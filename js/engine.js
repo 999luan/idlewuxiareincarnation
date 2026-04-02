@@ -240,7 +240,22 @@ function getActionRequirementFailures(actionData) {
         }
     });
 
+    if (actionData.id) {
+        const cooldownRemaining = getActionCooldownRemainingYears(actionData.id);
+        if (cooldownRemaining > 0) {
+            failures.push(`Recarga ${cooldownRemaining.toFixed(1)} anos`);
+        }
+    }
+
     return failures;
+}
+
+function getActionCooldownRemainingYears(actionId) {
+    const actionData = GAME_DATA.journeyActions[actionId];
+    if (!actionData?.cooldownYears) return 0;
+
+    const nextAvailableAge = gameState.actionCooldowns?.[actionId] || 0;
+    return Math.max(0, nextAvailableAge - gameState.age);
 }
 
 function syncCultivationMilestones() {

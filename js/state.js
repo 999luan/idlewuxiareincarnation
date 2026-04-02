@@ -21,6 +21,7 @@ let gameState = {
     unlockedActions: getStartingJourneyActions(),
     discoveredActions: getStartingJourneyActions(),
     blockedActions: [],
+    actionCooldowns: {},
     actionUseCounts: {},
     activeAction: null,
     actionProgresses: {},
@@ -121,6 +122,7 @@ function loadGame() {
         });
 
         if (gameState.blockedActions === undefined) gameState.blockedActions = [];
+        if (gameState.actionCooldowns === undefined) gameState.actionCooldowns = {};
         if (gameState.actionUseCounts === undefined) gameState.actionUseCounts = {};
         if (gameState.activeAction === undefined) gameState.activeAction = null;
         if (gameState.actionProgresses === undefined) {
@@ -189,6 +191,7 @@ function resetJourneyState() {
     gameState.mind = 10;
     gameState.unlockedActions = [...getStartingJourneyActions()];
     gameState.blockedActions = [];
+    gameState.actionCooldowns = {};
     gameState.actionUseCounts = {};
     gameState.activeAction = null;
     gameState.actionProgresses = {};

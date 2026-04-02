@@ -6,7 +6,7 @@ let inTribulation = false;
 let tribulationTimer = 0;
 
 function getTribulationDurationYears() {
-    return Math.pow(10, gameState.realm);
+    return GAME_DATA.realms[gameState.realm]?.tribulationYears || Math.pow(10, gameState.realm);
 }
 
 let isDead = false;
@@ -291,16 +291,10 @@ function completeJourneyAction(actionId, actionData) {
         });
     }
 
-    if (actionData.maxUses) {
-        gameState.actionUseCounts[actionId] = (gameState.actionUseCounts[actionId] || 0) + 1;
-        if (gameState.actionUseCounts[actionId] >= actionData.maxUses) {
-            const exhaustedIndex = gameState.unlockedActions.indexOf(actionId);
-            if (exhaustedIndex > -1) {
-                gameState.unlockedActions.splice(exhaustedIndex, 1);
-            }
-            addJourneyLog(`[Recurso Esgotado] ${actionData.name} não pode mais ser repetida nesta vida.`);
-            pushGameToast(`${actionData.name} se esgotou nesta vida.`, 'warning');
-        }
+    if (actionData.cooldownYears) {
+        gameState.actionCooldowns[actionId] = gameState.age + actionData.cooldownYears;
+        addJourneyLog(`[Recarga] ${actionData.name} estará pronta novamente em ${actionData.cooldownYears} anos.`);
+        pushGameToast(`${actionData.name} recarrega em ${actionData.cooldownYears} anos.`, 'warning');
     }
 
     if (!actionData.repeatable) {

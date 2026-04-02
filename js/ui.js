@@ -146,8 +146,8 @@ function showJourneyHoverTooltip(node, clientX, clientY) {
     const requirements = getActionRequirementFailures(action);
     const status = node.isInteractable
         ? 'Disponível'
-        : node.exhausted
-            ? 'Exaurida nesta vida'
+        : node.onCooldown
+            ? 'Recarregando'
         : node.blocked
             ? 'Rota perdida'
             : node.adjacent
@@ -161,7 +161,7 @@ function showJourneyHoverTooltip(node, clientX, clientY) {
         <p>${status}</p>
         <p>${action.time_cost} anos</p>
         <p>${effectsText.length > 0 ? effectsText.join(' • ') : 'Sem efeito direto além da progressão.'}</p>
-        ${node.remainingUses !== null ? `<p>Usos restantes: ${node.remainingUses}</p>` : ''}
+        ${node.onCooldown ? `<p>Disponível em ${node.cooldownRemaining.toFixed(1)} anos</p>` : (action.cooldownYears ? `<p>Recarga: ${action.cooldownYears} anos</p>` : '')}
         ${requirements.length > 0 ? `<p>Falta: ${requirements.join(' • ')}</p>` : ''}
     `;
 
@@ -355,9 +355,9 @@ function buildJourneyGraphViewModel() {
         const graph = action.graph || { x: 0, y: 0, lane: 'geral' };
         const discovered = gameState.discoveredActions.includes(actionId);
         const blocked = gameState.blockedActions.includes(actionId);
-        const uses = gameState.actionUseCounts?.[actionId] || 0;
-        const exhausted = !!action.maxUses && uses >= action.maxUses;
-        const unlocked = (gameState.unlockedActions.includes(actionId) || getStartingJourneyActions().includes(actionId)) && !exhausted;
+        const cooldownRemaining = getActionCooldownRemainingYears(actionId);
+        const onCooldown = cooldownRemaining > 0;
+        const unlocked = gameState.unlockedActions.includes(actionId) || getStartingJourneyActions().includes(actionId);
         const active = gameState.activeAction === actionId;
         const adjacent = !discovered && Array.from(baseSet).some(parentId => {
             const parent = GAME_DATA.journeyActions[parentId];
@@ -384,10 +384,9 @@ function buildJourneyGraphViewModel() {
             hovered: journeyGraphRuntime.hoveredNodeId === actionId,
             selected: gameState.journeyView?.selectedNode === actionId,
             isEnding: !!action.ending,
-            isInteractable: unlocked && failures.length === 0 && !blocked && !exhausted,
-            exhausted,
-            uses,
-            remainingUses: action.maxUses ? Math.max(0, action.maxUses - uses) : null
+            isInteractable: unlocked && failures.length === 0 && !blocked && !onCooldown,
+            onCooldown,
+            cooldownRemaining
         };
     }).sort((a, b) => a.x - b.x || a.y - b.y);
 
@@ -582,9 +581,9 @@ function updateJourneyGraphInfo(nodeId) {
 
     const failures = getActionRequirementFailures(action);
     const blocked = gameState.blockedActions.includes(nodeId);
-        const uses = gameState.actionUseCounts?.[nodeId] || 0;
-        const exhausted = !!action.maxUses && uses >= action.maxUses;
     const unlocked = gameState.unlockedActions.includes(nodeId) || getStartingJourneyActions().includes(nodeId);
+        const cooldownRemaining = getActionCooldownRemainingYears(nodeId);
+        const onCooldown = cooldownRemaining > 0;
     const discovered = gameState.discoveredActions.includes(nodeId);
     const adjacent = !discovered && Array.from(new Set([...getStartingJourneyActions(), ...gameState.discoveredActions, ...gameState.unlockedActions])).some(parentId => {
         const parent = GAME_DATA.journeyActions[parentId];
@@ -592,7 +591,7 @@ function updateJourneyGraphInfo(nodeId) {
     });
 
     let status = 'Memória';
-    if (exhausted) status = 'Exaurida nesta vida';
+    if (onCooldown) status = 'Recarregando';
     if (blocked) status = 'Rota perdida nesta vida';
     else if (gameState.activeAction === nodeId) status = 'Em andamento';
     else if (unlocked && failures.length === 0) status = 'Disponível agora';
@@ -615,7 +614,7 @@ function updateJourneyGraphInfo(nodeId) {
     const progressText = progress > 0 ? `${Math.floor((progress / action.time_cost) * 100)}% salvo` : 'Nenhum progresso salvo';
     const failureText = failures.length > 0 ? failures.join(' • ') : 'Nada faltando';
     const effectsText = getActionEffectsSummary(action);
-    const usesText = action.maxUses ? `${Math.max(0, action.maxUses - uses)} restantes de ${action.maxUses}` : 'Sem limite por vida';
+    const cooldownText = action.cooldownYears ? (onCooldown ? `${cooldownRemaining.toFixed(1)} anos restantes de ${action.cooldownYears}` : `${action.cooldownYears} anos por recarga`) : 'Sem recarga';
 
     info.innerHTML = `
         <h3>${action.name}</h3>
@@ -625,7 +624,7 @@ function updateJourneyGraphInfo(nodeId) {
         <p><span class="journey-node-info-emphasis">Requisitos:</span> ${reqParts.length > 0 ? reqParts.join(', ') : 'Nenhum'}</p>
         <p><span class="journey-node-info-emphasis">Falta:</span> ${failureText}</p>
         <p><span class="journey-node-info-emphasis">Efeitos:</span> ${effectsText.length > 0 ? effectsText.join(' • ') : 'Sem efeito direto além da progressão.'}</p>
-        <p><span class="journey-node-info-emphasis">Usos:</span> ${usesText}</p>
+        <p><span class="journey-node-info-emphasis">Recarga:</span> ${cooldownText}</p>
         <p><span class="journey-node-info-emphasis">Progresso:</span> ${progressText}</p>
     `;
 }

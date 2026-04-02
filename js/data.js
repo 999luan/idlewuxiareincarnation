@@ -6,13 +6,13 @@ const GAME_DATA = {
         4: { name: "Pico", multiplier: 2.1 }
     },
     realms: {
-        1: { name: "Temperar o Corpo", qiCap: 2000, multiplier: 1, tribulationDps: 80, desc: "Seus ossos doem, mas sua vontade finalmente aprendeu a ranger junto." },
-        2: { name: "Condensação de Qi", qiCap: 200000, multiplier: 5, tribulationDps: 3000, desc: "O mundo deixa de ser ar e passa a ser alimento." },
-        3: { name: "Estabelecimento de Fundação", qiCap: 200000000, multiplier: 25, tribulationDps: 800000, desc: "Seu Dao deixa de ser rumor e ganha espinha dorsal." },
-        4: { name: "Formação do Núcleo", qiCap: 200000000000, multiplier: 125, tribulationDps: 250000000, desc: "Uma estrela pessoal gira no seu dantian, pequena e tirânica." },
-        5: { name: "Alma Nascente", qiCap: 5e14, multiplier: 625, tribulationDps: 2e11, desc: "Sua alma aprende a andar antes mesmo de abandonar o corpo." },
-        6: { name: "Separação Espiritual", qiCap: 5e18, multiplier: 3125, tribulationDps: 2e15, desc: "A carne já não manda tanto quanto antes." },
-        7: { name: "Imortal Verdadeiro", qiCap: 5e22, multiplier: 15625, tribulationDps: 2e19, desc: "Os mortais juram que você sempre existiu." }
+        1: { name: "Temperar o Corpo", qiCap: 2000, multiplier: 1, tribulationDps: 80, tribulationYears: 10, desc: "Seus ossos doem, mas sua vontade finalmente aprendeu a ranger junto." },
+        2: { name: "Condensação de Qi", qiCap: 200000, multiplier: 5, tribulationDps: 3000, tribulationYears: 100, desc: "O mundo deixa de ser ar e passa a ser alimento." },
+        3: { name: "Estabelecimento de Fundação", qiCap: 200000000, multiplier: 25, tribulationDps: 800000, tribulationYears: 250, desc: "Seu Dao deixa de ser rumor e ganha espinha dorsal." },
+        4: { name: "Formação do Núcleo", qiCap: 200000000000, multiplier: 125, tribulationDps: 250000000, tribulationYears: 500, desc: "Uma estrela pessoal gira no seu dantian, pequena e tirânica." },
+        5: { name: "Alma Nascente", qiCap: 5e14, multiplier: 625, tribulationDps: 2e11, tribulationYears: 1000, desc: "Sua alma aprende a andar antes mesmo de abandonar o corpo." },
+        6: { name: "Separação Espiritual", qiCap: 5e18, multiplier: 3125, tribulationDps: 2e15, tribulationYears: 2000, desc: "A carne já não manda tanto quanto antes." },
+        7: { name: "Imortal Verdadeiro", qiCap: 5e22, multiplier: 15625, tribulationDps: 2e19, tribulationYears: 4000, desc: "Os mortais juram que você sempre existiu." }
     },
     techniques: {
         click_base: {
@@ -301,7 +301,7 @@ const GAME_DATA = {
             effects: { body: 2, qi: 300 },
             unlocks: ["fight_beast"],
             repeatable: true,
-            maxUses: 4,
+            cooldownYears: 12,
             ui_reward_summary: "Rende um salto físico inicial, mas o vale logo fica sem presas úteis.",
             log: "A caçada deixa seus músculos duros e seus meridianos levemente mais ricos."
         },
@@ -353,7 +353,7 @@ const GAME_DATA = {
             effects: { body: 3, qi: 2500 },
             unlocks: ["blood_bath", "feel_heavens"],
             repeatable: true,
-            maxUses: 3,
+            cooldownYears: 20,
             ui_reward_summary: "Cada fera abatida acelera o corpo, mas a região logo se esgota.",
             log: "A fera cai. Seu corpo aprende com a brutalidade antes da sua mente reclamar."
         },
@@ -423,7 +423,7 @@ const GAME_DATA = {
             effects: { qi: 8000, body: 1, lifespan_penalty: 5, karma: -5 },
             unlocks: ["soul_bargain"],
             repeatable: true,
-            maxUses: 3,
+            cooldownYears: 30,
             ui_reward_summary: "Explode seu poder por pouco tempo, mas o preço e a fonte se tornam instáveis.",
             log: "O ganho é embriagante. O cheiro da sua alma, menos."
         },
@@ -536,7 +536,7 @@ const GAME_DATA = {
             effects: { qi: 150000, body: 2, karma: -3 },
             unlocks: ["black_meridian_breakthrough"],
             repeatable: true,
-            maxUses: 3,
+            cooldownYears: 60,
             ui_reward_summary: "É um grande salto, mas você não encontra núcleos úteis para sempre.",
             log: "Seu poder cresce com a mesma velocidade da sua reputação terrível."
         },
