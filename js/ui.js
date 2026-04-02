@@ -798,12 +798,12 @@ function updateUI() {
     
     if (progressBar) {
         if (inTribulation) {
-            const maxTribulationHp = GAME_DATA.realms[gameState.realm].tribulationDps * 10;
-            const percent = Math.max(0, Math.min(100, (tribulationHp / maxTribulationHp) * 100));
+            const totalTribulationYears = getTribulationDurationYears();
+            const percent = Math.max(0, Math.min(100, (tribulationTimer / totalTribulationYears) * 100));
             progressBar.style.width = `${percent}%`;
             progressBar.classList.add('tribulation-bar-fill');
-            document.getElementById('qi-progress').innerText = formatNumber(tribulationHp);
-            document.getElementById('qi-cap').innerText = formatNumber(maxTribulationHp);
+            document.getElementById('qi-progress').innerText = formatNumber(Math.max(0, tribulationTimer));
+            document.getElementById('qi-cap').innerText = formatNumber(totalTribulationYears);
             if (progressLabel) progressLabel.innerText = 'Tribulação';
         } else {
             const percent = Math.min(100, (gameState.qi / targetCap) * 100);
