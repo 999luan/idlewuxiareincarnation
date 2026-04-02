@@ -418,22 +418,13 @@ function gameLoop() {
                 gameState.qi += qps * secondsPassed;
                 if (gameState.qi > realmData.qiCap) gameState.qi = realmData.qiCap;
             }
+            if (gameState.qi < 0) {
+                gameState.qi = 0;
+            }
             
             tribulationTimer -= secondsPassed;
             
-            if (!gameState.isImmortal && gameState.age >= gameState.lifespan) {
-                inTribulation = false;
-                pushGameToast("Seu corpo mortal não resistiu aos anos arrancados pela Tribulação.", 'danger');
-                addJourneyLog("[Tribulação] O peso dos anos venceu antes do céu ceder.");
-                handleDeath();
-            } else if (gameState.qi <= 0) {
-                // Falhou
-                gameState.qi = 0;
-                inTribulation = false;
-                pushGameToast("Você falhou na Tribulação. O Dao é implacável!", 'danger');
-                addJourneyLog("[Tribulação] Você falhou e os céus responderam com desprezo.");
-                document.getElementById('tribulation-btn').innerText = "Iniciar Tribulação";
-            } else if (tribulationTimer <= 0) {
+            if (tribulationTimer <= 0) {
                 // Sucesso
                 inTribulation = false;
                 gameState.realm++;
@@ -445,6 +436,9 @@ function gameLoop() {
                     gameState.isImmortal = true;
                 } else if (!gameState.isImmortal) {
                     gameState.lifespan += 50; // +50 anos por Reino
+                }
+                if (!gameState.isImmortal && gameState.age >= gameState.lifespan) {
+                    gameState.lifespan = Math.ceil(gameState.age + 10);
                 }
 
                 const newRealmName = GAME_DATA.realms[gameState.realm].name;
