@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultivo Wuxia Idle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="fullscreen-shell" class="fullscreen-shell">
+        <div id="journey-canvas-layer" class="journey-canvas-layer">
+            <div id="journey-graph-container" class="journey-graph-container">
+                <canvas id="journey-graph-canvas"></canvas>
+            </div>
+        </div>
+
+        <div id="hud-top" class="hud-panel hud-top">
+            <div class="system-bar hud-system-bar">
+                <button onclick="manualSave()" class="sys-btn">Salvar Jogo</button>
+                <button onclick="manualLoad()" class="sys-btn">Carregar Save</button>
+                <button onclick="resetGame()" class="sys-btn danger-btn">Reset Total</button>
+                <span id="save-indicator" style="opacity: 0; color: #57A773; font-size: 12px; transition: opacity 0.5s;">Jogo Salvo!</span>
+            </div>
+
+            <div class="hud-top-stats">
+                <div class="hud-card hud-age-card">
+                    <span class="hud-label">Idade</span>
+                    <span class="hud-value"><span id="current-age">15</span> / <span id="max-age">150</span> anos</span>
+                    <div class="progress-bar-container hud-age-progress">
+                        <div id="age-progress-bar-fill" class="progress-bar-fill" style="background-color: #D4AF37; box-shadow: 0 0 5px #D4AF37;"></div>
+                    </div>
+                </div>
+                <div class="hud-card">
+                    <span class="hud-label">Reino</span>
+                    <span class="hud-value" id="current-realm">Condensação de Qi</span>
+                    <span class="hud-subvalue">Estágio: <span id="current-sub-realm">Inicial</span></span>
+                    <div class="progress-bar-container hud-realm-progress">
+                        <div id="realm-progress-bar-fill" class="progress-bar-fill"></div>
+                    </div>
+                    <span class="hud-subvalue" id="realm-progress-text">0 / 1000 Qi para o próximo estágio</span>
+                </div>
+                <div class="hud-card hud-qi-card">
+                    <span class="hud-label">Qi</span>
+                    <span class="hud-value" id="current-qi">0</span>
+                    <span class="hud-subvalue"><span id="qps-display">0</span> Qi/s • <span id="qpc-display">1</span> Qi/clique</span>
+                </div>
+                <div class="hud-card hud-audio-card">
+                    <span class="hud-label">Trilha</span>
+                    <div class="audio-controls">
+                        <button id="audio-toggle-btn" class="sys-btn">Tocar</button>
+                        <input id="audio-volume" type="range" min="0" max="100" value="45">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="hud-left" class="hud-panel hud-left">
+            <div class="hud-card hud-left-card">
+                <div class="hud-left-header">
+                    <span class="hud-label">Ações Rápidas</span>
+                </div>
+                <div class="hud-left-actions">
+                    <button id="meditate-btn" class="buy-btn hud-mini-btn hud-mini-primary">Meditar</button>
+                    <button class="buy-btn hud-mini-btn" onclick="toggleHudDrawer('drawer-idle')">Idle</button>
+                    <button class="buy-btn hud-mini-btn" onclick="toggleHudDrawer('drawer-sect')">Seita</button>
+                    <button class="buy-btn hud-mini-btn" onclick="toggleHudDrawer('drawer-transcendence')">Dao</button>
+                </div>
+
+                <div id="stance-selector-section" class="stance-selector hud-inline-section" style="display: none;">
+                    <label>Postura de Cultivo</label>
+                    <select id="stance-select">
+                        <option value="balance">Equilíbrio (Normal)</option>
+                        <option value="mountain">Montanha (+50% Clique, -20% Passivo)</option>
+                        <option value="river">Rio (-20% Clique, +50% Passivo)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="hud-right" class="hud-panel hud-right">
+            <div class="hud-card hud-journey-stats">
+                <div class="hud-status-strip">
+                    <span>Corpo: <span id="status-body">10</span></span>
+                    <span>Mente: <span id="status-mind">10</span></span>
+                </div>
+                <div class="hud-destiny-card">
+                    <h3>Destino Atual</h3>
+                    <p><strong>Rota:</strong> <span id="current-route">Caminho Indefinido</span></p>
+                    <p><strong>Objetivo:</strong> <span id="current-objective">Descubra um caminho entre trabalho, estudo e risco.</span></p>
+                    <p><strong>Final:</strong> <span id="current-ending">Nenhum final alcançado nesta vida.</span></p>
+                </div>
+                <div class="hud-breakthrough-card">
+                    <p><strong><span id="progress-phase-label">Próximo Avanço</span>:</strong> <span id="qi-progress">0</span> / <span id="qi-cap">1000</span></p>
+                    <div class="progress-bar-container" style="height: 10px;">
+                        <div id="qi-progress-bar-fill" class="progress-bar-fill"></div>
+                    </div>
+                    <p style="font-size: 12px; color: #A0A0A0; margin: 8px 0 10px;">Ao atingir o pico do reino e o cap de Qi, desafie os céus para romper o próximo reino.</p>
+                    <button id="tribulation-btn" class="tribulation-btn" style="display: none;" disabled>Iniciar Tribulação</button>
+                </div>
+            </div>
+
+            <div id="active-action-section" class="active-action-container" style="display: none;">
+                <h3 id="active-action-name" style="color: #EAE4D3; margin-bottom: 5px;">Ação Atual</h3>
+                <p id="active-action-desc" style="font-size: 12px; color: #A0A0A0; margin-bottom: 10px;">Descrição da ação em andamento...</p>
+                <div class="progress-bar-container" style="height: 15px;">
+                    <div id="action-progress-bar-fill" class="progress-bar-fill" style="width: 0%; background-color: #57A773;"></div>
+                </div>
+                <p style="font-size: 12px; margin-top: 5px; color: #EAE4D3;">Tempo restante: <span id="action-time-left">0</span> Anos</p>
+                <button id="cancel-action-btn" class="buy-btn" style="margin-top: 10px; background: #8a2424; border-color: #6b1b1b;">Cancelar Ação</button>
+            </div>
+
+            <div id="journey-graph-node-info" class="journey-graph-node-info hud-card">
+                <h3>Escolha um nó</h3>
+                <p>Clique em uma ação no quadro para ver requisitos, custo de vida e status.</p>
+            </div>
+        </div>
+
+        <div id="hud-bottom" class="hud-panel hud-bottom">
+            <div class="journey-graph-header hud-bottom-header">
+                <h3>Mapa da Jornada</h3>
+                <span class="journey-graph-hint">Arraste para mover • Role para aproximar</span>
+            </div>
+            <div class="journey-graph-legend">
+                <span class="legend-pill unlocked">Desbloqueada</span>
+                <span class="legend-pill adjacent">Próxima</span>
+                <span class="legend-pill memory">Memória</span>
+                <span class="legend-pill blocked">Perdida</span>
+                <span class="legend-pill ending">Final</span>
+            </div>
+            <div id="journey-log" class="log-container">
+                <div class="log-entry">Aos 15 anos, sua jornada rumo à imortalidade começa.</div>
+            </div>
+        </div>
+
+        <aside id="drawer-idle" class="hud-drawer hud-drawer-left">
+            <div class="drawer-header">
+                <h3>Fluxo do Cultivo</h3>
+                <button class="buy-btn" onclick="closeAllHudDrawers()">Fechar</button>
+            </div>
+            <div id="buildings-list" class="techniques-list" style="margin-bottom: 20px;"></div>
+            <div id="techniques-list" style="display: none;"></div>
+        </aside>
+
+        <aside id="drawer-sect" class="hud-drawer hud-drawer-right">
+            <div class="drawer-header">
+                <h3>Sua Seita</h3>
+                <button class="buy-btn" onclick="closeAllHudDrawers()">Fechar</button>
+            </div>
+            <div id="sect-section" style="display: none; text-align: center; margin-bottom: 20px; border-bottom: 1px solid #2A3034; padding-bottom: 20px;">
+                <label style="font-size: 14px; color: #D4AF37; font-family: 'Cinzel', serif;">Afiliação da Seita:</label><br>
+                <select id="sect-select" style="background: #121415; color: #D4AF37; border: 1px solid #D4AF37; padding: 8px; border-radius: 4px; margin-top: 10px; width: 80%;">
+                    <option value="none">Nenhuma (Vagante)</option>
+                    <option value="sword">Lâmina Vazia (2x Clique)</option>
+                    <option value="lotus">Lótus de Fogo (2x Passivo)</option>
+                </select>
+            </div>
+        </aside>
+
+        <aside id="drawer-transcendence" class="hud-drawer hud-drawer-right secondary-drawer">
+            <div class="drawer-header">
+                <h3>Transcendência</h3>
+                <button class="buy-btn" onclick="closeAllHudDrawers()">Fechar</button>
+            </div>
+            <div id="ascension-section" style="display: none; text-align: center;">
+                <h2 style="color: #D4AF37;">Iluminação (Prestige)</h2>
+                <p style="font-size: 12px; color: #A0A0A0; margin-bottom: 15px;">
+                    Renuncie ao seu corpo mortal para ganhar <span id="karma-gain-preview" style="color: #D4AF37; font-weight: bold;">0</span> Karma.
+                </p>
+                <button id="ascend-btn" class="main-action-btn" style="width: 100%; height: auto; padding: 15px; border-radius: 4px; font-size: 18px; background: radial-gradient(circle, #D4AF37, #8a7322); color: #121415; border: none; box-shadow: 0 0 10px rgba(212,175,55,0.4);">Buscar Dao</button>
+                
+                <div style="margin-top: 30px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 6px; border: 1px solid #2A3034;">
+                    <h3 style="margin-bottom: 5px;">Seu Karma: <span id="current-karma" style="color: #D4AF37;">0</span></h3>
+                    <p id="karma-desc" style="font-size: 12px; color: #A0A0A0; margin-bottom: 15px;">Karma positivo reduz custos. Karma negativo aumenta poder bruto.</p>
+                    <button id="open-tree-btn" class="buy-btn" style="width: 100%; padding: 15px; font-size: 16px; background: #121415; border-color: #D4AF37; color: #D4AF37;">Árvore do Dao</button>
+                </div>
+            </div>
+        </aside>
+
+        <div id="toast-container" class="toast-container"></div>
+        <div id="journey-hover-tooltip" class="journey-hover-tooltip"></div>
+        <audio id="bgm-player" loop autoplay preload="none" src="Midnight%20Temple%20Loop.mp3"></audio>
+    </div>
+
+    <!-- Modal de Morte (Samsara) -->
+    <div id="death-modal" class="modal" style="display: none; background: rgba(0, 0, 0, 0.95);">
+        <div class="modal-content" style="border-color: #8a2424; box-shadow: 0 0 40px rgba(138, 36, 36, 0.4);">
+            <h2 style="color: #8a2424; text-shadow: none;">O Fim do Caminho Mortal</h2>
+            <p style="margin-bottom: 15px; font-style: italic; color: #A0A0A0;">"Sua energia vital se esvaiu. Seu corpo volta ao pó, mas sua alma entra no ciclo do Samsara..."</p>
+            
+            <div style="text-align: left; background: #121415; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #2A3034;">
+                <p><strong>Idade Atingida:</strong> <span id="death-age">150</span> Anos</p>
+                <p><strong>Reino Máximo:</strong> <span id="death-realm">Condensação</span></p>
+                <p><strong>Qi Total Acumulado:</strong> <span id="death-qi">0</span></p>
+                <p><strong>Título da Vida:</strong> <span id="death-ending-title">Destino Ainda Inacabado</span></p>
+                <p style="color: #A0A0A0; font-size: 13px;"><span id="death-ending-text">Sua vida termina sem um final lendário completo, mas o Samsara ainda guarda espaço para outra tentativa.</span></p>
+                <p style="margin-top: 10px; color: #D4AF37; text-align: center;"><strong>Karma Ganho: <span id="death-karma">0</span></strong></p>
+            </div>
+            
+            <button id="reincarnate-btn" class="main-action-btn" style="width: 100%; height: auto; padding: 15px; border-radius: 4px; font-size: 20px; background: radial-gradient(circle, #D4AF37, #8a7322); color: #121415; border: none;">Entrar no Samsara (Reencarnar)</button>
+        </div>
+    </div>
+
+    <!-- Modal da Árvore do Dao -->
+    <div id="tree-modal" class="modal" style="display: none; background: rgba(0, 0, 0, 0.95);">
+        <div class="modal-content" style="max-width: 900px; width: 95%; height: 90vh; display: flex; flex-direction: column; border-color: #D4AF37;">
+            <h2 style="color: #D4AF37;">A Árvore do Dao</h2>
+            <p style="color: #A0A0A0; margin-bottom: 20px;">Seu Karma: <span id="tree-karma-display" style="color: #D4AF37; font-weight: bold;">0</span></p>
+            
+            <div class="tree-container" style="flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px;">
+                <!-- Caminho do Céu -->
+                <div class="tree-path">
+                    <h3 style="text-align: center; color: #8cb8ff; margin-bottom: 15px;">Caminho do Céu</h3>
+                    <div id="path-heaven" class="techniques-list"></div>
+                </div>
+                <!-- Caminho da Terra -->
+                <div class="tree-path">
+                    <h3 style="text-align: center; color: #57A773; margin-bottom: 15px;">Caminho da Terra</h3>
+                    <div id="path-earth" class="techniques-list"></div>
+                </div>
+                <!-- Caminho do Homem -->
+                <div class="tree-path">
+                    <h3 style="text-align: center; color: #d48237; margin-bottom: 15px;">Caminho do Homem</h3>
+                    <div id="path-man" class="techniques-list"></div>
+                </div>
+            </div>
+            
+            <button class="buy-btn" style="margin-top: 20px; padding: 15px;" onclick="document.getElementById('tree-modal').style.display='none'">Fechar Meditação</button>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
