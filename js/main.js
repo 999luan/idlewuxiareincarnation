@@ -9,6 +9,43 @@ function getTribulationDurationYears() {
     return GAME_DATA.realms[gameState.realm]?.tribulationYears || Math.pow(10, gameState.realm);
 }
 
+function resolveRealmPromotion() {
+    const currentRealm = gameState.realm;
+    const maxRealm = getMaxRealm();
+
+    if (currentRealm >= maxRealm) {
+        inTribulation = false;
+        gameState.qi = GAME_DATA.realms[currentRealm].qiCap;
+        refreshTribulationUnlock();
+        pushGameToast('Você já alcançou o reino máximo atual.', 'warning');
+        updateUI();
+        return;
+    }
+
+    gameState.realm = currentRealm + 1;
+    gameState.subRealm = 1;
+    gameState.qi = 0;
+    refreshTribulationUnlock();
+
+    if (gameState.realm >= 5) {
+        gameState.isImmortal = true;
+    } else if (!gameState.isImmortal) {
+        gameState.lifespan += 50;
+    }
+
+    if (!gameState.isImmortal && gameState.age >= gameState.lifespan) {
+        gameState.lifespan = Math.ceil(gameState.age + 10);
+    }
+
+    const newRealmData = GAME_DATA.realms[gameState.realm];
+    const lifeMsg = gameState.isImmortal ? ' Você se tornou Imortal!' : ' Expectativa de vida aumentada grandemente!';
+    gameState.currentObjective = `Fortaleça corpo, mente e Qi para dominar o reino ${newRealmData.name}.`;
+
+    pushGameToast(`Sucesso! Você avançou para o Reino: ${newRealmData.name}.`, 'success');
+    addJourneyLog(`[Tribulação] ${newRealmData.desc} ${lifeMsg}`);
+    checkSectUnlock();
+}
+
 let isDead = false;
 
 function init() {
@@ -119,7 +156,7 @@ function handleAscend() {
             renderJourney();
             updateUI();
         } else {
-            pushGameToast("Você precisa gerar mais Qi nesta vida antes de poder ascender (mínimo 1M total).", 'warning');
+            pushGameToast("Você ainda não acumulou compreensão suficiente nesta vida para ascender.", 'warning');
         }
     }
 }
@@ -384,13 +421,17 @@ function addJourneyLog(text) {
 function handleTribulation() {
     if (inTribulation) return;
     const cap = GAME_DATA.realms[gameState.realm].qiCap;
-    if (gameState.qi >= cap) {
+    if (canStartTribulation() && gameState.qi >= cap) {
         inTribulation = true;
         tribulationTimer = getTribulationDurationYears();
         document.getElementById('tribulation-btn').innerText = "Sobreviva!";
         document.getElementById('tribulation-btn').disabled = true;
         pushGameToast(`A Tribulação Celestial começou. Ela consumirá ${formatNumber(tribulationTimer)} anos desta vida.`, 'warning');
         addJourneyLog(`[Tribulação] Os céus exigem ${formatNumber(tribulationTimer)} anos de resistência para permitir o avanço.`);
+    } else if (gameState.realm >= getMaxRealm()) {
+        pushGameToast('Você já alcançou o reino máximo atual.', 'warning');
+    } else if (!isRealmPeak()) {
+        pushGameToast('Você precisa alcançar o Pico deste reino antes de iniciar a tribulação.', 'warning');
     }
 }
 
@@ -425,30 +466,9 @@ function gameLoop() {
             tribulationTimer -= secondsPassed;
             
             if (tribulationTimer <= 0) {
-                // Sucesso
                 inTribulation = false;
-                gameState.realm++;
-                gameState.subRealm = 1; // Reset do sub-reino
-                gameState.qi = 0; // Opcional: zera o Qi ao avançar de reino para recomeçar o ciclo
-                
-                // Bônus de vida e Imortalidade
-                if (gameState.realm >= 5) {
-                    gameState.isImmortal = true;
-                } else if (!gameState.isImmortal) {
-                    gameState.lifespan += 50; // +50 anos por Reino
-                }
-                if (!gameState.isImmortal && gameState.age >= gameState.lifespan) {
-                    gameState.lifespan = Math.ceil(gameState.age + 10);
-                }
-
-                const newRealmName = GAME_DATA.realms[gameState.realm].name;
-                const newRealmDesc = GAME_DATA.realms[gameState.realm].desc;
-                const lifeMsg = gameState.isImmortal ? "\nVocê se tornou Imortal!" : "\nExpectativa de vida aumentada grandemente!";
-                pushGameToast(`Sucesso! Você avançou para o Reino: ${newRealmName}.`, 'success');
-                addJourneyLog(`[Tribulação] ${newRealmDesc} ${lifeMsg.replace('\n', ' ')}`);
-                
+                resolveRealmPromotion();
                 document.getElementById('tribulation-btn').innerText = "Iniciar Tribulação";
-                checkSectUnlock();
             }
             updateUI();
         } else {

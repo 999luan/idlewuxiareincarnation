@@ -31,21 +31,35 @@ function getSubRealmCap() {
     return Math.floor(realmCap * fractions[gameState.subRealm]);
 }
 
+function getMaxRealm() {
+    return Math.max(...Object.keys(GAME_DATA.realms).map(Number));
+}
+
+function isRealmPeak() {
+    return gameState.subRealm >= 4;
+}
+
+function refreshTribulationUnlock() {
+    gameState.unlocks.canTribulation = isRealmPeak() && gameState.realm < getMaxRealm();
+}
+
+function canStartTribulation() {
+    return !inTribulation && gameState.realm < getMaxRealm() && isRealmPeak() && gameState.qi >= GAME_DATA.realms[gameState.realm].qiCap;
+}
+
 function checkSubRealmAdvancement() {
     if (gameState.subRealm >= 4) return; // Já está no pico
     
     const currentSubCap = getSubRealmCap();
     if (gameState.qi >= currentSubCap) {
         gameState.subRealm++;
-        if (gameState.subRealm >= 4) {
-            gameState.unlocks.canTribulation = true;
-        }
+        refreshTribulationUnlock();
         if (!gameState.isImmortal) {
             gameState.lifespan += 10; // +10 anos por sub-reino
         }
         pushGameToast(`Você avançou para o estágio: ${GAME_DATA.subRealms[gameState.subRealm].name}. +10 anos de vida.`, 'success');
         addJourneyLog(`[Dao] Seu cultivo avançou para o estágio ${GAME_DATA.subRealms[gameState.subRealm].name}.`);
-        if (gameState.subRealm >= 4) {
+        if (isRealmPeak()) {
             pushGameToast('Seu cultivo alcançou o pico deste reino. A Tribulação Celestial agora pode ser enfrentada ao atingir o limite de Qi.', 'warning');
             addJourneyLog('[Tribulação] O pico do reino foi alcançado. Encha seu Qi até o limite para desafiar os céus.');
         }
@@ -191,13 +205,13 @@ function buyTechnique(techId) {
 }
 
 function calculateKarmaGain() {
-    // Ganha Karma baseado no Total de Qi gerado nesta vida
-    // Fórmula simples: raiz cúbica do totalQi / 1000
-    if (gameState.totalQi < 1000000) return 0; // Mínimo de 1M de Qi para ganhar karma
+    let baseKarma = GAME_DATA.realms[gameState.realm]?.karmaReward || 0;
+    const qiMillions = Math.max(0, gameState.totalQi / 1000000);
+    const qiBonus = qiMillions > 0 ? Math.floor(Math.log10(qiMillions + 1) * Math.max(1, gameState.realm - 1)) : 0;
+    const endingBonus = gameState.endingTitle ? 2 : 0;
+
+    baseKarma += qiBonus + endingBonus;
     
-    let baseKarma = Math.floor(Math.pow(gameState.totalQi / 1000000, 0.5));
-    
-    // Dao do Homem: Compreensão do Samsara (+10% karma por nível)
     const daoKarmaGain = gameState.metaUpgrades.dao_karma_gain || 0;
     if (daoKarmaGain > 0) {
         baseKarma = Math.floor(baseKarma * (1 + (0.1 * daoKarmaGain)));
@@ -264,14 +278,9 @@ function syncCultivationMilestones() {
     while (gameState.subRealm < 4 && gameState.qi >= getSubRealmCap()) {
         gameState.subRealm++;
         corrected = true;
-        if (gameState.subRealm >= 4) {
-            gameState.unlocks.canTribulation = true;
-        }
     }
 
-    if (gameState.subRealm >= 4) {
-        gameState.unlocks.canTribulation = true;
-    }
+    refreshTribulationUnlock();
 
     return corrected;
 }

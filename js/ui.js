@@ -775,7 +775,7 @@ function updateUI() {
     document.getElementById('qps-display').innerText = formatNumber(getQiPerSecond());
     document.getElementById('qpc-display').innerText = formatNumber(getQiPerClick());
     document.getElementById('current-route').innerText = getRouteLabel(gameState.currentRoute);
-    const objectiveText = (gameState.subRealm >= 4 && gameState.qi >= GAME_DATA.realms[gameState.realm].qiCap && !inTribulation)
+    const objectiveText = (canStartTribulation() && !inTribulation)
         ? 'Você atingiu o pico do reino. Inicie a Tribulação Celestial.'
         : (gameState.currentObjective || 'Descubra um caminho entre trabalho, estudo e risco.');
     document.getElementById('current-objective').innerText = objectiveText;
@@ -788,8 +788,8 @@ function updateUI() {
     const progressBar = document.getElementById('qi-progress-bar-fill');
     const progressLabel = document.getElementById('progress-phase-label');
     const tribBtn = document.getElementById('tribulation-btn');
-    const atPeak = gameState.subRealm >= 4;
-    const tribulationReady = atPeak && gameState.qi >= realmCap;
+    const atPeak = isRealmPeak();
+    const tribulationReady = canStartTribulation();
     const targetCap = atPeak ? realmCap : subRealmCap;
 
     document.getElementById('qi-progress').innerText = formatNumber(gameState.qi);
@@ -815,9 +815,9 @@ function updateUI() {
     const realmProgressFill = document.getElementById('realm-progress-bar-fill');
     const realmProgressText = document.getElementById('realm-progress-text');
     if (realmProgressFill && realmProgressText) {
-        const realmPercent = Math.min(100, (gameState.qi / subRealmCap) * 100);
+        const realmPercent = Math.min(100, (gameState.qi / targetCap) * 100);
         realmProgressFill.style.width = `${realmPercent}%`;
-        realmProgressText.innerText = gameState.subRealm >= 4
+        realmProgressText.innerText = atPeak
             ? `${formatNumber(gameState.qi)} / ${formatNumber(realmCap)} Qi para a tribulação`
             : `${formatNumber(gameState.qi)} / ${formatNumber(subRealmCap)} Qi para o próximo estágio`;
     }
@@ -845,7 +845,7 @@ function updateUI() {
         document.getElementById('qi-progress').style.color = 'inherit';
         if (tribBtn) {
             tribBtn.style.display = atPeak ? 'inline-flex' : 'none';
-            if (gameState.realm >= Object.keys(GAME_DATA.realms).length && gameState.subRealm >= 4) {
+            if (gameState.realm >= getMaxRealm() && atPeak) {
                 tribBtn.innerText = "Reino Máximo Atingido";
                 tribBtn.disabled = true;
             } else if (tribulationReady) {

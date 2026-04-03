@@ -6,13 +6,13 @@ const GAME_DATA = {
         4: { name: "Pico", multiplier: 2.1 }
     },
     realms: {
-        1: { name: "Temperar o Corpo", qiCap: 2000, multiplier: 1, tribulationDps: 80, tribulationYears: 10, desc: "Seus ossos doem, mas sua vontade finalmente aprendeu a ranger junto." },
-        2: { name: "Condensação de Qi", qiCap: 200000, multiplier: 5, tribulationDps: 3000, tribulationYears: 100, desc: "O mundo deixa de ser ar e passa a ser alimento." },
-        3: { name: "Estabelecimento de Fundação", qiCap: 200000000, multiplier: 25, tribulationDps: 800000, tribulationYears: 250, desc: "Seu Dao deixa de ser rumor e ganha espinha dorsal." },
-        4: { name: "Formação do Núcleo", qiCap: 200000000000, multiplier: 125, tribulationDps: 250000000, tribulationYears: 500, desc: "Uma estrela pessoal gira no seu dantian, pequena e tirânica." },
-        5: { name: "Alma Nascente", qiCap: 5e14, multiplier: 625, tribulationDps: 2e11, tribulationYears: 1000, desc: "Sua alma aprende a andar antes mesmo de abandonar o corpo." },
-        6: { name: "Separação Espiritual", qiCap: 5e18, multiplier: 3125, tribulationDps: 2e15, tribulationYears: 2000, desc: "A carne já não manda tanto quanto antes." },
-        7: { name: "Imortal Verdadeiro", qiCap: 5e22, multiplier: 15625, tribulationDps: 2e19, tribulationYears: 4000, desc: "Os mortais juram que você sempre existiu." }
+        1: { name: "Temperar o Corpo", qiCap: 2000, multiplier: 1, tribulationDps: 80, tribulationYears: 2, karmaReward: 0, desc: "Seus ossos doem, mas sua vontade finalmente aprendeu a ranger junto." },
+        2: { name: "Condensação de Qi", qiCap: 120000, multiplier: 5, tribulationDps: 3000, tribulationYears: 18, karmaReward: 1, desc: "O mundo deixa de ser ar e passa a ser alimento." },
+        3: { name: "Estabelecimento de Fundação", qiCap: 2500000, multiplier: 25, tribulationDps: 800000, tribulationYears: 45, karmaReward: 2, desc: "Seu Dao deixa de ser rumor e ganha espinha dorsal." },
+        4: { name: "Formação do Núcleo", qiCap: 40000000, multiplier: 125, tribulationDps: 250000000, tribulationYears: 90, karmaReward: 4, desc: "Uma estrela pessoal gira no seu dantian, pequena e tirânica." },
+        5: { name: "Alma Nascente", qiCap: 800000000, multiplier: 625, tribulationDps: 2e11, tribulationYears: 180, karmaReward: 7, desc: "Sua alma aprende a andar antes mesmo de abandonar o corpo." },
+        6: { name: "Separação Espiritual", qiCap: 15000000000, multiplier: 3125, tribulationDps: 2e15, tribulationYears: 360, karmaReward: 11, desc: "A carne já não manda tanto quanto antes." },
+        7: { name: "Imortal Verdadeiro", qiCap: 250000000000, multiplier: 15625, tribulationDps: 2e19, tribulationYears: 720, karmaReward: 16, desc: "Os mortais juram que você sempre existiu." }
     },
     techniques: {
         click_base: {
@@ -447,7 +447,7 @@ const GAME_DATA = {
             time_cost: 4,
             type: "social",
             requirements: { realm: 2, qi: 6000 },
-            effects: { qi: 2500, mind: 1 },
+            effects: { qi: 9000, mind: 1 },
             unlocks: ["formation_lessons"],
             repeatable: true,
             log: "Seu nome sobe um degrau invisível na fila de servos promissores."
@@ -459,7 +459,7 @@ const GAME_DATA = {
             time_cost: 5,
             type: "social",
             requirements: { realm: 2, mind: 18, qi: 8000 },
-            effects: { mind: 2, qi: 3500 },
+            effects: { mind: 2, qi: 12000 },
             unlocks: ["formation_lessons"],
             repeatable: true,
             log: "Você aprende a pensar com rigor suficiente para sobreviver a bibliotecas cultivadoras."
@@ -471,7 +471,7 @@ const GAME_DATA = {
             time_cost: 5,
             type: "corpo",
             requirements: { realm: 2, body: 26, qi: 12000 },
-            effects: { body: 4, qi: 2500 },
+            effects: { body: 4, qi: 14000 },
             unlocks: ["mountain_trial", "iron_body_breakthrough"],
             repeatable: true,
             log: "Seus ossos agora rangem com autoridade."
@@ -483,7 +483,7 @@ const GAME_DATA = {
             time_cost: 5,
             type: "cultivo",
             requirements: { realm: 2, mind: 20, qi: 12000 },
-            effects: { qi: 5000, mind: 1 },
+            effects: { qi: 18000, mind: 1 },
             unlocks: ["stabilize_foundation", "golden_cauldron_ritual"],
             repeatable: true,
             log: "Seu nome circula entre mercadores, pacientes e gente sem escrúpulos."
@@ -509,7 +509,7 @@ const GAME_DATA = {
             time_cost: 6,
             type: "cultivo",
             requirements: { realm: 2, mind: 26, qi: 50000 },
-            effects: { mind: 4 },
+            effects: { qi: 16000, mind: 4 },
             unlocks: ["nameless_breakthrough"],
             repeatable: true,
             log: "Seu pensamento para de pedir permissão ao mundo."
@@ -521,7 +521,7 @@ const GAME_DATA = {
             time_cost: 6,
             type: "social",
             requirements: { realm: 2, mind: 20, qi: 60000 },
-            effects: { qi: 8000, mind: 1 },
+            effects: { qi: 26000, mind: 1 },
             unlocks: ["elder_promotion"],
             repeatable: true,
             log: "Pela primeira vez, o chão da seita trabalha a seu favor."
@@ -533,10 +533,10 @@ const GAME_DATA = {
             time_cost: 5,
             type: "risco",
             requirements: { realm: 2, qi: 40000, karma_max: -5 },
-            effects: { qi: 150000, body: 2, karma: -3 },
+            effects: { qi: 220000, body: 2, karma: -3 },
             unlocks: ["black_meridian_breakthrough"],
             repeatable: true,
-            cooldownYears: 60,
+            cooldownYears: 45,
             ui_reward_summary: "É um grande salto, mas você não encontra núcleos úteis para sempre.",
             log: "Seu poder cresce com a mesma velocidade da sua reputação terrível."
         },
@@ -558,8 +558,8 @@ const GAME_DATA = {
             desc: "A montanha testa quem é duro. A gravidade também.",
             time_cost: 8,
             type: "corpo",
-            requirements: { realm: 2, body: 30, qi: 80000 },
-            effects: { body: 5 },
+            requirements: { realm: 2, body: 28, qi: 55000 },
+            effects: { body: 5, qi: 120000 },
             unlocks: ["iron_body_breakthrough", "beast_king_gate"],
             repeatable: false,
             log: "Pedra, peso e dor se dobram um pouco mais ao seu passo."
@@ -570,8 +570,8 @@ const GAME_DATA = {
             desc: "Na seita, respeito é só outro nome para poder administrativo.",
             time_cost: 8,
             type: "social",
-            requirements: { realm: 3, mind: 24, qi: 800000, disciples: 25 },
-            effects: { qi: 200000, body: 2 },
+            requirements: { realm: 3, mind: 24, qi: 500000, disciples: 18 },
+            effects: { qi: 450000, body: 2 },
             unlock_flags: ["canBuyElders", "canBuyArrays"],
             unlocks: ["found_own_peak"],
             repeatable: false,
@@ -584,8 +584,8 @@ const GAME_DATA = {
             desc: "A chama alquímica sobe como um sol doméstico e arrogante.",
             time_cost: 8,
             type: "cultivo",
-            requirements: { realm: 3, mind: 30, qi: 500000 },
-            effects: { qi: 200000, mind: 5 },
+            requirements: { realm: 3, mind: 28, qi: 350000 },
+            effects: { qi: 500000, mind: 5 },
             unlocks: ["pill_saint_ascension"],
             repeatable: false,
             log: "Seu caldeirão finalmente para de ser ferramenta e vira extensão da sua vontade."
@@ -596,8 +596,8 @@ const GAME_DATA = {
             desc: "Você avança sem fundar escola, sem pedir testemunhas e sem explicar nada.",
             time_cost: 8,
             type: "cultivo",
-            requirements: { realm: 3, mind: 34, qi: 600000 },
-            effects: { mind: 5 },
+            requirements: { realm: 3, mind: 32, qi: 450000 },
+            effects: { qi: 450000, mind: 5 },
             unlocks: ["walk_beyond_mortals"],
             repeatable: false,
             log: "O seu avanço não cabe em doutrina. Isso o torna mais perigoso e muito mais solitário."
@@ -608,8 +608,8 @@ const GAME_DATA = {
             desc: "Você força o impossível até o impossível ceder por medo.",
             time_cost: 8,
             type: "risco",
-            requirements: { realm: 3, body: 24, qi: 700000, karma_max: -15 },
-            effects: { body: 4, mind: 4 },
+            requirements: { realm: 3, body: 22, qi: 420000, karma_max: -12 },
+            effects: { qi: 650000, body: 4, mind: 4 },
             unlocks: ["karma_storm"],
             repeatable: false,
             log: "Seus canais espirituais escurecem como um juramento de guerra."
@@ -620,8 +620,8 @@ const GAME_DATA = {
             desc: "Sua carne para de pedir licença à dor.",
             time_cost: 8,
             type: "corpo",
-            requirements: { realm: 3, body: 36, qi: 700000 },
-            effects: { body: 8 },
+            requirements: { realm: 3, body: 34, qi: 500000 },
+            effects: { qi: 500000, body: 8 },
             unlocks: ["beast_king_gate"],
             repeatable: false,
             log: "Seu corpo cruza um limite que a maioria só descreve com reverência ou terror."
