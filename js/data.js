@@ -6,13 +6,13 @@ const GAME_DATA = {
         4: { name: "Pico", multiplier: 2.1 }
     },
     realms: {
-        1: { name: "Temperar o Corpo", qiCap: 2000, multiplier: 1, tribulationDps: 80, tribulationYears: 2, karmaReward: 0, desc: "Seus ossos doem, mas sua vontade finalmente aprendeu a ranger junto." },
-        2: { name: "Condensação de Qi", qiCap: 120000, multiplier: 5, tribulationDps: 3000, tribulationYears: 18, karmaReward: 1, desc: "O mundo deixa de ser ar e passa a ser alimento." },
-        3: { name: "Estabelecimento de Fundação", qiCap: 2500000, multiplier: 25, tribulationDps: 800000, tribulationYears: 45, karmaReward: 2, desc: "Seu Dao deixa de ser rumor e ganha espinha dorsal." },
-        4: { name: "Formação do Núcleo", qiCap: 40000000, multiplier: 125, tribulationDps: 250000000, tribulationYears: 90, karmaReward: 4, desc: "Uma estrela pessoal gira no seu dantian, pequena e tirânica." },
-        5: { name: "Alma Nascente", qiCap: 800000000, multiplier: 625, tribulationDps: 2e11, tribulationYears: 180, karmaReward: 7, desc: "Sua alma aprende a andar antes mesmo de abandonar o corpo." },
-        6: { name: "Separação Espiritual", qiCap: 15000000000, multiplier: 3125, tribulationDps: 2e15, tribulationYears: 360, karmaReward: 11, desc: "A carne já não manda tanto quanto antes." },
-        7: { name: "Imortal Verdadeiro", qiCap: 250000000000, multiplier: 15625, tribulationDps: 2e19, tribulationYears: 720, karmaReward: 16, desc: "Os mortais juram que você sempre existiu." }
+        1: { name: "Temperar o Corpo", qiCap: 2000, multiplier: 1, tribulationDps: 80, tribulationYears: 2, karmaReward: 0, lifespanReward: 25, qiReserveRatio: 0.5, desc: "Seus ossos doem, mas sua vontade finalmente aprendeu a ranger junto." },
+        2: { name: "Condensação de Qi", qiCap: 120000, multiplier: 5, tribulationDps: 3000, tribulationYears: 18, karmaReward: 1, lifespanReward: 60, qiReserveRatio: 0.5, desc: "O mundo deixa de ser ar e passa a ser alimento." },
+        3: { name: "Estabelecimento de Fundação", qiCap: 2500000, multiplier: 25, tribulationDps: 800000, tribulationYears: 45, karmaReward: 2, lifespanReward: 120, qiReserveRatio: 0.5, desc: "Seu Dao deixa de ser rumor e ganha espinha dorsal." },
+        4: { name: "Formação do Núcleo", qiCap: 40000000, multiplier: 125, tribulationDps: 250000000, tribulationYears: 90, karmaReward: 4, lifespanReward: 220, qiReserveRatio: 0.5, desc: "Uma estrela pessoal gira no seu dantian, pequena e tirânica." },
+        5: { name: "Alma Nascente", qiCap: 800000000, multiplier: 625, tribulationDps: 2e11, tribulationYears: 180, karmaReward: 7, lifespanReward: 420, qiReserveRatio: 0.5, desc: "Sua alma aprende a andar antes mesmo de abandonar o corpo." },
+        6: { name: "Separação Espiritual", qiCap: 15000000000, multiplier: 3125, tribulationDps: 2e15, tribulationYears: 360, karmaReward: 11, lifespanReward: 800, qiReserveRatio: 0.5, desc: "A carne já não manda tanto quanto antes." },
+        7: { name: "Imortal Verdadeiro", qiCap: 250000000000, multiplier: 15625, tribulationDps: 2e19, tribulationYears: 720, karmaReward: 16, lifespanReward: 1500, qiReserveRatio: 0.5, desc: "Os mortais juram que você sempre existiu." }
     },
     techniques: {
         click_base: {

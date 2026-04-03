@@ -12,10 +12,11 @@ function getTribulationDurationYears() {
 function resolveRealmPromotion() {
     const currentRealm = gameState.realm;
     const maxRealm = getMaxRealm();
+    const currentRealmData = GAME_DATA.realms[currentRealm];
 
     if (currentRealm >= maxRealm) {
         inTribulation = false;
-        gameState.qi = GAME_DATA.realms[currentRealm].qiCap;
+        gameState.qi = currentRealmData.qiCap;
         refreshTribulationUnlock();
         pushGameToast('Você já alcançou o reino máximo atual.', 'warning');
         updateUI();
@@ -24,25 +25,28 @@ function resolveRealmPromotion() {
 
     gameState.realm = currentRealm + 1;
     gameState.subRealm = 1;
-    gameState.qi = 0;
+    const newRealmData = GAME_DATA.realms[gameState.realm];
+    const qiReserveRatio = currentRealmData.qiReserveRatio ?? 0.5;
+    gameState.qi = Math.floor(newRealmData.qiCap * qiReserveRatio);
+    syncCultivationMilestones();
     refreshTribulationUnlock();
 
     if (gameState.realm >= 5) {
         gameState.isImmortal = true;
     } else if (!gameState.isImmortal) {
-        gameState.lifespan += 50;
+        const lifespanReward = currentRealmData.lifespanReward ?? Math.max(50, Math.ceil(currentRealmData.tribulationYears * 2));
+        gameState.lifespan += lifespanReward;
     }
 
     if (!gameState.isImmortal && gameState.age >= gameState.lifespan) {
         gameState.lifespan = Math.ceil(gameState.age + 10);
     }
 
-    const newRealmData = GAME_DATA.realms[gameState.realm];
     const lifeMsg = gameState.isImmortal ? ' Você se tornou Imortal!' : ' Expectativa de vida aumentada grandemente!';
     gameState.currentObjective = `Fortaleça corpo, mente e Qi para dominar o reino ${newRealmData.name}.`;
 
     pushGameToast(`Sucesso! Você avançou para o Reino: ${newRealmData.name}.`, 'success');
-    addJourneyLog(`[Tribulação] ${newRealmData.desc} ${lifeMsg}`);
+    addJourneyLog(`[Tribulação] ${newRealmData.desc} ${lifeMsg} Você retém ${formatNumber(gameState.qi)} Qi como base do novo reino.`);
     checkSectUnlock();
 }
 
