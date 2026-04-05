@@ -6,13 +6,13 @@ const GAME_DATA = {
         4: { name: "Pico", multiplier: 2.1 }
     },
     realms: {
-        1: { name: "Temperar o Corpo", qiCap: 2000, multiplier: 1, tribulationDps: 80, tribulationYears: 2, karmaReward: 0, lifespanReward: 25, qiReserveRatio: 0.5, desc: "Seus ossos ainda pertencem à lama, mas sua vontade já aprendeu a responder ao ferro." },
-        2: { name: "Condensação de Qi", qiCap: 120000, multiplier: 5, tribulationDps: 3000, tribulationYears: 18, karmaReward: 1, lifespanReward: 60, qiReserveRatio: 0.5, desc: "O mundo deixa de ser apenas ar: agora cada sopro pode ser engolido como alimento espiritual." },
-        3: { name: "Estabelecimento de Fundação", qiCap: 2500000, multiplier: 25, tribulationDps: 800000, tribulationYears: 45, karmaReward: 2, lifespanReward: 120, qiReserveRatio: 0.5, desc: "Seu Dao deixa de ser rumor e ganha ossatura; a estrada já pode sustentar o próprio peso." },
-        4: { name: "Formação do Núcleo", qiCap: 40000000, multiplier: 125, tribulationDps: 250000000, tribulationYears: 90, karmaReward: 4, lifespanReward: 220, qiReserveRatio: 0.5, desc: "Uma estrela pessoal gira no seu dantian, pequena, tirânica e faminta por eternidade." },
-        5: { name: "Alma Nascente", qiCap: 800000000, multiplier: 625, tribulationDps: 2e11, tribulationYears: 180, karmaReward: 7, lifespanReward: 420, qiReserveRatio: 0.5, desc: "Sua alma ensaia os primeiros passos antes mesmo de abandonar o corpo que a abrigou." },
-        6: { name: "Separação Espiritual", qiCap: 15000000000, multiplier: 3125, tribulationDps: 2e15, tribulationYears: 360, karmaReward: 11, lifespanReward: 800, qiReserveRatio: 0.5, desc: "A carne ainda existe, mas já não governa sozinha o que você pode se tornar." },
-        7: { name: "Imortal Verdadeiro", qiCap: 250000000000, multiplier: 15625, tribulationDps: 2e19, tribulationYears: 720, karmaReward: 16, lifespanReward: 1500, qiReserveRatio: 0.5, desc: "Os mortais juram que você sempre existiu; os céus, em silêncio, começam a considerar a hipótese." }
+        1: { name: "Temperar o Corpo", qiCap: 2000, multiplier: 1, tribulationDps: 80, tribulationYears: 2, karmaReward: 0, lifespanReward: 25, qiReserveRatio: 0.5, desc: "Seus ossos doem, mas sua vontade finalmente aprendeu a ranger junto." },
+        2: { name: "Condensação de Qi", qiCap: 120000, multiplier: 5, tribulationDps: 3000, tribulationYears: 18, karmaReward: 1, lifespanReward: 60, qiReserveRatio: 0.5, desc: "O mundo deixa de ser ar e passa a ser alimento." },
+        3: { name: "Estabelecimento de Fundação", qiCap: 2500000, multiplier: 25, tribulationDps: 800000, tribulationYears: 45, karmaReward: 2, lifespanReward: 120, qiReserveRatio: 0.5, desc: "Seu Dao deixa de ser rumor e ganha espinha dorsal." },
+        4: { name: "Formação do Núcleo", qiCap: 40000000, multiplier: 125, tribulationDps: 250000000, tribulationYears: 90, karmaReward: 4, lifespanReward: 220, qiReserveRatio: 0.5, desc: "Uma estrela pessoal gira no seu dantian, pequena e tirânica." },
+        5: { name: "Alma Nascente", qiCap: 800000000, multiplier: 625, tribulationDps: 2e11, tribulationYears: 180, karmaReward: 7, lifespanReward: 420, qiReserveRatio: 0.5, desc: "Sua alma aprende a andar antes mesmo de abandonar o corpo." },
+        6: { name: "Separação Espiritual", qiCap: 15000000000, multiplier: 3125, tribulationDps: 2e15, tribulationYears: 360, karmaReward: 11, lifespanReward: 800, qiReserveRatio: 0.5, desc: "A carne já não manda tanto quanto antes." },
+        7: { name: "Imortal Verdadeiro", qiCap: 250000000000, multiplier: 15625, tribulationDps: 2e19, tribulationYears: 720, karmaReward: 16, lifespanReward: 1500, qiReserveRatio: 0.5, desc: "Os mortais juram que você sempre existiu." }
     },
     techniques: {
         click_base: {
@@ -77,218 +77,120 @@ const GAME_DATA = {
             id: "dao_karma_gain",
             name: "Compreensão do Samsara",
             baseCost: 1,
-            costGrowth: 1.45,
+            costGrowth: 1.5,
             desc: "Aumenta o ganho de Karma ao reencarnar em +10%.",
-            path: "man",
-            tier: 1,
-            maxLevel: 6
+            path: "man"
         },
         dao_cost_reduction: {
             id: "dao_cost_reduction",
             name: "Mente Vazia",
             baseCost: 2,
-            costGrowth: 1.65,
+            costGrowth: 1.8,
             desc: "Reduz o crescimento de custo das propriedades.",
-            path: "man",
-            tier: 2,
-            maxLevel: 5,
-            requires: { dao_karma_gain: 1 }
+            path: "man"
         },
         dao_realm_mult: {
             id: "dao_realm_mult",
             name: "Ecos do Passado",
-            baseCost: 4,
-            costGrowth: 2.1,
+            baseCost: 5,
+            costGrowth: 3,
             desc: "Multiplicadores de reino ganham um bônus massivo.",
-            path: "man",
-            tier: 3,
-            maxLevel: 4,
-            requires: { dao_cost_reduction: 2 }
-        },
-        dao_fate_threads: {
-            id: "dao_fate_threads",
-            name: "Fios do Destino",
-            baseCost: 7,
-            costGrowth: 2.2,
-            desc: "Ações da jornada rendem mais Qi e ficam menos dependentes da rota perfeita.",
-            path: "man",
-            tier: 4,
-            maxLevel: 4,
-            requires: { dao_realm_mult: 1 }
-        },
-        dao_mortal_echo: {
-            id: "dao_mortal_echo",
-            name: "Ecos da Vida Mortal",
-            baseCost: 14,
-            costGrowth: 2.45,
-            desc: "A jornada passa a render mais corpo e mente, e as recargas deixam de travar tanto o caminho.",
-            path: "man",
-            tier: 5,
-            maxLevel: 3,
-            requires: { dao_fate_threads: 2 }
+            path: "man"
         },
         dao_life: {
             id: "dao_life",
             name: "Corpo de Tartaruga",
             baseCost: 1,
-            costGrowth: 1.4,
+            costGrowth: 1.5,
             desc: "Aumenta a expectativa de vida inicial em +20 anos.",
-            path: "heaven",
-            tier: 1,
-            maxLevel: 8
+            path: "heaven"
         },
         dao_offline: {
             id: "dao_offline",
             name: "Respiração Profunda",
             baseCost: 2,
-            costGrowth: 1.7,
+            costGrowth: 2,
             desc: "Aumenta Qi manual e passivo em +10%.",
-            path: "heaven",
-            tier: 2,
-            maxLevel: 6,
-            requires: { dao_life: 2 }
+            path: "heaven"
         },
         dao_retain: {
             id: "dao_retain",
             name: "Memória da Alma",
-            baseCost: 5,
-            costGrowth: 2.1,
+            baseCost: 10,
+            costGrowth: 5,
             desc: "Mantém 5% do Qi total na próxima vida.",
-            path: "heaven",
-            tier: 3,
-            maxLevel: 5,
-            requires: { dao_offline: 2 }
-        },
-        dao_origin_reserve: {
-            id: "dao_origin_reserve",
-            name: "Reservatório Primordial",
-            baseCost: 8,
-            costGrowth: 2.2,
-            desc: "Você entra em cada novo reino com uma base de Qi cada vez menos vazia.",
-            path: "heaven",
-            tier: 4,
-            maxLevel: 3,
-            requires: { dao_retain: 1 }
-        },
-        dao_tribulation_grace: {
-            id: "dao_tribulation_grace",
-            name: "Graça dos Céus",
-            baseCost: 12,
-            costGrowth: 2.25,
-            desc: "Reduz o custo em anos da tribulação e suaviza a passagem entre reinos.",
-            path: "heaven",
-            tier: 5,
-            maxLevel: 5,
-            requires: { dao_origin_reserve: 1 }
+            path: "heaven"
         },
         dao_herb_mult: {
             id: "dao_herb_mult",
             name: "Solo Fértil",
             baseCost: 1,
-            costGrowth: 1.45,
+            costGrowth: 1.5,
             desc: "Ervas geram 2x mais Qi.",
-            path: "earth",
-            tier: 1,
-            maxLevel: 5
+            path: "earth"
         },
         dao_pill_mult: {
             id: "dao_pill_mult",
             name: "Fogo Alquímico",
             baseCost: 3,
-            costGrowth: 1.8,
-            desc: "Pílulas são 50% mais eficientes ao buffar Ervas.",
-            path: "earth",
-            tier: 2,
-            maxLevel: 5,
-            requires: { dao_herb_mult: 2 }
-        },
-        dao_sect_flow: {
-            id: "dao_sect_flow",
-            name: "Maré da Seita",
-            baseCost: 5,
             costGrowth: 2,
-            desc: "Discípulos, Anciões e Matrizes trabalham em sincronia cada vez maior.",
-            path: "earth",
-            tier: 3,
-            maxLevel: 4,
-            requires: { dao_pill_mult: 1 }
-        },
-        dao_foundation_well: {
-            id: "dao_foundation_well",
-            name: "Poço da Fundação",
-            baseCost: 8,
-            costGrowth: 2.15,
-            desc: "Toda produção passiva do cultivo ganha estabilidade e volume.",
-            path: "earth",
-            tier: 4,
-            maxLevel: 4,
-            requires: { dao_sect_flow: 2 }
-        },
-        dao_world_root: {
-            id: "dao_world_root",
-            name: "Raiz do Mundo",
-            baseCost: 14,
-            costGrowth: 2.35,
-            desc: "A infraestrutura espiritual para de desperdiçar força e tudo que é passivo flui melhor junto.",
-            path: "earth",
-            tier: 5,
-            maxLevel: 3,
-            requires: { dao_foundation_well: 2 }
+            desc: "Pílulas são 50% mais eficientes ao buffar Ervas.",
+            path: "earth"
         }
     },
     journeyActions: {
         work_farm: {
             id: "work_farm",
             name: "Trabalhar na Fazenda",
-            desc: "Você enterra as mãos na terra fria e aprende, em silêncio, que toda sobrevivência começa pelo peso do corpo.",
+            desc: "Você ara a terra, fortalece os braços e compra mais alguns anos de humildade.",
             time_cost: 2,
             type: "corpo",
             requirements: {},
             effects: { body: 1 },
             unlocks: ["explore_forest", "explore_ruins"],
             repeatable: true,
-            log: "Você volta da plantação com as mãos rachadas, os ombros mais pesados e a vaga sensação de que suportar também é uma forma de cultivo."
+            log: "Você volta da plantação com as mãos rachadas e o corpo um pouco mais firme."
         },
         hear_legends: {
             id: "hear_legends",
             name: "Ouvir Lendas na Taverna",
-            desc: "Velhos bêbados mentem mal, mas quando mentem sobre imortais ainda deixam escapar migalhas de verdade.",
+            desc: "Velhos bêbados mentem mal, mas mentem sobre imortais. Isso já basta.",
             time_cost: 2,
             type: "social",
             requirements: {},
             effects: { mind: 2 },
             unlocks: ["breathe"],
             repeatable: false,
-            log: "As histórias deixam brasas na sua mente; onde antes havia cansaço, agora há uma fome difícil de nomear."
+            log: "As histórias plantam ambição onde antes só havia cansaço."
         },
         village_elder: {
             id: "village_elder",
             name: "Consultar o Ancião da Vila",
-            desc: "O velho sabe pouco, mas conhece o valor de apontar para a montanha certa no momento exato.",
+            desc: "O velho sabe pouco, mas sabe apontar para as montanhas certas.",
             time_cost: 2,
             type: "social",
             requirements: {},
             effects: { body: 1, mind: 1 },
             unlocks: ["sect_recruiter", "find_cave"],
             repeatable: false,
-            log: "O ancião fala de cavernas, seitas e da espécie de loucura que separa um camponês de alguém digno de ser lembrado."
+            log: "O ancião fala sobre cavernas, seitas e o tipo de loucura que vale a pena perseguir."
         },
         rest_under_tree: {
             id: "rest_under_tree",
             name: "Descansar sob a Árvore Antiga",
-            desc: "Você aquieta a respiração e, por um instante, o vento parece sussurrar como um mestre invisível.",
+            desc: "Você silencia a respiração e escuta o vento tentando ensinar alguma coisa.",
             time_cost: 2,
             type: "cultivo",
             requirements: {},
             effects: { mind: 1, qi: 10 },
             unlocks: ["breathe"],
             repeatable: true,
-            log: "Nada aconteceu de grandioso, mas o mundo pareceu menos barulhento e seu coração aprendeu um pouco de quietude."
+            log: "Nada aconteceu de grandioso. Ainda assim, seu coração ficou mais quieto."
         },
         breathe: {
             id: "breathe",
             name: "Tentar Sentir o Qi",
-            desc: "Você tenta respirar o mundo inteiro sem se partir no processo, como se o vazio entre uma batida e outra escondesse um segredo.",
+            desc: "Você tenta respirar o mundo sem parecer ridículo.",
             time_cost: 3,
             type: "cultivo",
             requirements: { mind: 12 },
@@ -297,12 +199,12 @@ const GAME_DATA = {
             unlocks: ["read_scroll", "watch_stars"],
             repeatable: false,
             ui_reward_summary: "Desbloqueia meditação e inicia seu primeiro fluxo passivo de Qi.",
-            log: "Uma corrente morna atravessa seus meridianos. A partir daqui, meditar deixa de ser superstição e passa a ser caminho."
+            log: "Uma corrente morna passa pelos seus meridianos. Meditar deixou de ser superstição."
         },
         find_cave: {
             id: "find_cave",
             name: "Investigar a Caverna Brilhante",
-            desc: "Uma caverna húmida exala energia verde, antiga e instável, como se a montanha estivesse respirando por uma ferida aberta.",
+            desc: "Uma caverna húmida exala energia verde. Isso parece promissor e levemente insalubre.",
             time_cost: 3,
             type: "cultivo",
             requirements: { qi: 80 },
@@ -311,31 +213,31 @@ const GAME_DATA = {
             unlocks: ["gather_spirit_herbs", "read_scroll"],
             repeatable: false,
             ui_reward_summary: "Desbloqueia Ervas Espirituais e abre a primeira layer comprável do idle.",
-            log: "Você encontra ervas espirituais e um abrigo tosco, mas ali já existe espaço suficiente para começar a sonhar com grandeza."
+            log: "Você encontra ervas espirituais e um abrigo bom o bastante para sonhar com grandeza."
         },
         explore_forest: {
             id: "explore_forest",
             name: "Explorar a Floresta Sombria",
-            desc: "A mata aceita sua entrada apenas para cobrar depois, em arranhões, fôlego e pequenas lições de medo.",
+            desc: "A mata cobra coragem de entrada e sangue na saída.",
             time_cost: 3,
             type: "risco",
             requirements: { body: 11 },
             effects: { body: 2 },
             unlocks: ["hunt_wild_boar"],
             repeatable: false,
-            log: "Você retorna arranhado e ofegante, mas leva consigo a primeira certeza rude de que ainda não é presa fácil."
+            log: "Você volta arranhado, vivo e um pouco menos impressionável."
         },
         explore_ruins: {
             id: "explore_ruins",
             name: "Explorar Ruínas Abandonadas",
-            desc: "Pedras quebradas, estelas rachadas e o cheiro persistente de uma sorte que estragou muitos destinos antes do seu.",
+            desc: "Pedras quebradas, estelas rachadas e um cheiro de sorte errada.",
             time_cost: 3,
             type: "risco",
             requirements: { mind: 11 },
             effects: { mind: 1, karma: -1 },
             unlocks: ["forbidden_whisper"],
             repeatable: false,
-            log: "Nas ruínas, alguma coisa antiga percebe que você é curioso, ambicioso e tolo o bastante para prosseguir."
+            log: "Nas ruínas, algo antigo percebe que você é tolo o bastante para continuar."
         },
         read_scroll: {
             id: "read_scroll",

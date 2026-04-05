@@ -16,19 +16,27 @@ function formatNumber(num) {
 }
 
 function getRouteLabel(routeId) {
-    return getLocalizedRouteLabel(routeId);
+    const labels = {
+        none: "Caminho Indefinido",
+        body: "Corpo Bestial",
+        alchemy: "Alquimista da Longevividade",
+        sect: "Patriarca de Seita",
+        void: "Eremita do Vazio",
+        demonic: "Herdeiro do Dao Proibido"
+    };
+    return labels[routeId] || "Caminho Indefinido";
 }
 
 function getBuildingEffectSummary(buildingId) {
     const building = GAME_DATA.buildings[buildingId];
-    if (!building) return t('no_effect_defined');
+    if (!building) return 'Sem efeito definido.';
 
     const effectLabels = {
-        qi: t('effect_qi_per_unit', { amount: formatNumber(building.amount) }),
-        herbs_mult: t('effect_herbs_mult', { amount: (building.amount * 100).toFixed(1).replace('.0', '') }),
-        pills: t('effect_pills_per_unit', { amount: formatNumber(building.amount) }),
-        disciples: t('effect_disciples_per_unit', { amount: formatNumber(building.amount) }),
-        elders: t('effect_elders_per_unit', { amount: formatNumber(building.amount) })
+        qi: `gera ${formatNumber(building.amount)} Qi/s por unidade`,
+        herbs_mult: `aumenta a eficiência das Ervas em ${(building.amount * 100).toFixed(1).replace('.0', '')}% por unidade`,
+        pills: `gera ${formatNumber(building.amount)} Pílulas/s por unidade`,
+        disciples: `gera ${formatNumber(building.amount)} Discípulos/s por unidade`,
+        elders: `gera ${formatNumber(building.amount)} Anciões/s por unidade`
     };
 
     return effectLabels[building.generate] || building.desc;
@@ -36,36 +44,20 @@ function getBuildingEffectSummary(buildingId) {
 
 function getMetaUpgradeEffectSummary(upgradeId) {
     const upgrade = GAME_DATA.metaUpgrades[upgradeId];
-    if (!upgrade) return t('no_effect_defined');
+    if (!upgrade) return 'Sem efeito definido.';
 
     const summaries = {
-        dao_karma_gain: { 'pt-BR': '+10% de Karma por nível ao reencarnar', en: '+10% Karma on reincarnation per level', 'zh-CN': '每级转生业力 +10%' },
-        dao_cost_reduction: { 'pt-BR': 'reduz o crescimento de custo das layers a cada nível', en: 'reduces layer cost growth each level', 'zh-CN': '每级降低产业成本成长' },
-        dao_realm_mult: { 'pt-BR': 'multiplica fortemente o bônus dos reinos', en: 'greatly amplifies realm bonuses', 'zh-CN': '大幅强化境界倍率' },
-        dao_fate_threads: { 'pt-BR': '+15% de Qi das ações da jornada por nível', en: '+15% Qi from journey actions per level', 'zh-CN': '每级旅途行动真气 +15%' },
-        dao_mortal_echo: { 'pt-BR': '+20% de Corpo/Mente em ações e -12% de recarga por nível', en: '+20% Body/Mind from actions and -12% cooldown per level', 'zh-CN': '每级行动肉身/心神 +20%，冷却 -12%' },
-        dao_life: { 'pt-BR': '+20 anos de vida base por nível', en: '+20 base lifespan per level', 'zh-CN': '每级基础寿命 +20 年' },
-        dao_offline: { 'pt-BR': '+10% no Qi manual e passivo por nível', en: '+10% manual and passive Qi per level', 'zh-CN': '每级手动与被动真气 +10%' },
-        dao_retain: { 'pt-BR': 'retém 5% do Qi total por nível até o limite de 50%', en: 'retains 5% total Qi per level up to 50%', 'zh-CN': '每级保留 5% 总真气，上限 50%' },
-        dao_origin_reserve: { 'pt-BR': '+10% de reserva inicial de Qi em cada novo reino por nível', en: '+10% starting Qi reserve in each new realm per level', 'zh-CN': '每级新境界初始真气储备 +10%' },
-        dao_tribulation_grace: { 'pt-BR': '-8% de anos de tribulação por nível', en: '-8% tribulation years per level', 'zh-CN': '每级天劫年数 -8%' },
-        dao_herb_mult: { 'pt-BR': 'dobra a produção das Ervas por nível', en: 'doubles Herb production per level', 'zh-CN': '每级灵草产出翻倍' },
-        dao_pill_mult: { 'pt-BR': '+50% de eficiência das Pílulas por nível', en: '+50% Pill efficiency per level', 'zh-CN': '每级丹药效率 +50%' },
-        dao_sect_flow: { 'pt-BR': '+20% na cascata de Discípulos, Anciões e Matrizes por nível', en: '+20% cascade flow for Disciples, Elders and Arrays per level', 'zh-CN': '每级弟子、长老、阵法联动 +20%' },
-        dao_foundation_well: { 'pt-BR': '+15% de Qi passivo total por nível', en: '+15% total passive Qi per level', 'zh-CN': '每级总被动真气 +15%' },
-        dao_world_root: { 'pt-BR': '+12% no fluxo passivo total e +10% na cascata por nível', en: '+12% total passive flow and +10% cascade per level', 'zh-CN': '每级总被动流转 +12%，联动 +10%' }
+        dao_karma_gain: '+10% de Karma por nível ao reencarnar',
+        dao_cost_reduction: 'reduz o crescimento de custo das layers a cada nível',
+        dao_realm_mult: 'multiplica fortemente o bônus dos reinos',
+        dao_life: '+20 anos de vida base por nível',
+        dao_offline: '+10% no Qi manual e passivo por nível',
+        dao_retain: 'retém 5% do Qi total por nível até o limite de 50%',
+        dao_herb_mult: 'dobra a produção das Ervas por nível',
+        dao_pill_mult: '+50% de eficiência das Pílulas por nível'
     };
 
-    const summary = summaries[upgradeId];
-    if (!summary) return upgrade.desc;
-    return summary[getCurrentLocale()] || summary['pt-BR'];
-}
-
-function getMetaUpgradeRequirementText(upg) {
-    if (!upg.requires) return t('free');
-    return Object.entries(upg.requires)
-        .map(([reqId, reqLevel]) => `${GAME_DATA.metaUpgrades[reqId].name} ${reqLevel}`)
-        .join(' • ');
+    return summaries[upgradeId] || upgrade.desc;
 }
 
 function closeAllHudDrawers() {
@@ -153,24 +145,24 @@ function showJourneyHoverTooltip(node, clientX, clientY) {
     const effectsText = getActionEffectsSummary(action);
     const requirements = getActionRequirementFailures(action);
     const status = node.isInteractable
-        ? t('available_now')
+        ? 'Disponível'
         : node.onCooldown
-            ? t('recharging')
+            ? 'Recarregando'
         : node.blocked
-            ? t('route_lost')
+            ? 'Rota perdida'
             : node.adjacent
-                ? t('next_action')
+                ? 'Próxima ação'
                 : node.unlocked
-                    ? t('next_action')
-                    : t('memory_status');
+                    ? 'Desbloqueada, mas indisponível'
+                    : 'Memória';
 
     tooltip.innerHTML = `
         <h4>${action.name}</h4>
         <p>${status}</p>
-        <p>${action.time_cost} ${t('years')}</p>
-        <p>${effectsText.length > 0 ? effectsText.join(' • ') : t('no_direct_effect')}</p>
-        ${node.onCooldown ? `<p>${t('cooldown_ready_in', { years: node.cooldownRemaining.toFixed(1) })}</p>` : (action.cooldownYears ? `<p>${t('cooldown_label')}: ${t('cooldown_fixed', { years: getActionCooldownDurationYears(action.id) })}</p>` : '')}
-        ${requirements.length > 0 ? `<p>${t('missing')}: ${requirements.join(' • ')}</p>` : ''}
+        <p>${action.time_cost} anos</p>
+        <p>${effectsText.length > 0 ? effectsText.join(' • ') : 'Sem efeito direto além da progressão.'}</p>
+        ${node.onCooldown ? `<p>Disponível em ${node.cooldownRemaining.toFixed(1)} anos</p>` : (action.cooldownYears ? `<p>Recarga: ${action.cooldownYears} anos</p>` : '')}
+        ${requirements.length > 0 ? `<p>Falta: ${requirements.join(' • ')}</p>` : ''}
     `;
 
     const tooltipWidth = 320;
@@ -190,7 +182,7 @@ function updateAudioHud() {
     if (!audio || !btn || !volume) return;
 
     audio.volume = Number(volume.value) / 100;
-    btn.innerText = audio.paused ? t('play') : t('pause');
+    btn.innerText = audio.paused ? 'Tocar' : 'Pausar';
 }
 
 async function tryAutoplayBackgroundMusic() {
@@ -235,7 +227,7 @@ function setupAudioHud() {
             }
             updateAudioHud();
         } catch (error) {
-            pushGameToast(t('audio_blocked_toast'), 'warning');
+            pushGameToast('O navegador exigiu interação adicional para iniciar a trilha.', 'warning');
         }
     });
 
@@ -539,18 +531,18 @@ function drawJourneyNodeLabels(ctx, nodes) {
         ctx.fillStyle = node.blocked ? '#886868' : (node.adjacent && !node.isInteractable ? '#5f5846' : '#B4B4B4');
         ctx.font = '12px Inter';
         const statusText = node.active
-            ? t('in_progress_action')
+            ? 'Em andamento'
             : node.blocked
-                ? t('route_lost')
+                ? 'Rota perdida'
                 : node.unlocked
-                    ? t('available_now')
+                    ? 'Disponível'
                     : node.adjacent
-                        ? t('next_action')
-                        : t('memory_status');
+                        ? 'Próximo passo'
+                        : 'Memória';
         ctx.fillText(statusText, node.x + 12, node.y + 34);
 
         ctx.fillStyle = node.isEnding ? '#f0d78a' : '#D4AF37';
-        const costText = node.isEnding ? `${t('final_word')} • ${node.action.time_cost} ${t('years')}` : `${node.action.time_cost} ${t('years')}`;
+        const costText = node.isEnding ? `Final • ${node.action.time_cost} anos` : `${node.action.time_cost} anos`;
         ctx.fillText(costText, node.x + 12, node.y + 52);
         ctx.restore();
     });
@@ -581,12 +573,8 @@ function updateJourneyGraphInfo(nodeId) {
     const action = GAME_DATA.journeyActions[nodeId];
     if (!action) {
         info.innerHTML = `
-            <div class="journey-graph-node-info-top">
-                <span class="hud-label">${t('status')}</span>
-                <span class="journey-graph-node-info-chip">${t('action_panel_chip')}</span>
-            </div>
-            <h3>${t('choose_node')}</h3>
-            <p>${t('choose_node_hint')}</p>
+            <h3>Escolha um nó</h3>
+            <p>Clique em uma ação no quadro para ver requisitos, custo de vida e status.</p>
         `;
         return;
     }
@@ -602,101 +590,42 @@ function updateJourneyGraphInfo(nodeId) {
         return parent?.unlocks?.includes(nodeId);
     });
 
-    let status = t('memory_status');
-    if (onCooldown) status = t('recharging');
-    if (blocked) status = t('route_lost');
-    else if (gameState.activeAction === nodeId) status = t('in_progress_action');
-    else if (unlocked && failures.length === 0) status = t('available_now');
-    else if (unlocked) status = t('next_action');
-    else if (adjacent) status = t('next_action');
+    let status = 'Memória';
+    if (onCooldown) status = 'Recarregando';
+    if (blocked) status = 'Rota perdida nesta vida';
+    else if (gameState.activeAction === nodeId) status = 'Em andamento';
+    else if (unlocked && failures.length === 0) status = 'Disponível agora';
+    else if (unlocked) status = 'Desbloqueada, mas ainda exige preparo';
+    else if (adjacent) status = 'Próxima ação visível';
 
     const req = action.requirements || {};
     const reqParts = [];
     if (req.qi) reqParts.push(`${formatNumber(req.qi)} Qi`);
-    if (req.body) reqParts.push(`${req.body} ${t('body_word')}`);
-    if (req.mind) reqParts.push(`${req.mind} ${t('mind_word')}`);
-    if (req.realm) reqParts.push(`${t('realm_word')} ${req.realm}+`);
-    if (req.subRealm) reqParts.push(`${t('subrealm_word')} ${req.subRealm}+`);
+    if (req.body) reqParts.push(`${req.body} Corpo`);
+    if (req.mind) reqParts.push(`${req.mind} Mente`);
+    if (req.realm) reqParts.push(`Reino ${req.realm}+`);
+    if (req.subRealm) reqParts.push(`Estágio ${req.subRealm}+`);
     if (req.karma_max !== undefined) reqParts.push(`Karma <= ${req.karma_max}`);
     ['herbs', 'pills', 'disciples', 'elders', 'arrays'].forEach(key => {
         if (req[key]) reqParts.push(`${formatNumber(req[key])} ${GAME_DATA.buildings[key].name}`);
     });
 
     const progress = gameState.actionProgresses[nodeId] || 0;
-    const progressText = progress > 0 ? `${Math.floor((progress / action.time_cost) * 100)}%` : t('no_saved_progress');
-    const failureText = failures.length > 0 ? failures.join(' • ') : t('no_requirements');
+    const progressText = progress > 0 ? `${Math.floor((progress / action.time_cost) * 100)}% salvo` : 'Nenhum progresso salvo';
+    const failureText = failures.length > 0 ? failures.join(' • ') : 'Nada faltando';
     const effectsText = getActionEffectsSummary(action);
-    const cooldownDuration = getActionCooldownDurationYears(nodeId);
-    const cooldownText = action.cooldownYears ? (onCooldown ? t('cooldown_remaining', { remaining: cooldownRemaining.toFixed(1), total: cooldownDuration }) : t('cooldown_per_use', { years: cooldownDuration })) : t('no_cooldown');
-    const unlocksText = action.unlocks?.length ? action.unlocks.map(id => GAME_DATA.journeyActions[id]?.name).filter(Boolean) : [];
-
-    let ctaLabel = t('execute_action');
-    let ctaDisabled = false;
-    if (gameState.activeAction === nodeId) {
-        ctaLabel = t('action_running');
-        ctaDisabled = true;
-    } else if (blocked) {
-        ctaLabel = t('locked_route');
-        ctaDisabled = true;
-    } else if (!unlocked) {
-        ctaLabel = t('locked_word');
-        ctaDisabled = true;
-    } else if (onCooldown) {
-        ctaLabel = t('recharging');
-        ctaDisabled = true;
-    } else if (failures.length > 0) {
-        ctaLabel = t('unmet_requirements');
-        ctaDisabled = true;
-    }
+    const cooldownText = action.cooldownYears ? (onCooldown ? `${cooldownRemaining.toFixed(1)} anos restantes de ${action.cooldownYears}` : `${action.cooldownYears} anos por recarga`) : 'Sem recarga';
 
     info.innerHTML = `
-        <div class="journey-graph-node-info-top">
-            <span class="hud-label">${t('status')}</span>
-            <span class="journey-graph-node-info-chip">${status}</span>
-        </div>
         <h3>${action.name}</h3>
         <p>${action.desc}</p>
-        <div class="journey-detail-grid">
-            <div class="journey-detail-stat">
-                <span class="journey-detail-stat-label">${t('status')}</span>
-                <span class="journey-detail-stat-value">${status}</span>
-            </div>
-            <div class="journey-detail-stat">
-                <span class="journey-detail-stat-label">${t('time_word')}</span>
-                <span class="journey-detail-stat-value">${action.time_cost} ${t('years')}</span>
-            </div>
-            <div class="journey-detail-stat">
-                <span class="journey-detail-stat-label">${t('repeatable_word')}</span>
-                <span class="journey-detail-stat-value">${action.repeatable ? t('yes_word') : t('no_word')}</span>
-            </div>
-            <div class="journey-detail-stat">
-                <span class="journey-detail-stat-label">${t('progress')}</span>
-                <span class="journey-detail-stat-value">${progressText}</span>
-            </div>
-        </div>
-        <div class="journey-detail-block">
-            <h4>${t('requirements')}</h4>
-            <div class="journey-detail-list">
-                <div class="journey-detail-item">${reqParts.length > 0 ? reqParts.join(' • ') : t('no_requirements')}</div>
-                <div class="journey-detail-item muted">${t('missing')}: ${failureText}</div>
-            </div>
-        </div>
-        <div class="journey-detail-block">
-            <h4>${t('effects')}</h4>
-            <div class="journey-detail-list">
-                <div class="journey-detail-item">${effectsText.length > 0 ? effectsText.join(' • ') : t('no_direct_effect')}</div>
-                <div class="journey-detail-item muted">${t('cooldown_label')}: ${cooldownText}</div>
-            </div>
-        </div>
-        ${unlocksText.length > 0 ? `
-            <div class="journey-detail-block">
-                <h4>${t('unlocks')}</h4>
-                <div class="journey-detail-list">
-                    <div class="journey-detail-item">${unlocksText.join(' • ')}</div>
-                </div>
-            </div>
-        ` : ''}
-        <button class="buy-btn journey-detail-cta" onclick="startJourneyAction('${nodeId}')" ${ctaDisabled ? 'disabled' : ''}>${ctaLabel}</button>
+        <p><span class="journey-node-info-emphasis">Status:</span> ${status}</p>
+        <p><span class="journey-node-info-emphasis">Custo:</span> ${action.time_cost} anos</p>
+        <p><span class="journey-node-info-emphasis">Requisitos:</span> ${reqParts.length > 0 ? reqParts.join(', ') : 'Nenhum'}</p>
+        <p><span class="journey-node-info-emphasis">Falta:</span> ${failureText}</p>
+        <p><span class="journey-node-info-emphasis">Efeitos:</span> ${effectsText.length > 0 ? effectsText.join(' • ') : 'Sem efeito direto além da progressão.'}</p>
+        <p><span class="journey-node-info-emphasis">Recarga:</span> ${cooldownText}</p>
+        <p><span class="journey-node-info-emphasis">Progresso:</span> ${progressText}</p>
     `;
 }
 
@@ -788,7 +717,7 @@ function bindJourneyCanvasEvents() {
         if (node.isInteractable) {
             startJourneyAction(node.id);
         } else if (node.adjacent || node.blocked || node.failures.length > 0) {
-            pushGameToast(t('unavailable_action_toast', { action: node.action.name }), 'warning');
+            pushGameToast(`Ainda indisponível: ${node.action.name}`, 'warning');
         }
     });
 
@@ -847,15 +776,10 @@ function updateUI() {
     document.getElementById('qpc-display').innerText = formatNumber(getQiPerClick());
     document.getElementById('current-route').innerText = getRouteLabel(gameState.currentRoute);
     const objectiveText = (canStartTribulation() && !inTribulation)
-        ? t('objective_tribulation')
-        : (gameState.currentObjectiveKey ? t(gameState.currentObjectiveKey, gameState.currentObjectiveData || {}) : (gameState.currentObjective || t('objective_default')));
+        ? 'Você atingiu o pico do reino. Inicie a Tribulação Celestial.'
+        : (gameState.currentObjective || 'Descubra um caminho entre trabalho, estudo e risco.');
     document.getElementById('current-objective').innerText = objectiveText;
-    document.getElementById('current-ending').innerText = gameState.endingTitle || t('no_ending');
-    const topKarma = document.getElementById('top-karma-display');
-    if (topKarma) {
-        topKarma.innerText = formatNumber(gameState.karma);
-        topKarma.style.color = gameState.karma >= 0 ? '#D4AF37' : '#d98b8b';
-    }
+    document.getElementById('current-ending').innerText = gameState.endingTitle || 'Nenhum final alcançado nesta vida.';
 
     // Direita
     const realmCap = GAME_DATA.realms[gameState.realm].qiCap;
@@ -879,12 +803,12 @@ function updateUI() {
             progressBar.classList.add('tribulation-bar-fill');
             document.getElementById('qi-progress').innerText = formatNumber(Math.max(0, tribulationTimer));
             document.getElementById('qi-cap').innerText = formatNumber(totalTribulationYears);
-            if (progressLabel) progressLabel.innerText = t('tribulation');
+            if (progressLabel) progressLabel.innerText = 'Tribulação';
         } else {
             const percent = Math.min(100, (gameState.qi / targetCap) * 100);
             progressBar.style.width = `${percent}%`;
             progressBar.classList.toggle('tribulation-bar-fill', tribulationReady);
-            if (progressLabel) progressLabel.innerText = atPeak ? t('tribulation') : t('next_breakthrough');
+            if (progressLabel) progressLabel.innerText = atPeak ? 'Tribulação' : 'Próximo Avanço';
         }
     }
 
@@ -894,8 +818,8 @@ function updateUI() {
         const realmPercent = Math.min(100, (gameState.qi / targetCap) * 100);
         realmProgressFill.style.width = `${realmPercent}%`;
         realmProgressText.innerText = atPeak
-            ? t('qi_to_tribulation', { current: formatNumber(gameState.qi), target: formatNumber(realmCap) })
-            : t('qi_to_next_stage', { current: formatNumber(gameState.qi), target: formatNumber(subRealmCap) });
+            ? `${formatNumber(gameState.qi)} / ${formatNumber(realmCap)} Qi para a tribulação`
+            : `${formatNumber(gameState.qi)} / ${formatNumber(subRealmCap)} Qi para o próximo estágio`;
     }
     
     // Posturas Ocultar se não liberado
@@ -915,21 +839,21 @@ function updateUI() {
         if (tribBtn) {
             tribBtn.style.display = 'inline-flex';
             tribBtn.disabled = true;
-            tribBtn.innerText = t('survive_years', { years: Math.ceil(tribulationTimer) });
+            tribBtn.innerText = `Sobreviva ${Math.ceil(tribulationTimer)} anos`;
         }
     } else {
         document.getElementById('qi-progress').style.color = 'inherit';
         if (tribBtn) {
             tribBtn.style.display = atPeak ? 'inline-flex' : 'none';
             if (gameState.realm >= getMaxRealm() && atPeak) {
-                tribBtn.innerText = t('max_realm');
+                tribBtn.innerText = "Reino Máximo Atingido";
                 tribBtn.disabled = true;
             } else if (tribulationReady) {
                 tribBtn.disabled = false;
-                tribBtn.innerText = t('start_tribulation');
+                tribBtn.innerText = "Iniciar Tribulação";
             } else {
                 tribBtn.disabled = true;
-                tribBtn.innerText = atPeak ? t('reach_qi_cap') : t('cultivate_to_peak');
+                tribBtn.innerText = atPeak ? "Atingir Limite de Qi" : "Cultive mais para o Pico";
             }
         }
     }
@@ -974,11 +898,11 @@ function updateUI() {
         const ascBtn = document.getElementById('ascend-btn');
         ascBtn.disabled = karmaGain <= 0;
         if (gameState.isImmortal) {
-            ascBtn.innerText = t('ascend_dao');
+            ascBtn.innerText = "Ascender ao Dao (Prestige)";
         } else if (gameState.endingTitle) {
-            ascBtn.innerText = t('end_legend_btn');
+            ascBtn.innerText = "Encerrar Esta Lenda";
         } else {
-            ascBtn.innerText = t('spiritual_suicide');
+            ascBtn.innerText = "Suicídio Espiritual (Prestige)";
         }
         
         for (const upgId in GAME_DATA.metaUpgrades) {
@@ -1003,12 +927,12 @@ function renderTechniques() {
         meditateBtn.style.display = 'flex';
         if (gameState.unlocks.canMeditate) {
             meditateBtn.disabled = false;
-            meditateBtn.innerText = t('meditate');
-            meditateBtn.title = t('meditation_title', { qpc: formatNumber(getQiPerClick()) });
+            meditateBtn.innerText = 'Meditar';
+            meditateBtn.title = `Meditar manualmente.\nGera ${formatNumber(getQiPerClick())} Qi por clique e mantém 1 Qi/s passivo enquanto a meditação estiver desperta.`;
         } else {
             meditateBtn.disabled = true;
-            meditateBtn.innerText = t('awaken_qi');
-            meditateBtn.title = t('awaken_qi_title');
+            meditateBtn.innerText = 'Desperte o Qi';
+            meditateBtn.title = 'Descubra o Qi na jornada para desbloquear a meditação e seu fluxo passivo.';
         }
     }
 
@@ -1020,7 +944,7 @@ function renderTechniques() {
         if (!gameState.unlocks.canBuyHerbs) {
             bList.innerHTML = `
                 <div class="technique-card" style="opacity: 0.5; border-style: dashed; justify-content: center;">
-                    <p style="color: #666; font-style: italic;">${t('locked_idle_hint')}</p>
+                    <p style="color: #666; font-style: italic;">🔒 Explore o mundo para descobrir os segredos do Cultivo.</p>
                 </div>
             `;
             return;
@@ -1051,7 +975,7 @@ function renderTechniques() {
                 card.style.justifyContent = 'center';
                 card.style.background = 'repeating-linear-gradient(45deg, #121415, #121415 10px, #1a1e20 10px, #1a1e20 20px)';
                 card.innerHTML = `
-                    <p style="color: #A0A0A0; font-style: italic;">${t('locked_next_step')}</p>
+                    <p style="color: #A0A0A0; font-style: italic;">🔒 Próximo Passo Bloqueado (Avance na Jornada)</p>
                 `;
                 bList.appendChild(card);
                 break; // Para de renderizar a lista
@@ -1067,18 +991,18 @@ function renderTechniques() {
             // Seta visual para o próximo
             let arrowHtml = '';
             if (i < layerOrder.length - 1) {
-                arrowHtml = `<div style="text-align: center; color: #57A773; margin: -10px 0 -5px 0;">${t('generates_arrow')}</div>`;
+                arrowHtml = `<div style="text-align: center; color: #57A773; margin: -10px 0 -5px 0;">↑ gera ↑</div>`;
             }
 
             card.innerHTML = `
                 <div class="tech-info" style="width: 100%;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h3 style="color: #57A773; margin: 0;">${b.name} (<span id="count-b-${bId}">${formatNumber(count)}</span>)</h3>
-                        <button id="buy-b-${bId}" class="buy-btn" onclick="handleBuyBuilding('${bId}')">${t('buy')}</button>
+                        <button id="buy-b-${bId}" class="buy-btn" onclick="handleBuyBuilding('${bId}')">Comprar</button>
                     </div>
                     <p style="margin: 5px 0;">${b.desc}</p>
-                    <p style="margin: 5px 0; color: #EAE4D3;">${t('effect')}: ${getBuildingEffectSummary(bId)}</p>
-                    <p>${t('cost')}: <span id="cost-b-${bId}" style="color: #D4AF37;">${formatNumber(cost)}</span> Qi</p>
+                    <p style="margin: 5px 0; color: #EAE4D3;">Efeito: ${getBuildingEffectSummary(bId)}</p>
+                    <p>Custo: <span id="cost-b-${bId}" style="color: #D4AF37;">${formatNumber(cost)}</span> Qi</p>
                 </div>
             `;
             
@@ -1106,12 +1030,12 @@ function renderTechniques() {
             card.style.background = '#f9f6e6';
             card.innerHTML = `
                 <div class="tech-info">
-                    <h3>${upg.name} (${t('level_short')} <span id="level-meta-${upgId}">${level}</span>)</h3>
+                    <h3>${upg.name} (Nvl <span id="level-meta-${upgId}">${level}</span>)</h3>
                     <p>${upg.desc}</p>
-                    <p style="color: #EAE4D3;">${t('effect')}: ${getMetaUpgradeEffectSummary(upgId)}</p>
-                    <p>${t('cost')}: <span id="cost-meta-${upgId}">${formatNumber(cost)}</span> ${t('karma_word')}</p>
+                    <p style="color: #EAE4D3;">Efeito: ${getMetaUpgradeEffectSummary(upgId)}</p>
+                    <p>Custo: <span id="cost-meta-${upgId}">${formatNumber(cost)}</span> Karma</p>
                 </div>
-                <button id="buy-meta-${upgId}" class="buy-btn" style="background: #d4af37; color: #1a1a1a;" onclick="handleBuyMeta('${upgId}')">${t('comprehend')}</button>
+                <button id="buy-meta-${upgId}" class="buy-btn" style="background: #d4af37; color: #1a1a1a;" onclick="handleBuyMeta('${upgId}')">Compreender</button>
             `;
             metaList.appendChild(card);
         }
@@ -1157,8 +1081,6 @@ function renderDaoTree() {
         const upg = GAME_DATA.metaUpgrades[upgId];
         const cost = getMetaCost(upgId);
         const level = gameState.metaUpgrades[upgId] || 0;
-        const canBuy = canBuyMetaUpgrade(upgId);
-        const isMaxed = upg.maxLevel !== undefined && level >= upg.maxLevel;
         
         const card = document.createElement('div');
         card.className = 'technique-card';
@@ -1173,18 +1095,16 @@ function renderDaoTree() {
         if(upg.path === 'man') borderColor = '#d48237';
         
         card.style.borderColor = borderColor;
-        card.style.opacity = canBuy || level > 0 ? '1' : '0.72';
         
         card.innerHTML = `
             <div class="tech-info" style="text-align: center;">
-                <h3 style="color: ${borderColor};">${upg.name} (${t('level_short')} <span id="level-tree-${upgId}">${level}</span>${upg.maxLevel ? ` / ${upg.maxLevel}` : ''})</h3>
+                <h3 style="color: ${borderColor};">${upg.name} (Nvl <span id="level-tree-${upgId}">${level}</span>)</h3>
                 <p style="margin: 5px 0;">${upg.desc}</p>
-                <p style="margin: 5px 0; color: #EAE4D3;">${t('effect')}: ${getMetaUpgradeEffectSummary(upgId)}</p>
-                <p style="color: #D4AF37; font-weight: bold;">${t('cost')}: <span id="cost-tree-${upgId}">${formatNumber(cost)}</span> ${t('karma_word')}</p>
-                <p style="margin: 5px 0; color: #A0A0A0;">${t('requirements')}: ${getMetaUpgradeRequirementText(upg)}</p>
+                <p style="margin: 5px 0; color: #EAE4D3;">Efeito: ${getMetaUpgradeEffectSummary(upgId)}</p>
+                <p style="color: #D4AF37; font-weight: bold;">Custo: <span id="cost-tree-${upgId}">${formatNumber(cost)}</span> Karma</p>
             </div>
             <button id="buy-tree-${upgId}" class="buy-btn" style="background: #121415; border-color: ${borderColor}; color: ${borderColor}; width: 100%;" onclick="handleBuyMeta('${upgId}')">
-                ${isMaxed ? t('completed') : t('comprehend')}
+                Compreender
             </button>
         `;
         
@@ -1195,7 +1115,7 @@ function renderDaoTree() {
         // Desabilitar botão se não tiver karma
         setTimeout(() => {
             const btn = document.getElementById(`buy-tree-${upgId}`);
-            if (btn) btn.disabled = !canBuy || isMaxed;
+            if(btn) btn.disabled = gameState.karma < cost;
         }, 0);
     }
 }

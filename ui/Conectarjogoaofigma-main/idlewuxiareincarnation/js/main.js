@@ -6,9 +6,7 @@ let inTribulation = false;
 let tribulationTimer = 0;
 
 function getTribulationDurationYears() {
-    const baseYears = GAME_DATA.realms[gameState.realm]?.tribulationYears || Math.pow(10, gameState.realm);
-    const graceLevel = gameState.metaUpgrades.dao_tribulation_grace || 0;
-    return Math.max(1, Math.ceil(baseYears * (1 - (0.08 * graceLevel))));
+    return GAME_DATA.realms[gameState.realm]?.tribulationYears || Math.pow(10, gameState.realm);
 }
 
 function resolveRealmPromotion() {
@@ -20,7 +18,7 @@ function resolveRealmPromotion() {
         inTribulation = false;
         gameState.qi = currentRealmData.qiCap;
         refreshTribulationUnlock();
-        pushGameToast(t('max_realm_toast'), 'warning');
+        pushGameToast('Você já alcançou o reino máximo atual.', 'warning');
         updateUI();
         return;
     }
@@ -28,8 +26,7 @@ function resolveRealmPromotion() {
     gameState.realm = currentRealm + 1;
     gameState.subRealm = 1;
     const newRealmData = GAME_DATA.realms[gameState.realm];
-    const reserveBonus = (gameState.metaUpgrades.dao_retain || 0) * 0.05 + (gameState.metaUpgrades.dao_origin_reserve || 0) * 0.1;
-    const qiReserveRatio = Math.min(0.9, (currentRealmData.qiReserveRatio ?? 0.5) + reserveBonus);
+    const qiReserveRatio = currentRealmData.qiReserveRatio ?? 0.5;
     gameState.qi = Math.floor(newRealmData.qiCap * qiReserveRatio);
     syncCultivationMilestones();
     refreshTribulationUnlock();
@@ -45,12 +42,10 @@ function resolveRealmPromotion() {
         gameState.lifespan = Math.ceil(gameState.age + 10);
     }
 
-    const lifeMsg = gameState.isImmortal ? t('immortal_log_suffix') : t('lifespan_up_log_suffix');
-    gameState.currentObjectiveKey = 'objective_master_realm';
-    gameState.currentObjectiveData = { realm: newRealmData.name };
-    gameState.currentObjective = t('objective_master_realm', { realm: newRealmData.name });
+    const lifeMsg = gameState.isImmortal ? ' Você se tornou Imortal!' : ' Expectativa de vida aumentada grandemente!';
+    gameState.currentObjective = `Fortaleça corpo, mente e Qi para dominar o reino ${newRealmData.name}.`;
 
-    pushGameToast(t('realm_up_toast', { realm: newRealmData.name }), 'success');
+    pushGameToast(`Sucesso! Você avançou para o Reino: ${newRealmData.name}.`, 'success');
     addJourneyLog(`[Tribulação] ${newRealmData.desc} ${lifeMsg} Você retém ${formatNumber(gameState.qi)} Qi como base do novo reino.`);
     checkSectUnlock();
 }
@@ -59,7 +54,6 @@ let isDead = false;
 
 function init() {
     loadGame();
-    initializeLocalization();
     syncCultivationMilestones();
     syncFullscreenHudLayout();
     setupAudioHud();
@@ -158,15 +152,15 @@ function handleBuyMeta(upgId) {
 }
 
 function handleAscend() {
-    if (confirm(t('ascension_confirm'))) {
+    if (confirm("Deseja ascender? Você perderá todo seu Qi, Técnicas e voltará ao Reino 1, mas ganhará Karma para melhorias permanentes.")) {
         if (ascend()) {
-            pushGameToast(t('ascension_success'), 'success');
-            addJourneyLog(t('ascension_log'));
+            pushGameToast("Você ascendeu com sucesso e compreendeu mais sobre o Dao!", 'success');
+            addJourneyLog("[Dao] Você ascendeu e levou sua compreensão para a próxima vida.");
             renderTechniques();
             renderJourney();
             updateUI();
         } else {
-            pushGameToast(t('ascension_fail'), 'warning');
+            pushGameToast("Você ainda não acumulou compreensão suficiente nesta vida para ascender.", 'warning');
         }
     }
 }
@@ -182,8 +176,8 @@ function handleDeath() {
     document.getElementById('death-realm').innerText = GAME_DATA.realms[gameState.realm].name;
     document.getElementById('death-qi').innerText = formatNumber(gameState.totalQi);
     document.getElementById('death-karma').innerText = formatNumber(karmaGained);
-    document.getElementById('death-ending-title').innerText = gameState.endingTitle || t('death_unfinished_title');
-    document.getElementById('death-ending-text').innerText = gameState.endingText || t('death_unfinished_text');
+    document.getElementById('death-ending-title').innerText = gameState.endingTitle || 'Destino Ainda Inacabado';
+    document.getElementById('death-ending-text').innerText = gameState.endingText || 'Sua vida termina sem um final lendário completo, mas o Samsara ainda guarda espaço para outra tentativa.';
     document.getElementById('death-modal').style.display = 'flex';
     
     saveGame();
@@ -285,11 +279,10 @@ function processJourneyAction(secondsPassed) {
 }
 
 function completeJourneyAction(actionId, actionData) {
-    const statMultiplier = getJourneyStatRewardMultiplier();
     if (actionData.effects) {
-        if (actionData.effects.qi) addQi(actionData.effects.qi * getJourneyQiRewardMultiplier());
-        if (actionData.effects.body) gameState.body += Math.max(1, Math.round(actionData.effects.body * statMultiplier));
-        if (actionData.effects.mind) gameState.mind += Math.max(1, Math.round(actionData.effects.mind * statMultiplier));
+        if (actionData.effects.qi) addQi(actionData.effects.qi);
+        if (actionData.effects.body) gameState.body += actionData.effects.body;
+        if (actionData.effects.mind) gameState.mind += actionData.effects.mind;
         if (actionData.effects.karma) gameState.karma += actionData.effects.karma;
         if (actionData.effects.lifespan_penalty) gameState.lifespan -= actionData.effects.lifespan_penalty;
     }
@@ -297,7 +290,7 @@ function completeJourneyAction(actionId, actionData) {
     if (actionData.unlock_flags) {
         actionData.unlock_flags.forEach(flag => {
             gameState.unlocks[flag] = true;
-            addJourneyLog(t('unlock_mechanic_log'));
+            addJourneyLog(`[Revelação] Uma nova mecânica foi desbloqueada!`);
         });
     }
 
@@ -306,12 +299,9 @@ function completeJourneyAction(actionId, actionData) {
     }
 
     if (actionData.ending) {
-        gameState.endingId = actionId;
         gameState.endingTitle = actionData.ending.title;
         gameState.endingText = actionData.ending.text;
-        gameState.currentObjectiveKey = 'ending_objective';
-        gameState.currentObjectiveData = {};
-        gameState.currentObjective = t('ending_objective');
+        gameState.currentObjective = 'Seu destino foi escrito. Busque o Dao ou renasça para trilhar outro caminho.';
         pushGameToast(actionData.ending.title, 'success');
         addJourneyLog(`[Destino] ${actionData.ending.text}`);
     }
@@ -326,7 +316,7 @@ function completeJourneyAction(actionId, actionData) {
                 newlyUnlocked.push(newId);
                 if (!gameState.discoveredActions.includes(newId)) {
                     gameState.discoveredActions.push(newId);
-                    addJourneyLog(t('new_choice_log', { action: GAME_DATA.journeyActions[newId].name }));
+                    addJourneyLog(`Nova escolha de jornada: ${GAME_DATA.journeyActions[newId].name}`);
                 }
             }
         });
@@ -343,10 +333,9 @@ function completeJourneyAction(actionId, actionData) {
     }
 
     if (actionData.cooldownYears) {
-        const cooldownYears = getActionCooldownDurationYears(actionId);
-        gameState.actionCooldowns[actionId] = gameState.age + cooldownYears;
-        addJourneyLog(t('cooldown_log', { action: actionData.name, years: cooldownYears }));
-        pushGameToast(t('cooldown_toast', { action: actionData.name, years: cooldownYears }), 'warning');
+        gameState.actionCooldowns[actionId] = gameState.age + actionData.cooldownYears;
+        addJourneyLog(`[Recarga] ${actionData.name} estará pronta novamente em ${actionData.cooldownYears} anos.`);
+        pushGameToast(`${actionData.name} recarrega em ${actionData.cooldownYears} anos.`, 'warning');
     }
 
     if (!actionData.repeatable) {
@@ -358,16 +347,12 @@ function completeJourneyAction(actionId, actionData) {
 
     ensureJourneySafety();
     if (newlyUnlocked.length > 0 && !actionData.ending) {
-        gameState.currentObjectiveKey = 'next_step_objective';
-        gameState.currentObjectiveData = { action: GAME_DATA.journeyActions[newlyUnlocked[0]].name };
-        gameState.currentObjective = t('next_step_objective', { action: GAME_DATA.journeyActions[newlyUnlocked[0]].name });
+        gameState.currentObjective = `Próximo passo: ${GAME_DATA.journeyActions[newlyUnlocked[0]].name}.`;
     } else if (!actionData.ending && actionData.repeatable) {
-        gameState.currentObjectiveKey = 'grind_objective';
-        gameState.currentObjectiveData = {};
-        gameState.currentObjective = t('grind_objective');
+        gameState.currentObjective = 'Fortaleça corpo, mente e Qi até abrir o próximo gargalo.';
     }
 
-    pushGameToast(t('action_completed_toast', { action: actionData.name }), 'success');
+    pushGameToast(`Ação concluída: ${actionData.name}`, 'success');
 
     gameState.activeAction = null;
     gameState.actionProgresses[actionId] = 0;
@@ -388,12 +373,12 @@ function startJourneyAction(actionId) {
 
     const failures = getActionRequirementFailures(actionData);
     if (failures.length > 0) {
-        pushGameToast(t('action_not_ready_toast', { action: actionData.name }), 'warning');
+        pushGameToast(`Você ainda não está pronto para ${actionData.name}.`, 'warning');
         return;
     }
 
     if (gameState.activeAction) {
-        addJourneyLog(t('switched_focus_log', { age: Math.floor(gameState.age), action: actionData.name }));
+        addJourneyLog(`[${Math.floor(gameState.age)} Anos] Mudou o foco para: ${actionData.name}`);
     }
 
     gameState.activeAction = actionId;
@@ -421,7 +406,7 @@ function startJourneyAction(actionId) {
 
 function cancelCurrentAction() {
     if (gameState.activeAction) {
-        addJourneyLog(t('abandon_action_log', { age: Math.floor(gameState.age) }));
+        addJourneyLog(`[${Math.floor(gameState.age)} Anos] Você abandonou a ação pela metade. O progresso foi salvo.`);
         gameState.activeAction = null;
         document.getElementById('active-action-section').style.display = 'none';
         updateUI();
@@ -443,14 +428,14 @@ function handleTribulation() {
     if (canStartTribulation() && gameState.qi >= cap) {
         inTribulation = true;
         tribulationTimer = getTribulationDurationYears();
-        document.getElementById('tribulation-btn').innerText = t('survive_years', { years: Math.ceil(tribulationTimer) });
+        document.getElementById('tribulation-btn').innerText = "Sobreviva!";
         document.getElementById('tribulation-btn').disabled = true;
-        pushGameToast(t('tribulation_start_toast', { years: formatNumber(tribulationTimer) }), 'warning');
+        pushGameToast(`A Tribulação Celestial começou. Ela consumirá ${formatNumber(tribulationTimer)} anos desta vida.`, 'warning');
         addJourneyLog(`[Tribulação] Os céus exigem ${formatNumber(tribulationTimer)} anos de resistência para permitir o avanço.`);
     } else if (gameState.realm >= getMaxRealm()) {
-        pushGameToast(t('max_realm_toast'), 'warning');
+        pushGameToast('Você já alcançou o reino máximo atual.', 'warning');
     } else if (!isRealmPeak()) {
-        pushGameToast(t('peak_required_toast'), 'warning');
+        pushGameToast('Você precisa alcançar o Pico deste reino antes de iniciar a tribulação.', 'warning');
     }
 }
 
@@ -487,7 +472,7 @@ function gameLoop() {
             if (tribulationTimer <= 0) {
                 inTribulation = false;
                 resolveRealmPromotion();
-                document.getElementById('tribulation-btn').innerText = t('start_tribulation');
+                document.getElementById('tribulation-btn').innerText = "Iniciar Tribulação";
             }
             updateUI();
         } else {
@@ -530,7 +515,7 @@ function manualSave() {
 }
 
 function manualLoad() {
-    if (confirm(t('load_confirm'))) {
+    if (confirm("Carregar o jogo substituirá seu progresso atual não salvo. Deseja continuar?")) {
         loadGame();
         syncCultivationMilestones();
         

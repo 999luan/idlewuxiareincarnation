@@ -24,33 +24,6 @@ function getRealmMultiplier() {
     return base * subMult;
 }
 
-function getJourneyQiRewardMultiplier() {
-    const fateThreads = gameState.metaUpgrades.dao_fate_threads || 0;
-    return 1 + (0.15 * fateThreads);
-}
-
-function getJourneyStatRewardMultiplier() {
-    const mortalEcho = gameState.metaUpgrades.dao_mortal_echo || 0;
-    return 1 + (0.2 * mortalEcho);
-}
-
-function getJourneyCooldownMultiplier() {
-    const mortalEcho = gameState.metaUpgrades.dao_mortal_echo || 0;
-    return Math.max(0.55, 1 - (0.12 * mortalEcho));
-}
-
-function getPassiveFoundationMultiplier() {
-    const foundationWell = gameState.metaUpgrades.dao_foundation_well || 0;
-    const worldRoot = gameState.metaUpgrades.dao_world_root || 0;
-    return (1 + (0.15 * foundationWell)) * (1 + (0.12 * worldRoot));
-}
-
-function getCascadeFlowMultiplier() {
-    const sectFlow = gameState.metaUpgrades.dao_sect_flow || 0;
-    const worldRoot = gameState.metaUpgrades.dao_world_root || 0;
-    return (1 + (0.2 * sectFlow)) * (1 + (0.1 * worldRoot));
-}
-
 function getSubRealmCap() {
     const realmCap = GAME_DATA.realms[gameState.realm].qiCap;
     // Sub-reinos dividem o cap total em 4 partes crescentes
@@ -84,11 +57,11 @@ function checkSubRealmAdvancement() {
         if (!gameState.isImmortal) {
             gameState.lifespan += 10; // +10 anos por sub-reino
         }
-        pushGameToast(t('subrealm_up_toast', { stage: GAME_DATA.subRealms[gameState.subRealm].name }), 'success');
-        addJourneyLog(t('subrealm_up_log', { stage: GAME_DATA.subRealms[gameState.subRealm].name }));
+        pushGameToast(`Você avançou para o estágio: ${GAME_DATA.subRealms[gameState.subRealm].name}. +10 anos de vida.`, 'success');
+        addJourneyLog(`[Dao] Seu cultivo avançou para o estágio ${GAME_DATA.subRealms[gameState.subRealm].name}.`);
         if (isRealmPeak()) {
-            pushGameToast(t('peak_reached_toast'), 'warning');
-            addJourneyLog(t('peak_reached_log'));
+            pushGameToast('Seu cultivo alcançou o pico deste reino. A Tribulação Celestial agora pode ser enfrentada ao atingir o limite de Qi.', 'warning');
+            addJourneyLog('[Tribulação] O pico do reino foi alcançado. Encha seu Qi até o limite para desafiar os céus.');
         }
         updateUI();
     }
@@ -138,21 +111,6 @@ function getBuildingCost(buildingId) {
     return cost;
 }
 
-function canBuyMetaUpgrade(upgradeId) {
-    const upg = GAME_DATA.metaUpgrades[upgradeId];
-    if (!upg) return false;
-    const level = gameState.metaUpgrades[upgradeId] || 0;
-    if (upg.maxLevel !== undefined && level >= upg.maxLevel) return false;
-    if (upg.requires) {
-        for (const reqId in upg.requires) {
-            if ((gameState.metaUpgrades[reqId] || 0) < upg.requires[reqId]) {
-                return false;
-            }
-        }
-    }
-    return gameState.karma >= getMetaCost(upgradeId);
-}
-
 function buyBuilding(buildingId) {
     const cost = getBuildingCost(buildingId);
     if (gameState.qi >= cost) {
@@ -164,18 +122,19 @@ function buyBuilding(buildingId) {
 }
 
 function processCascade(secondsPassed) {
-    const cascadeMult = getCascadeFlowMultiplier();
-
+    // A cascata roda de cima para baixo
+    // Matrizes -> Anciões -> Discípulos -> Pílulas -> Ervas -> Qi
+    
     if (gameState.inventory.arrays > 0) {
-        gameState.inventory.elders += gameState.inventory.arrays * GAME_DATA.buildings.arrays.amount * cascadeMult * secondsPassed;
+        gameState.inventory.elders += gameState.inventory.arrays * GAME_DATA.buildings.arrays.amount * secondsPassed;
     }
     
     if (gameState.inventory.elders > 0) {
-        gameState.inventory.disciples += gameState.inventory.elders * GAME_DATA.buildings.elders.amount * cascadeMult * secondsPassed;
+        gameState.inventory.disciples += gameState.inventory.elders * GAME_DATA.buildings.elders.amount * secondsPassed;
     }
     
     if (gameState.inventory.disciples > 0) {
-        gameState.inventory.pills += gameState.inventory.disciples * GAME_DATA.buildings.disciples.amount * cascadeMult * secondsPassed;
+        gameState.inventory.pills += gameState.inventory.disciples * GAME_DATA.buildings.disciples.amount * secondsPassed;
     }
 }
 
@@ -220,8 +179,6 @@ function getQiPerSecond() {
     if (daoBreath > 0) {
         basePassive *= (1 + (0.1 * daoBreath));
     }
-
-    basePassive *= getPassiveFoundationMultiplier();
     
     return basePassive * getRealmMultiplier();
 }
@@ -271,7 +228,7 @@ function getMetaCost(upgradeId) {
 
 function buyMetaUpgrade(upgradeId) {
     const cost = getMetaCost(upgradeId);
-    if (canBuyMetaUpgrade(upgradeId) && gameState.karma >= cost) {
+    if (gameState.karma >= cost) {
         gameState.karma -= cost;
         gameState.metaUpgrades[upgradeId] = (gameState.metaUpgrades[upgradeId] || 0) + 1;
         return true;
@@ -284,10 +241,10 @@ function getActionRequirementFailures(actionData) {
     const req = actionData.requirements || {};
 
     if (req.qi && gameState.qi < req.qi) failures.push(`Qi ${formatNumber(gameState.qi)}/${formatNumber(req.qi)}`);
-    if (req.body && gameState.body < req.body) failures.push(`${t('body_word')} ${gameState.body}/${req.body}`);
-    if (req.mind && gameState.mind < req.mind) failures.push(`${t('mind_word')} ${gameState.mind}/${req.mind}`);
-    if (req.realm && gameState.realm < req.realm) failures.push(`${t('realm_word')} ${gameState.realm}/${req.realm}`);
-    if (req.subRealm && gameState.subRealm < req.subRealm) failures.push(`${t('subrealm_word')} ${gameState.subRealm}/${req.subRealm}`);
+    if (req.body && gameState.body < req.body) failures.push(`Corpo ${gameState.body}/${req.body}`);
+    if (req.mind && gameState.mind < req.mind) failures.push(`Mente ${gameState.mind}/${req.mind}`);
+    if (req.realm && gameState.realm < req.realm) failures.push(`Reino ${gameState.realm}/${req.realm}`);
+    if (req.subRealm && gameState.subRealm < req.subRealm) failures.push(`Estágio ${gameState.subRealm}/${req.subRealm}`);
     if (req.karma_max !== undefined && gameState.karma > req.karma_max) failures.push(`Karma ${gameState.karma}/${req.karma_max}`);
 
     const inventoryKeys = ['herbs', 'pills', 'disciples', 'elders', 'arrays'];
@@ -300,21 +257,16 @@ function getActionRequirementFailures(actionData) {
     if (actionData.id) {
         const cooldownRemaining = getActionCooldownRemainingYears(actionData.id);
         if (cooldownRemaining > 0) {
-            failures.push(`${t('cooldown_label')} ${cooldownRemaining.toFixed(1)} ${t('years')}`);
+            failures.push(`Recarga ${cooldownRemaining.toFixed(1)} anos`);
         }
     }
 
     return failures;
 }
 
-function getActionCooldownDurationYears(actionId) {
+function getActionCooldownRemainingYears(actionId) {
     const actionData = GAME_DATA.journeyActions[actionId];
     if (!actionData?.cooldownYears) return 0;
-    return Math.max(1, Math.ceil(actionData.cooldownYears * getJourneyCooldownMultiplier()));
-}
-
-function getActionCooldownRemainingYears(actionId) {
-    if (!getActionCooldownDurationYears(actionId)) return 0;
 
     const nextAvailableAge = gameState.actionCooldowns?.[actionId] || 0;
     return Math.max(0, nextAvailableAge - gameState.age);
@@ -336,42 +288,38 @@ function syncCultivationMilestones() {
 function getActionEffectsSummary(actionData) {
     const parts = [];
     const effects = actionData.effects || {};
-    const statMultiplier = getJourneyStatRewardMultiplier();
-
-    const scaledBody = effects.body ? Math.max(1, Math.round(effects.body * statMultiplier)) : 0;
-    const scaledMind = effects.mind ? Math.max(1, Math.round(effects.mind * statMultiplier)) : 0;
 
     if (effects.qi) parts.push(`+${formatNumber(effects.qi)} Qi`);
-    if (scaledBody) parts.push(`+${scaledBody} ${t('body_word')}`);
-    if (scaledMind) parts.push(`+${scaledMind} ${t('mind_word')}`);
+    if (effects.body) parts.push(`+${effects.body} Corpo`);
+    if (effects.mind) parts.push(`+${effects.mind} Mente`);
     if (effects.karma) parts.push(`${effects.karma > 0 ? '+' : ''}${effects.karma} Karma`);
-    if (effects.lifespan_penalty) parts.push(`-${effects.lifespan_penalty} ${t('years')}`);
+    if (effects.lifespan_penalty) parts.push(`-${effects.lifespan_penalty} anos de vida`);
 
     if (actionData.unlock_flags?.length) {
         const unlockNames = {
-            canMeditate: t('unlock_meditation'),
-            canSelectStance: t('unlock_stances'),
-            canJoinSect: t('unlock_sects'),
-            canBuyHerbs: t('unlock_herbs'),
-            canBuyPills: t('unlock_pills'),
-            canBuyDisciples: t('unlock_disciples'),
-            canBuyElders: t('unlock_elders'),
-            canBuyArrays: t('unlock_arrays'),
-            canTribulation: t('unlock_tribulation')
+            canMeditate: 'Meditação',
+            canSelectStance: 'Posturas',
+            canJoinSect: 'Seitas',
+            canBuyHerbs: 'Ervas Espirituais',
+            canBuyPills: 'Pílulas da Fundação',
+            canBuyDisciples: 'Discípulos',
+            canBuyElders: 'Anciões',
+            canBuyArrays: 'Matrizes de Convergência',
+            canTribulation: 'Tribulação Celestial'
         };
-        parts.push(`${t('unlocks')} ${actionData.unlock_flags.map(flag => unlockNames[flag] || flag).join(', ')}`);
+        parts.push(`Desbloqueia ${actionData.unlock_flags.map(flag => unlockNames[flag] || flag).join(', ')}`);
     }
 
     if (actionData.unlocks?.length) {
-        parts.push(`${t('reveals')} ${actionData.unlocks.map(id => GAME_DATA.journeyActions[id]?.name).filter(Boolean).join(', ')}`);
+        parts.push(`Revela ${actionData.unlocks.map(id => GAME_DATA.journeyActions[id]?.name).filter(Boolean).join(', ')}`);
     }
 
     if (actionData.set_route) {
-        parts.push(t('commits_route', { route: getRouteLabel(actionData.set_route) }));
+        parts.push(`Compromete a rota ${getRouteLabel(actionData.set_route)}`);
     }
 
     if (actionData.blocks?.length) {
-        parts.push(`${t('closes')} ${actionData.blocks.map(id => GAME_DATA.journeyActions[id]?.name).filter(Boolean).join(', ')}`);
+        parts.push(`Fecha ${actionData.blocks.map(id => GAME_DATA.journeyActions[id]?.name).filter(Boolean).join(', ')}`);
     }
 
     if (actionData.ui_reward_summary) {
