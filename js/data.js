@@ -127,6 +127,17 @@ const GAME_DATA = {
             maxLevel: 3,
             requires: { dao_fate_threads: 2 }
         },
+        dao_destiny_mark: {
+            id: "dao_destiny_mark",
+            name: "Marca do Destino",
+            baseCost: 22,
+            costGrowth: 2.55,
+            desc: "Cada final unico ja conquistado passa a render mais Karma em vidas futuras.",
+            path: "man",
+            tier: 6,
+            maxLevel: 3,
+            requires: { dao_mortal_echo: 2 }
+        },
         dao_life: {
             id: "dao_life",
             name: "Corpo de Tartaruga",
@@ -181,6 +192,17 @@ const GAME_DATA = {
             maxLevel: 5,
             requires: { dao_origin_reserve: 1 }
         },
+        dao_reborn_frame: {
+            id: "dao_reborn_frame",
+            name: "Arcabouço Reencarnado",
+            baseCost: 20,
+            costGrowth: 2.45,
+            desc: "Cada nova vida começa com mais Corpo e Mente, como se a alma chegasse menos crua ao mundo.",
+            path: "heaven",
+            tier: 6,
+            maxLevel: 4,
+            requires: { dao_tribulation_grace: 2 }
+        },
         dao_herb_mult: {
             id: "dao_herb_mult",
             name: "Solo Fértil",
@@ -234,6 +256,17 @@ const GAME_DATA = {
             tier: 5,
             maxLevel: 3,
             requires: { dao_foundation_well: 2 }
+        },
+        dao_samsara_seed: {
+            id: "dao_samsara_seed",
+            name: "Semente do Samsara",
+            baseCost: 20,
+            costGrowth: 2.5,
+            desc: "O cultivo passivo passa a florescer melhor a cada ciclo de vida acumulado.",
+            path: "earth",
+            tier: 6,
+            maxLevel: 3,
+            requires: { dao_world_root: 2 }
         }
     },
     journeyActions: {

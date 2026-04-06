@@ -44,16 +44,19 @@ function getMetaUpgradeEffectSummary(upgradeId) {
         dao_realm_mult: { 'pt-BR': 'multiplica fortemente o bônus dos reinos', en: 'greatly amplifies realm bonuses', 'zh-CN': '大幅强化境界倍率' },
         dao_fate_threads: { 'pt-BR': '+15% de Qi das ações da jornada por nível', en: '+15% Qi from journey actions per level', 'zh-CN': '每级旅途行动真气 +15%' },
         dao_mortal_echo: { 'pt-BR': '+20% de Corpo/Mente em ações e -12% de recarga por nível', en: '+20% Body/Mind from actions and -12% cooldown per level', 'zh-CN': '每级行动肉身/心神 +20%，冷却 -12%' },
+        dao_destiny_mark: { 'pt-BR': '+1 Karma por final único já alcançado a cada nível', en: '+1 Karma per unique ending already achieved each level', 'zh-CN': '每级让每种已达成独特结局额外提供 +1 业力' },
         dao_life: { 'pt-BR': '+20 anos de vida base por nível', en: '+20 base lifespan per level', 'zh-CN': '每级基础寿命 +20 年' },
         dao_offline: { 'pt-BR': '+10% no Qi manual e passivo por nível', en: '+10% manual and passive Qi per level', 'zh-CN': '每级手动与被动真气 +10%' },
         dao_retain: { 'pt-BR': 'retém 5% do Qi total por nível até o limite de 50%', en: 'retains 5% total Qi per level up to 50%', 'zh-CN': '每级保留 5% 总真气，上限 50%' },
         dao_origin_reserve: { 'pt-BR': '+10% de reserva inicial de Qi em cada novo reino por nível', en: '+10% starting Qi reserve in each new realm per level', 'zh-CN': '每级新境界初始真气储备 +10%' },
         dao_tribulation_grace: { 'pt-BR': '-8% de anos de tribulação por nível', en: '-8% tribulation years per level', 'zh-CN': '每级天劫年数 -8%' },
+        dao_reborn_frame: { 'pt-BR': '+2 Corpo e +2 Mente no início de cada vida por nível', en: '+2 Body and +2 Mind at the start of each life per level', 'zh-CN': '每级每一世初始 +2 肉身与 +2 心神' },
         dao_herb_mult: { 'pt-BR': 'dobra a produção das Ervas por nível', en: 'doubles Herb production per level', 'zh-CN': '每级灵草产出翻倍' },
         dao_pill_mult: { 'pt-BR': '+50% de eficiência das Pílulas por nível', en: '+50% Pill efficiency per level', 'zh-CN': '每级丹药效率 +50%' },
         dao_sect_flow: { 'pt-BR': '+20% na cascata de Discípulos, Anciões e Matrizes por nível', en: '+20% cascade flow for Disciples, Elders and Arrays per level', 'zh-CN': '每级弟子、长老、阵法联动 +20%' },
         dao_foundation_well: { 'pt-BR': '+15% de Qi passivo total por nível', en: '+15% total passive Qi per level', 'zh-CN': '每级总被动真气 +15%' },
-        dao_world_root: { 'pt-BR': '+12% no fluxo passivo total e +10% na cascata por nível', en: '+12% total passive flow and +10% cascade per level', 'zh-CN': '每级总被动流转 +12%，联动 +10%' }
+        dao_world_root: { 'pt-BR': '+12% no fluxo passivo total e +10% na cascata por nível', en: '+12% total passive flow and +10% cascade per level', 'zh-CN': '每级总被动流转 +12%，联动 +10%' },
+        dao_samsara_seed: { 'pt-BR': '+4% de Qi passivo por ciclo do samsara e por nível, até +40%', en: '+4% passive Qi per samsara cycle and level, up to +40%', 'zh-CN': '每级每轮回一世被动真气 +4%，上限 +40%' }
     };
 
     const summary = summaries[upgradeId];

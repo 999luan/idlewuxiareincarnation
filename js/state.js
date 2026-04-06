@@ -9,10 +9,7 @@ function getDefaultObjective() {
     return 'Descubra um caminho entre trabalho, estudo e risco.';
 }
 
-function getJourneyStartLog() {
-    const samsaraCycles = typeof gameState !== 'undefined' && gameState?.narrativeMemory
-        ? (gameState.narrativeMemory.samsaraCycles || 0)
-        : 0;
+function getJourneyStartLog(samsaraCycles = 0) {
     if (typeof window.getLocalizedJourneyStartLog === 'function') {
         return window.getLocalizedJourneyStartLog(samsaraCycles);
     }
@@ -46,7 +43,7 @@ let gameState = {
     },
     activeAction: null,
     actionProgresses: {},
-    actionLogs: [getJourneyStartLog()],
+    actionLogs: [getJourneyStartLog(0)],
     currentRoute: 'none',
     endingId: '',
     endingTitle: '',
@@ -115,6 +112,16 @@ function saveGame() {
 }
 
 function loadGame() {
+    try {
+        if (sessionStorage.getItem('wuxiaIdleResetPending') === '1') {
+            sessionStorage.removeItem('wuxiaIdleResetPending');
+            localStorage.removeItem('wuxiaIdleSave');
+            return;
+        }
+    } catch (error) {
+        // Ignore sessionStorage issues and continue with normal load.
+    }
+
     const saved = localStorage.getItem('wuxiaIdleSave');
     if (saved) {
         const parsed = JSON.parse(saved);
@@ -186,7 +193,9 @@ function loadGame() {
                 gameState.actionProgresses[parsed.activeAction] = parsed.actionProgress;
             }
         }
-        if (gameState.actionLogs === undefined || gameState.actionLogs.length === 0) gameState.actionLogs = [getJourneyStartLog()];
+        if (gameState.actionLogs === undefined || gameState.actionLogs.length === 0) {
+            gameState.actionLogs = [getJourneyStartLog(gameState.narrativeMemory?.samsaraCycles || 0)];
+        }
         if (gameState.currentRoute === undefined) gameState.currentRoute = 'none';
         if (gameState.endingId === undefined) gameState.endingId = '';
         if (gameState.endingTitle === undefined) gameState.endingTitle = '';
@@ -245,8 +254,9 @@ function loadGame() {
 }
 
 function resetJourneyState() {
-    gameState.body = 10;
-    gameState.mind = 10;
+    const rebornFrame = gameState.metaUpgrades?.dao_reborn_frame || 0;
+    gameState.body = 10 + (2 * rebornFrame);
+    gameState.mind = 10 + (2 * rebornFrame);
     gameState.unlockedActions = [...getStartingJourneyActions()];
     gameState.blockedActions = [];
     gameState.actionCooldowns = {};
@@ -270,7 +280,7 @@ function resetJourneyState() {
     }
     gameState.activeAction = null;
     gameState.actionProgresses = {};
-    gameState.actionLogs = [getJourneyStartLog()];
+    gameState.actionLogs = [getJourneyStartLog(gameState.narrativeMemory?.samsaraCycles || 0)];
     gameState.age = 15;
     gameState.currentRoute = 'none';
     gameState.endingId = '';
@@ -310,6 +320,11 @@ function resetJourneyState() {
 
 function resetGame() {
     window.__skipBeforeUnloadSave = true;
+    try {
+        sessionStorage.setItem('wuxiaIdleResetPending', '1');
+    } catch (error) {
+        // Ignore sessionStorage issues and still perform the reset.
+    }
     localStorage.removeItem('wuxiaIdleSave');
-    location.reload();
+    location.replace(window.location.pathname + window.location.search + window.location.hash);
 }

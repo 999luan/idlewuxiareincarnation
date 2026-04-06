@@ -39,6 +39,18 @@ function getJourneyCooldownMultiplier() {
     return Math.max(0.55, 1 - (0.12 * mortalEcho));
 }
 
+function getUniqueEndingCount() {
+    const endingCounts = gameState.narrativeMemory?.endingCounts || {};
+    return Object.keys(endingCounts).filter(endingId => (endingCounts[endingId] || 0) > 0).length;
+}
+
+function getSamsaraSeedMultiplier() {
+    const seedLevel = gameState.metaUpgrades.dao_samsara_seed || 0;
+    const samsaraCycles = gameState.narrativeMemory?.samsaraCycles || 0;
+    if (seedLevel <= 0 || samsaraCycles <= 0) return 1;
+    return 1 + Math.min(0.4, samsaraCycles * seedLevel * 0.04);
+}
+
 function getPassiveFoundationMultiplier() {
     const foundationWell = gameState.metaUpgrades.dao_foundation_well || 0;
     const worldRoot = gameState.metaUpgrades.dao_world_root || 0;
@@ -221,6 +233,8 @@ function getQiPerSecond() {
         basePassive *= (1 + (0.1 * daoBreath));
     }
 
+    basePassive *= getSamsaraSeedMultiplier();
+
     basePassive *= getPassiveFoundationMultiplier();
     
     return basePassive * getRealmMultiplier();
@@ -252,8 +266,10 @@ function calculateKarmaGain() {
     const qiMillions = Math.max(0, gameState.totalQi / 1000000);
     const qiBonus = qiMillions > 0 ? Math.floor(Math.log10(qiMillions + 1) * Math.max(1, gameState.realm - 1)) : 0;
     const endingBonus = gameState.endingTitle ? 2 : 0;
+    const destinyMark = gameState.metaUpgrades.dao_destiny_mark || 0;
+    const uniqueEndingBonus = getUniqueEndingCount() * destinyMark;
 
-    baseKarma += qiBonus + endingBonus;
+    baseKarma += qiBonus + endingBonus + uniqueEndingBonus;
     
     const daoKarmaGain = gameState.metaUpgrades.dao_karma_gain || 0;
     if (daoKarmaGain > 0) {

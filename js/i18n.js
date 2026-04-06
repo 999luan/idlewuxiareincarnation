@@ -647,16 +647,19 @@ const CONTENT_TRANSLATIONS = {
             dao_realm_mult: { name: 'Echoes of the Past', desc: 'Realm multipliers gain a massive bonus.' },
             dao_fate_threads: { name: 'Threads of Fate', desc: 'Journey actions yield more Qi and rely less on a perfect route.' },
             dao_mortal_echo: { name: 'Echoes of Mortal Life', desc: 'Journey actions grant more body and mind, while cooldowns stop choking your path.' },
+            dao_destiny_mark: { name: 'Mark of Destiny', desc: 'Each unique ending already conquered grants extra Karma in future lives.' },
             dao_life: { name: 'Tortoise Body', desc: 'Increases starting lifespan by +20 years.' },
             dao_offline: { name: 'Deep Breath', desc: 'Increases manual and passive Qi by +10%.' },
             dao_retain: { name: 'Soul Memory', desc: 'Keeps 5% of total Qi for the next life.' },
             dao_origin_reserve: { name: 'Primordial Reservoir', desc: 'You enter each new realm with less of an empty Qi foundation.' },
             dao_tribulation_grace: { name: 'Grace of Heaven', desc: 'Reduces tribulation years and smooths the passage between realms.' },
+            dao_reborn_frame: { name: 'Reborn Frame', desc: 'Each new life begins with more Body and Mind, as if the soul arrived less raw.' },
             dao_herb_mult: { name: 'Fertile Soil', desc: 'Herbs generate 2x more Qi per level.' },
             dao_pill_mult: { name: 'Alchemical Flame', desc: 'Pills are 50% more effective at empowering Herbs.' },
             dao_sect_flow: { name: 'Sect Tide', desc: 'Disciples, Elders and Arrays work with increasing harmony.' },
             dao_foundation_well: { name: 'Foundation Well', desc: 'All passive cultivation gains stability and volume.' },
-            dao_world_root: { name: 'Root of the World', desc: 'Spiritual infrastructure stops wasting force, and every passive current begins to flow together.' }
+            dao_world_root: { name: 'Root of the World', desc: 'Spiritual infrastructure stops wasting force, and every passive current begins to flow together.' },
+            dao_samsara_seed: { name: 'Seed of Samsara', desc: 'Passive cultivation blooms more strongly with each life cycle already accumulated.' }
         },
         journeyActions: {
             work_farm: { name: 'Work the Farm', desc: 'You till the soil, toughen your arms and buy a few more years of humility.' },
@@ -742,16 +745,19 @@ const CONTENT_TRANSLATIONS = {
             dao_realm_mult: { name: '往昔回响', desc: '大幅提高境界倍率。' },
             dao_fate_threads: { name: '命运丝线', desc: '旅途行动给予更多真气，也更不依赖完美路线。' },
             dao_mortal_echo: { name: '凡尘回响', desc: '旅途行动提供更多肉身与心神收益，冷却也不再频繁卡住道路。' },
+            dao_destiny_mark: { name: '命途印记', desc: '每一种已达成过的独特结局，都会让未来转生获得更多业力。' },
             dao_life: { name: '龟息之体', desc: '初始寿命提高 +20 年。' },
             dao_offline: { name: '深息法', desc: '手动与被动真气提高 +10%。' },
             dao_retain: { name: '魂魄记忆', desc: '下一世保留 5% 总真气。' },
             dao_origin_reserve: { name: '本源气海', desc: '你在新境界开始时会保留更多基础真气。' },
             dao_tribulation_grace: { name: '天恩', desc: '减少渡劫所需年数，并让跨境更加平稳。' },
+            dao_reborn_frame: { name: '转生骨架', desc: '每一世都以更高的肉身与心神起步，仿佛灵魂不再那么粗糙。' },
             dao_herb_mult: { name: '沃土', desc: '每级让灵草产出翻倍。' },
             dao_pill_mult: { name: '丹火', desc: '丹药强化灵草的效率每级提高 50%。' },
             dao_sect_flow: { name: '宗门潮汐', desc: '弟子、长老与阵法的协同不断增强。' },
             dao_foundation_well: { name: '根基灵井', desc: '整体被动修炼获得更稳定、更丰厚。' },
-            dao_world_root: { name: '世界之根', desc: '灵性基础设施不再浪费力量，所有被动流转开始更紧密地协同。' }
+            dao_world_root: { name: '世界之根', desc: '灵性基础设施不再浪费力量，所有被动流转开始更紧密地协同。' },
+            dao_samsara_seed: { name: '轮回种子', desc: '随着轮回次数累积，你的被动修炼会越发生机勃勃。' }
         },
         journeyActions: {
             work_farm: { name: '在农田劳作', desc: '你翻土、练臂力，也为自己多换来几年卑微的寿命。' },
