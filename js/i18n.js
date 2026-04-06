@@ -1250,6 +1250,36 @@ const JOURNEY_LORE_OVERRIDES = {
             repeated: ['Você convoca a tempestade com mais precisão e menos dúvida. Nesta vida, até o ódio celeste lhe parece recurso.'],
             reborn: ['Nesta nova vida, os trovões negros o encontram depressa, como se lembrassem exatamente quem devem punir primeiro.'],
             mastered: ['Você já chamou calamidades suficientes para entender que, depois de certo ponto, ser odiado pelo céu vira apenas outra forma de intimidade.']
+        },
+        pill_saint_ascension: {
+            origin: ['Quando o caldeirão dourado se fecha, você entende que não está apenas refinando uma pílula, mas destilando a própria duração do seu nome.'],
+            repeated: ['Nesta vida, a grande obra chega com menos hesitação; você já conhece o peso de transformar longevidade em reputação.'],
+            reborn: ['Nesta encarnação, a fornalha o recebe como alguém que já discutiu com o tempo e voltou com novas fórmulas.'],
+            mastered: ['Em muitas vidas, você perseguiu o mesmo milagre até perceber que toda grande alquimia também é uma tentativa de ensinar a eternidade a caber num recipiente.']
+        },
+        found_own_peak: {
+            origin: ['Ao erguer seu próprio pico, você descobre que fundar uma tradição é só outra forma de declarar guerra ao esquecimento.'],
+            repeated: ['Você constrói autoridade com menos ingenuidade; nesta vida, já sabe quanto poder precisa vestir o rosto de ordem.'],
+            reborn: ['Nesta nova vida, discípulos e anciões se alinham rápido demais, como se sua vontade ainda circulasse por montanhas de outras eras.'],
+            mastered: ['Você já reuniu homens, técnicas e juramentos em vidas suficientes para saber que toda seita nasce como refúgio e termina como prolongamento do ego do fundador.']
+        },
+        walk_beyond_mortals: {
+            origin: ['Quando você caminha além dos mortais, entende que o passo decisivo não afasta apenas o mundo; ele também dissolve a necessidade de ser compreendido por ele.'],
+            repeated: ['Nesta vida, o silêncio da transcendência o assusta menos. Você já suspeita que os grandes avanços sempre cobram o preço da legibilidade.'],
+            reborn: ['Nesta encarnação, o vazio à frente parece familiar demais, como se sua alma já soubesse o formato da distância entre homem e céu.'],
+            mastered: ['Em muitas vidas, você se aproximou desse limiar até perceber que transcender talvez seja só aprender a desaparecer sem diminuir.']
+        },
+        beast_king_gate: {
+            origin: ['Ao abrir o portão do rei das feras, você percebe que o corpo pode crescer até se tornar território, ameaça e linguagem ao mesmo tempo.'],
+            repeated: ['Nesta vida, a brutalidade encontra menos resistência moral; você já compreende que certas coroas são feitas de instinto disciplinado.'],
+            reborn: ['Nesta nova vida, a montanha treme cedo demais sob seus passos, como se a besta de outras eras ainda habitasse sua carne recente.'],
+            mastered: ['Você já atravessou este portão em vidas suficientes para saber que há reinos onde homem e monstro deixam de ser opostos e passam a ser apenas graus de soberania.']
+        },
+        ten_thousand_ghosts_rite: {
+            origin: ['No rito dos dez mil fantasmas, você percebe que o horror também pode ser organizado, coroado e posto para trabalhar em seu nome.'],
+            repeated: ['Você conduz os ecos com mais frieza nesta vida; a culpa já não some, mas aprende a falar mais baixo do que o poder.'],
+            reborn: ['Nesta encarnação, os mortos o obedecem com rapidez indevida, como se lembrassem com clareza quem lhes deu voz em eras anteriores.'],
+            mastered: ['Em muitas vidas, você flertou com a calamidade até aprender a verdade final desta rota: há tronos que não são ocupados, apenas aceitos por quem já deixou de pedir perdão.']
         }
     },
     en: {
@@ -1347,6 +1377,96 @@ const JOURNEY_LORE_OVERRIDES = {
             reborn: ['In this incarnation, the forbidden art fits too quickly, like clothing tailored from old mistakes.'],
             mastered: ['Across several lives, you have already sold acceptable parts of yourself for speed. The price never falls; it only becomes familiar.']
         },
+        feel_heavens: {
+            origin: ['When you provoke the heavens, you discover that arrogance can also be a form of prayer.'],
+            repeated: ['You already recognize the signs of heavenly wrath before the first thunderclap. This time, fear arrives better educated.'],
+            reborn: ['In this life, heaven notices you too quickly, as if the memory of your insolence were still written above the clouds.'],
+            mastered: ['You have drawn the heavens\' attention across enough lives to know that the firmament never forgets a useful insolent.']
+        },
+        sect_duties: {
+            origin: ['Sect routine looks servile at first glance, until you notice how many secret passages drudgery quietly opens.'],
+            repeated: ['You obey with just enough discipline to rise and just enough ambition to profit from each assignment.'],
+            reborn: ['In this incarnation, the sect\'s machinery is easier to read; you already know the rhythm of this profitable obedience.'],
+            mastered: ['Across too many lives, you learned that spiritual empires also move through errands, favors and poorly paid exhaustion.']
+        },
+        hall_of_scripts: {
+            origin: ['Inside the Hall of Scripts, the excess of knowledge first compresses you, then begins to arrange you.'],
+            repeated: ['You return to the shelves with less reverence and more hunger; by now you know a library can also be a battlefield.'],
+            reborn: ['In this life, the smell of old paper calms you as if your mind had already aged here once before.'],
+            mastered: ['You have gone slightly mad in enough libraries to understand that knowledge rarely arrives without friction.']
+        },
+        bone_tempering: {
+            origin: ['Qi crosses your bones like a hammer. The body protests, but something deeper is grateful for the violence.'],
+            repeated: ['In this life, your bones already know how to receive the blow. It still hurts, but the pain meets a better-ordered skeleton.'],
+            reborn: ['In this incarnation, your marrow seems to remember discipline before the flesh fully accepts it.'],
+            mastered: ['You have tempered your own bones across enough lives to know that, at some point, pain stops being an obstacle and becomes a signature.']
+        },
+        open_medicine_hall: {
+            origin: ['When you open the medicine hall, you discover the market value of other people\'s hope.'],
+            repeated: ['You negotiate with colder hands now: healing, prestige and influence have begun to fit on the same counter.'],
+            reborn: ['In this life, patients and merchants seek you out with suspicious speed, as if your name still echoed from older eras.'],
+            mastered: ['Across enough lives, you learn that saving lives and building power sometimes use exactly the same hands.']
+        },
+        void_insight: {
+            origin: ['As you contemplate the void, you realize solitude and freedom sometimes share the same border.'],
+            repeated: ['You return to the vastness with less vertigo; in this life, your mind endures the absence of center more easily.'],
+            reborn: ['In this incarnation, the nothingness feels intimate. That is progress, but also a little unsettling.'],
+            mastered: ['Across many lives, you stared into the void until you learned that certain answers appear only after the self begins to thin.']
+        },
+        formation_lessons: {
+            origin: ['For the first time, you stop negotiating only with people and begin bargaining directly with the geometry of the world.'],
+            repeated: ['You return to formations with more control; the ground is no longer scenery, but instrument.'],
+            reborn: ['In this life, lines, nodes and currents begin organizing themselves before your eyes too quickly.'],
+            mastered: ['You have drawn the world often enough to know that every great formation is also an argument against chaos.']
+        },
+        consume_enemy_core: {
+            origin: ['When you consume an enemy core, power enters too quickly for innocence to remain a convincing posture.'],
+            repeated: ['Your body processes this theft with less hesitation now; it is your conscience that becomes harder to summon afterward.'],
+            reborn: ['In this incarnation, the enemy core yields too easily, as if it recognized in you an older predator.'],
+            mastered: ['You have grown too many times on what you killed to keep pretending victory and profanation are meaningfully separate.']
+        },
+        stabilize_foundation: {
+            origin: ['At last your base stops feeling improvised; for the first time, ambition and structure sign the same truce.'],
+            repeated: ['You repeat the process with more precision and less waste. In this life, stability no longer feels like a rare accident.'],
+            reborn: ['In this incarnation, solidifying your foundation feels almost natural, as if your soul had grown tired of collapsing.'],
+            mastered: ['You have rebuilt your own foundation across enough lives to know that permanence is a patient and expensive art.']
+        },
+        mountain_trial: {
+            origin: ['The mountain crushes you with the impersonality of natural law, and surviving that already changes you.'],
+            repeated: ['You return to the trial heavier within. The mountain still resists, though not in quite the same way.'],
+            reborn: ['In this life, your steps meet the stone with the familiarity of someone who has already been judged by it.'],
+            mastered: ['Across many lives, you have bargained with mountains. They always answer with the same three things: weight, silence and judgment.']
+        },
+        elder_promotion: {
+            origin: ['To sit among elders is to discover that authority rarely feels glorious from the inside.'],
+            repeated: ['You understand the theater of power better now; in this life, even sect formality begins to serve you.'],
+            reborn: ['In this incarnation, spiritual politics feels too old to frighten you. You recognize the hunger hiding behind etiquette.'],
+            mastered: ['You have climbed enough councils to know that the age of power rarely makes it wise, only patient.']
+        },
+        golden_cauldron_ritual: {
+            origin: ['The ritual of the golden cauldron makes your will seem larger than the body currently carrying it.'],
+            repeated: ['The flame bends with less resistance now; in this life, your ambition already knows how to breathe beside the furnace.'],
+            reborn: ['In this incarnation, the gold of the furnace reflects a face far too young to hold such familiarity.'],
+            mastered: ['You have raised domestic suns in enough lives to understand that every great alchemy demands an ego capable of meeting fire without blinking.']
+        },
+        nameless_breakthrough: {
+            origin: ['To break through without naming the Dao is to surrender the comfort of being explainable. You advance, and solitude advances with you.'],
+            repeated: ['You return to this threshold with less need for witnesses. In this life, anonymity serves you better.'],
+            reborn: ['In this incarnation, crossing boundaries without doctrine feels natural, as if samsara had lost patience with schools.'],
+            mastered: ['You have crossed limits without permission across enough lives to know that certain paths remain pure only while nobody can fully name them.']
+        },
+        black_meridian_breakthrough: {
+            origin: ['Your meridians darken as if they accepted a vow the cleaner part of your soul would never approve.'],
+            repeated: ['You force the rupture with more method and less remorse. That strengthens you in ways unwise to celebrate too loudly.'],
+            reborn: ['In this life, darkness enters the channels early, as if the forbidden road had preserved your address.'],
+            mastered: ['You have taken enough darkness into yourself to know that certain breakthroughs do not corrupt you at once; they simply train you to accept it.']
+        },
+        iron_body_breakthrough: {
+            origin: ['The iron body is born when flesh finally understands that pain is not a sufficient argument for retreat.'],
+            repeated: ['Your body returns to this threshold with less amazement. In this life, endurance has become reflex.'],
+            reborn: ['In this incarnation, the rupture feels like a reunion between a stubborn soul and a body still pretending to be new.'],
+            mastered: ['You have forced your own flesh through this gate across enough lives to know that extreme endurance always borders on monstrosity.']
+        },
         soul_bargain: {
             origin: ['The pact happens without visible ceremony, yet your soul notices at once that something has begun to watch it closely.'],
             repeated: ['You already know the taste of this agreement and still sign again. That may say more about you than about the abyss.'],
@@ -1358,6 +1478,36 @@ const JOURNEY_LORE_OVERRIDES = {
             repeated: ['You summon the storm with more precision and less doubt. In this life, even heaven\'s hatred starts to resemble a resource.'],
             reborn: ['In this incarnation, the black thunder finds you too quickly, as if it remembers exactly whom it should punish first.'],
             mastered: ['You have called enough calamities to understand that, after a certain point, being hated by heaven becomes another form of intimacy.']
+        },
+        pill_saint_ascension: {
+            origin: ['When the golden cauldron seals shut, you realize you are not merely refining a pill, but distilling the lifespan of your own name.'],
+            repeated: ['In this life, the great work arrives with less hesitation; you already know the weight of turning longevity into reputation.'],
+            reborn: ['In this incarnation, the furnace receives you like someone who has argued with time before and returned with better formulas.'],
+            mastered: ['Across many lives, you chased the same miracle until you understood that every supreme alchemy is also an attempt to teach eternity how to fit inside a vessel.']
+        },
+        found_own_peak: {
+            origin: ['When you raise your own peak, you discover that founding a tradition is merely another way to declare war on forgetting.'],
+            repeated: ['You build authority with less innocence now; in this life, you already know how much power must wear the face of order.'],
+            reborn: ['In this incarnation, disciples and elders align around you too quickly, as if your will still circulated through mountains of older eras.'],
+            mastered: ['You have gathered men, techniques and vows in enough lives to know that every sect begins as refuge and ends as an extension of the founder\'s ego.']
+        },
+        walk_beyond_mortals: {
+            origin: ['When you walk beyond mortals, you learn that the decisive step does not merely leave the world behind; it dissolves the need to be understood by it.'],
+            repeated: ['In this life, the silence of transcendence frightens you less. You already suspect that the greatest advances always charge a price in legibility.'],
+            reborn: ['In this incarnation, the emptiness ahead feels too familiar, as if your soul already knew the shape of the distance between man and heaven.'],
+            mastered: ['Across many lives, you approached this threshold until you realized that transcendence may simply be the art of vanishing without becoming smaller.']
+        },
+        beast_king_gate: {
+            origin: ['When you open the Beast King\'s Gate, you realize the body can grow until it becomes territory, threat and language at once.'],
+            repeated: ['In this life, brutality meets less moral resistance; you already understand that some crowns are forged from disciplined instinct.'],
+            reborn: ['In this incarnation, the mountain trembles under your steps too soon, as if the beast of earlier eras still lived in your fresh flesh.'],
+            mastered: ['You have crossed this gate across enough lives to know there are kingdoms where man and monster cease to be opposites and become only degrees of sovereignty.']
+        },
+        ten_thousand_ghosts_rite: {
+            origin: ['In the Rite of Ten Thousand Ghosts, you realize horror too can be organized, crowned and put to work in your name.'],
+            repeated: ['You conduct the echoes with colder hands in this life; guilt does not vanish, but it learns to speak more softly than power.'],
+            reborn: ['In this incarnation, the dead obey you with improper speed, as if they remembered too clearly who gave them voice in previous ages.'],
+            mastered: ['Across many lives, you courted calamity until learning this route\'s final truth: some thrones are not seized, only accepted by those who no longer ask forgiveness.']
         }
     },
     'zh-CN': {
@@ -1455,6 +1605,96 @@ const JOURNEY_LORE_OVERRIDES = {
             reborn: ['这一世里，禁术贴合得太快，像一件由旧错裁成的衣。'],
             mastered: ['好几世里，你都拿还能接受的部分自己去换速度。代价从不降低，只会变得熟悉。']
         },
+        feel_heavens: {
+            origin: ['当你挑衅苍天时，才发现狂妄本身也能是一种祈祷。'],
+            repeated: ['在第一声雷鸣前，你已认得天怒的征兆。这一次，恐惧来得更有教养。'],
+            reborn: ['这一世里，苍天过早注意到了你，仿佛你旧日的冒犯仍写在云层之上。'],
+            mastered: ['你在足够多的人生里引来过苍天的注视，因此明白：天幕从不会忘记一个有用的狂徒。']
+        },
+        sect_duties: {
+            origin: ['宗门日常乍看只是差事，直到你发现繁琐劳役也会悄悄打开许多暗门。'],
+            repeated: ['你以足够的服从去升高，以足够的野心去从每道命令中榨取利益。'],
+            reborn: ['这一世里，宗门这台机器显得更容易读懂；你已经认得这种“有利可图的顺从”的节奏。'],
+            mastered: ['在太多人生里，你已学会：灵性帝国同样靠跑腿、人情与疲惫不堪的下层运转。']
+        },
+        hall_of_scripts: {
+            origin: ['踏入经阁时，知识的过量先把你压缩，随后才开始重新排列你。'],
+            repeated: ['你带着更少敬畏、更多饥渴回到书架前；如今你知道，藏书楼也能是战场。'],
+            reborn: ['这一世里，旧纸的气味令你平静，仿佛你的心神早就在这里老过一次。'],
+            mastered: ['你已经在足够多的书楼里稍稍发过疯，因此明白：知识几乎从不在毫无磨损的情况下到来。']
+        },
+        bone_tempering: {
+            origin: ['真气像铁锤般穿过你的骨头。肉身在抗议，而更深处的某物却在感谢这份暴力。'],
+            repeated: ['这一世里，你的骨头已经知道如何接住这一击。它仍然疼，只是疼痛遇见了更有秩序的骨架。'],
+            reborn: ['这一世里，骨髓似乎比皮肉更早想起了纪律。'],
+            mastered: ['你在足够多的人生里锤炼过自己的骨，因此知道：某个时刻之后，痛苦不再是障碍，而会变成署名。']
+        },
+        open_medicine_hall: {
+            origin: ['当你开设药堂时，第一次发现别人的希望原来也有如此清晰的市价。'],
+            repeated: ['你如今谈判时手更冷了：医治、名望与影响力开始摆上同一张柜台。'],
+            reborn: ['这一世里，病人和商贩来得太快，像是你的名号仍在旧时代的街巷里回响。'],
+            mastered: ['足够多的人生会教会你：救人性命与建立权力，有时用的正是同一双手。']
+        },
+        void_insight: {
+            origin: ['当你凝视虚空时，才发现孤独与自由有时共用同一条边界。'],
+            repeated: ['你带着更少眩晕回到那片广大之中；这一世里，你的心神更能承受“无中心”的状态。'],
+            reborn: ['这一世里，虚无显得过于亲密。这是进步，但也令人略感不安。'],
+            mastered: ['在许多世里，你不断凝视虚空，直到明白：某些答案只会在“自我”开始变薄之后出现。']
+        },
+        formation_lessons: {
+            origin: ['第一次，你不再只与人周旋，而开始直接和世界的几何谈判。'],
+            repeated: ['你带着更强掌控回到阵法前；地面不再只是背景，而已成器具。'],
+            reborn: ['这一世里，线、节点与流向过早就在你眼前开始自我排列。'],
+            mastered: ['你已在足够多的人生里重画这个世界，因此知道：每一道伟大阵法，本质上都是对混沌提出的反驳。']
+        },
+        consume_enemy_core: {
+            origin: ['当你吞下敌人的核心时，力量进入得太快，以至于“无辜”再也站不稳脚。'],
+            repeated: ['你的身体如今更少迟疑地处理这种掠夺；真正更难召回的，是事后的良知。'],
+            reborn: ['这一世里，敌核让渡得太容易，仿佛它认出了你是旧时代的掠食者。'],
+            mastered: ['你已太多次靠所杀之物成长，因而不再假装胜利与亵渎之间真的隔着多远。']
+        },
+        stabilize_foundation: {
+            origin: ['你的根基终于不再像仓促拼起的脚手架；第一次，野心与结构签下了同一份停战书。'],
+            repeated: ['你以更高精度、更少浪费重复这个过程。到了这一世，稳定已不再像罕见事故。'],
+            reborn: ['这一世里，稳固根基几乎显得理所当然，仿佛你的神魂早已厌倦了反复坍塌。'],
+            mastered: ['你在足够多的人生里重建过自己的根基，因此知道：持久本身就是一门耐心而昂贵的艺术。']
+        },
+        mountain_trial: {
+            origin: ['山以自然法则般冷漠的方式碾压你，而仅仅活下来就已经改变了你。'],
+            repeated: ['你再次回到试炼时，心里更重了些。山仍会抗拒你，只是不再完全像从前那样。'],
+            reborn: ['这一世里，你的脚步碰上山石时显得太过熟悉，像一个曾受它审判过的人。'],
+            mastered: ['在许多世里，你都与高山谈判过。它们给出的答案始终只有三个：重量、寂静与裁决。']
+        },
+        elder_promotion: {
+            origin: ['坐入长老之列，便会明白权威从内部看去，往往并不光彩。'],
+            repeated: ['你如今更懂权力的戏剧性；这一世里，连宗门礼法也开始为你所用。'],
+            reborn: ['这一世里，灵性政治老得已不足以吓到你。你认得礼节背后那份饥饿。'],
+            mastered: ['你已经爬上过足够多的议席，因此明白：权力的年岁很少让它智慧，只会让它耐心。']
+        },
+        golden_cauldron_ritual: {
+            origin: ['金鼎之仪让你的意志看起来比承载它的肉身还要庞大。'],
+            repeated: ['火焰如今弯得更快了；这一世里，你的野心早已学会如何与炉火一同呼吸。'],
+            reborn: ['这一世里，炉中的金光映出一张过于年轻、却又对这一切过于熟悉的脸。'],
+            mastered: ['你在足够多的人生里升起过“家中的太阳”，因此明白：伟大炼丹术需要一种能直视火焰而不眨眼的自我。']
+        },
+        nameless_breakthrough: {
+            origin: ['无名破境，意味着放弃“可被解释”的安慰。你前进一步，孤独也跟着前进一步。'],
+            repeated: ['你再次回到这个门槛时，对见证者的需求已少得多。到了这一世，无名反而更适合你。'],
+            reborn: ['这一世里，不依教法而越界竟显得太自然，仿佛轮回早已对门派失去耐心。'],
+            mastered: ['你在足够多的人生里无请自破，因此知道：某些道路之所以纯粹，正因为还没人能完整命名它们。']
+        },
+        black_meridian_breakthrough: {
+            origin: ['你的经脉黑下去，仿佛接受了一份更干净的灵魂永远不会同意的誓言。'],
+            repeated: ['你以更强的方法、更少的悔意强行突破。这会以不宜大肆庆祝的方式让你更强。'],
+            reborn: ['这一世里，黑暗太早流入经脉，像是那条禁路一直替你保留着地址。'],
+            mastered: ['你已经把足够多的黑暗纳入体内，因此知道：某些突破不会立刻腐化你，它们只是训练你去习惯。']
+        },
+        iron_body_breakthrough: {
+            origin: ['铁躯的诞生，始于肉身终于承认“痛苦不足以构成退却理由”。'],
+            repeated: ['你的身体以更少惊异重返这个门槛；到了这一世，承受几乎已变成本能。'],
+            reborn: ['这一世里，这场突破像顽固神魂与一具仍假装年轻的肉身重新会面。'],
+            mastered: ['你在足够多的人生里逼自己的血肉穿过这道门，因此知道：极端的坚忍总与怪物只隔半步。']
+        },
         soul_bargain: {
             origin: ['契约表面上没有仪式，但你的魂魄立刻知道，有什么东西开始近距离看着你了。'],
             repeated: ['你已经认识这种交易的味道，却仍再次签下。也许这更说明你，而不是深渊。'],
@@ -1466,6 +1706,138 @@ const JOURNEY_LORE_OVERRIDES = {
             repeated: ['你以更少迟疑、更高精度召来风暴。到了这一世，连天意的憎恨都开始像资源。'],
             reborn: ['这一世里，黑雷来得太快，仿佛它们清楚记得该先惩罚谁。'],
             mastered: ['你已呼唤过足够多的灾厄，因此知道：到某个地步，被苍天厌恶本身也会成为一种亲密。']
+        },
+        pill_saint_ascension: {
+            origin: ['当金鼎合拢时，你明白自己炼制的不只是丹药，更是在蒸馏自己名字的寿命。'],
+            repeated: ['这一世里，大成之作来得更少犹豫；你已知道把长生炼成声名究竟有多重。'],
+            reborn: ['这一世里，丹炉接纳你的方式，像是它早见过你与时间争论，又见你带着更好的方子回来。'],
+            mastered: ['在许多世里，你追逐同一个奇迹，直到明白：每一种至高炼丹术，本质上都在尝试教会永恒如何装进器皿。']
+        },
+        found_own_peak: {
+            origin: ['当你立起自己的峰头，才发现创立传统也不过是另一种向遗忘宣战的方式。'],
+            repeated: ['你如今用更少天真去建构权威；这一世里，你已经知道多少力量必须披上秩序的面孔。'],
+            reborn: ['这一世里，弟子与长老向你聚拢得太快，仿佛你的意志仍在旧时代的群峰之间流动。'],
+            mastered: ['你在足够多的人生里聚拢过人、法与誓言，因此知道：每个宗门最初都像避难所，最后都成了开山者意志的延长。']
+        },
+        walk_beyond_mortals: {
+            origin: ['当你走到凡俗之外时，才明白那关键一步抛下的不只是世界，也包括“被世界理解”的需要。'],
+            repeated: ['这一世里，超脱的寂静已不那么可怕。你已猜到，最大的突破总要在“可理解性”上收税。'],
+            reborn: ['这一世里，前方的空茫熟悉得过分，仿佛你的神魂早就知道人和天之间那道距离的形状。'],
+            mastered: ['在许多世里，你不断逼近这一门槛，直到意识到：超脱也许只是学会在消失时不变小。']
+        },
+        beast_king_gate: {
+            origin: ['当你开启兽王之门时，才知道肉身可以成长到同时成为疆域、威胁与语言。'],
+            repeated: ['这一世里，蛮横遇到的道德阻力更少了；你已经懂得，有些王冠本就由受训的本能铸成。'],
+            reborn: ['这一世里，山在你脚下过早震动，仿佛旧时代的兽性仍住在这具新鲜的肉身里。'],
+            mastered: ['你在足够多的人生里穿过这道门，因此知道：有些国度里，人和怪物不再是对立，只是主权的不同程度。']
+        },
+        ten_thousand_ghosts_rite: {
+            origin: ['在万鬼之仪中，你发现恐怖同样可以被组织、加冕，并被迫为你的名字工作。'],
+            repeated: ['这一世里，你以更冷的手去统御回响；愧疚并未消失，只是学会了比力量说得更轻。'],
+            reborn: ['这一世里，亡者服从得太快，仿佛他们清楚记得是谁在旧时代给过他们声音。'],
+            mastered: ['在许多世里，你不断向灾厄靠近，直到学会这条路最后的真相：有些王座不是夺来的，而是由那些不再请求宽恕的人去接受。']
+        }
+    }
+};
+
+const JOURNEY_ENDING_ECHOES = {
+    'pt-BR': {
+        pill_saint_ascension: {
+            work_farm: ['Mesmo na lama, algo em você ainda trata o mundo como laboratório de longevidade.'],
+            hear_legends: ['Você escuta qualquer história de mestres e ervas raras com a suspeita de quem já destilou fama do impossível.'],
+            breathe: ['Ao sentir o Qi, sua alma parece procurar imediatamente a pureza de uma fórmula que já dominou em outra vida.'],
+            study_alchemy: ['A fornalha reacende um orgulho antigo: alguma parte sua ainda se lembra de ter ensinado o tempo a ferver.'],
+            open_medicine_hall: ['Curar e lucrar voltam a caminhar juntos; seu espírito ainda mede o mundo em remédios, pacientes e posteridade.'],
+            _cultivo: ['Há refinamento antigo na sua ambição, como se uma vida passada ainda procurasse o recipiente perfeito para durar.']
+        },
+        found_own_peak: {
+            work_farm: ['Até no trabalho mais humilde, sua alma avalia o mundo como quem já ergueu um nome alto o bastante para virar instituição.'],
+            village_elder: ['Conselhos lhe soam diferentes depois de uma vida em que outros aguardavam ordens suas.'],
+            sect_recruiter: ['Você reconhece cedo o cheiro do poder organizado; já houve uma vida em que foi você quem distribuiu lugar e favor.'],
+            sect_duties: ['Obedecer ainda funciona, mas alguma parte sua não esqueceu como era ser o eixo em torno do qual os outros obedeciam.'],
+            elder_promotion: ['A disputa por assento toca uma memória mais funda: você já foi o motivo de outras pessoas disputarem assentos.'],
+            _social: ['Sua alma ainda olha para qualquer hierarquia como matéria-prima, não como teto.']
+        },
+        walk_beyond_mortals: {
+            rest_under_tree: ['Mesmo no repouso, existe em você a distância serena de quem já aprendeu a desaparecer sem pedir testemunhas.'],
+            breathe: ['Ao respirar, o corpo é jovem, mas o espírito parece lembrar o silêncio rarefeito de quem já andou além do nome.'],
+            silent_retreat: ['O retiro toca uma lembrança funda: alguma parte sua já tratou o próprio mundo como ruído residual.'],
+            void_insight: ['O vazio lhe parece íntimo demais para ser novidade.'],
+            _cultivo: ['Sua ambição carrega um desapego antigo, como se já soubesse que o auge às vezes exige tornar-se ilegível.']
+        },
+        beast_king_gate: {
+            work_farm: ['O esforço bruto desperta um eco antigo: sua alma ainda se lembra da época em que o corpo bastava como reino.'],
+            explore_forest: ['A mata o observa como se reconhecesse um predador que já foi maior.'],
+            hunt_wild_boar: ['A caça desperta algo régio e brutal no seu sangue, como se outra vida ainda rosnasse dentro da carne.'],
+            bone_tempering: ['Seus ossos respondem com a familiaridade de quem já sustentou uma soberania feita de músculo e ameaça.'],
+            mountain_trial: ['A montanha parece reverenciá-lo e testá-lo ao mesmo tempo; talvez ainda se lembre do que você foi sobre ela.'],
+            _corpo: ['Sua alma trata força física com a intimidade de quem já falou ao mundo inteiro através do próprio corpo.']
+        },
+        ten_thousand_ghosts_rite: {
+            hear_legends: ['Entre uma lenda e outra, você escuta o murmúrio de vidas que já sobreviveram dentro de maldição e oração.'],
+            forbidden_whisper: ['O sussurro proibido encontra pouco atrito; talvez sua alma ainda retenha o hábito de conversar com ruínas vivas.'],
+            soul_bargain: ['Pactos soam familiares demais quando uma vida passada já transformou calamidade em trono.'],
+            demonic_art: ['A arte demoníaca parece reconhecer em você um veterano da corrupção bem-sucedida.'],
+            karma_storm: ['Até a tempestade parece menos surpresa com seu nome desta vez.'],
+            _risco: ['Seu espírito já traz a compostura terrível de quem descobriu que há destinos que sobrevivem melhor como ameaça do que como exemplo.']
+        }
+    },
+    en: {
+        pill_saint_ascension: {
+            work_farm: ['Even in the mud, some part of you still treats the world like a laboratory for longevity.'],
+            breathe: ['As you sense Qi, your soul immediately reaches for the purity of a formula it once mastered.'],
+            study_alchemy: ['The furnace rekindles an old pride: some part of you still remembers teaching time how to boil.'],
+            _cultivo: ['There is an old refinement in your ambition, as if a previous life still searched for the perfect vessel to endure.']
+        },
+        found_own_peak: {
+            village_elder: ['Advice sounds different once you have lived a life where others waited for your orders.'],
+            sect_recruiter: ['You recognize organized power early; there was already a life in which you decided who belonged.'],
+            sect_duties: ['Obedience still works, but some part of you remembers what it felt like to stand at the center of other people\'s obedience.'],
+            _social: ['Your soul still reads every hierarchy as raw material, never as ceiling.']
+        },
+        walk_beyond_mortals: {
+            rest_under_tree: ['Even in rest, there is in you the calm distance of someone who already learned how to vanish without witnesses.'],
+            void_insight: ['The void feels far too intimate to count as novelty.'],
+            _cultivo: ['Your ambition carries an old detachment, as if it already knew that the summit sometimes demands becoming illegible.']
+        },
+        beast_king_gate: {
+            work_farm: ['Raw labor awakens an older echo: your soul still remembers when the body alone was kingdom enough.'],
+            hunt_wild_boar: ['The hunt stirs something regal and brutal in your blood, as if another life were still growling inside the flesh.'],
+            _corpo: ['Your soul treats physical strength with the intimacy of someone who once spoke to the world through the body alone.']
+        },
+        ten_thousand_ghosts_rite: {
+            hear_legends: ['Between one legend and the next, you hear the murmur of lives that once survived as curse and prayer.'],
+            soul_bargain: ['Pacts feel too familiar when a previous life already turned calamity into a throne.'],
+            _risco: ['Your spirit already carries the terrible composure of someone who learned that some destinies survive better as threat than example.']
+        }
+    },
+    'zh-CN': {
+        pill_saint_ascension: {
+            work_farm: ['即便在泥土里，你体内仍有一部分把这个世界当作延寿的炉房。'],
+            breathe: ['当你感知真气时，神魂会本能地去寻找一张前世早已纯熟的丹方。'],
+            study_alchemy: ['炉火重新点亮了一种旧日的傲气：你体内仍有一部分记得自己曾教时间沸腾。'],
+            _cultivo: ['你的野心里带着一种旧日精炼之感，仿佛前世仍在寻找一个足以盛放长久的器皿。']
+        },
+        found_own_peak: {
+            village_elder: ['在经历过一生他人等待你发号施令之后，劝告听起来会完全不同。'],
+            sect_recruiter: ['你过早认出了“被组织起来的权力”；曾有一生，是由你来决定谁能留下。'],
+            sect_duties: ['顺从依旧有用，但你体内仍有一部分记得，自己也曾是别人顺从的中心。'],
+            _social: ['你的神魂仍把一切层级看作材料，而不是上限。']
+        },
+        walk_beyond_mortals: {
+            rest_under_tree: ['即便在歇息时，你也带着一种平静的距离感，那是曾学会无声消失之人留下的痕迹。'],
+            void_insight: ['虚无对你来说亲密得过头，已经不像新鲜事。'],
+            _cultivo: ['你的野心带着旧日的疏离，仿佛早已知道登顶有时意味着变得不可读。']
+        },
+        beast_king_gate: {
+            work_farm: ['粗重劳作唤醒了更古老的回声：你的神魂仍记得身体本身也曾足够称王。'],
+            hunt_wild_boar: ['猎杀唤醒你血里某种王者般而残暴的东西，仿佛另一世的兽性仍在肉身里低吼。'],
+            _corpo: ['你的神魂以一种旧王般的亲近感对待肉身力量，像是曾只凭身体便向世界发过言。']
+        },
+        ten_thousand_ghosts_rite: {
+            hear_legends: ['在一则又一则传说之间，你能听见那些曾以诅咒与祈祷之形幸存下来的旧命在低语。'],
+            soul_bargain: ['当上一世已把灾厄坐成王座时，契约自然会显得过分熟悉。'],
+            _risco: ['你的神魂已带着一种可怕的镇定，像是早就学会有些命途作为威胁比作为榜样更容易长存。']
         }
     }
 };
@@ -1520,11 +1892,17 @@ function buildJourneyActionLoreText(actionId, payload) {
         || JOURNEY_LORE_GENERIC['pt-BR']?.[stage]?.[action.type]
         || JOURNEY_LORE_GENERIC['pt-BR']?.[stage]?.cultivo
         || [];
+    const endingEchoPool = payload.previousEndingId
+        ? (JOURNEY_ENDING_ECHOES[locale]?.[payload.previousEndingId]?.[actionId]
+            || JOURNEY_ENDING_ECHOES[locale]?.[payload.previousEndingId]?.[`_${action.type}`]
+            || [])
+        : [];
 
     const overrideText = pickJourneyLoreVariant(localePool, (payload.totalCount || 1) - 1);
     const genericText = pickJourneyLoreVariant(genericPool, (payload.lifeCount || 1) - 1);
+    const endingEchoText = pickJourneyLoreVariant(endingEchoPool, (payload.endingCounts?.[payload.previousEndingId] || 1) - 1);
 
-    return [overrideText, genericText].filter(Boolean).join(' ');
+    return [overrideText, genericText, endingEchoText].filter(Boolean).join(' ');
 }
 
 function renderJourneyDynamicActionLog(payload) {

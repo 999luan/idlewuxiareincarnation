@@ -224,12 +224,28 @@ function ensureNarrativeMemoryState() {
         gameState.narrativeMemory = {
             samsaraCycles: 0,
             lifetimeActionCounts: {},
-            totalActionCounts: {}
+            totalActionCounts: {},
+            lastEndingId: '',
+            endingCounts: {},
+            endingHistory: []
         };
     }
     if (!gameState.narrativeMemory.lifetimeActionCounts) gameState.narrativeMemory.lifetimeActionCounts = {};
     if (!gameState.narrativeMemory.totalActionCounts) gameState.narrativeMemory.totalActionCounts = {};
     if (gameState.narrativeMemory.samsaraCycles === undefined) gameState.narrativeMemory.samsaraCycles = 0;
+    if (gameState.narrativeMemory.lastEndingId === undefined) gameState.narrativeMemory.lastEndingId = '';
+    if (!gameState.narrativeMemory.endingCounts) gameState.narrativeMemory.endingCounts = {};
+    if (!gameState.narrativeMemory.endingHistory) gameState.narrativeMemory.endingHistory = [];
+}
+
+function recordNarrativeEnding(actionId) {
+    ensureNarrativeMemoryState();
+    gameState.narrativeMemory.lastEndingId = actionId;
+    gameState.narrativeMemory.endingCounts[actionId] = (gameState.narrativeMemory.endingCounts[actionId] || 0) + 1;
+    gameState.narrativeMemory.endingHistory = [
+        actionId,
+        ...gameState.narrativeMemory.endingHistory.filter(id => id !== actionId)
+    ].slice(0, 5);
 }
 
 function recordNarrativeActionContext(actionId) {
@@ -246,7 +262,9 @@ function recordNarrativeActionContext(actionId) {
         age: Math.floor(gameState.age),
         lifeCount,
         totalCount,
-        samsaraCycles: gameState.narrativeMemory.samsaraCycles || 0
+        samsaraCycles: gameState.narrativeMemory.samsaraCycles || 0,
+        previousEndingId: gameState.narrativeMemory.lastEndingId || '',
+        endingCounts: gameState.narrativeMemory.endingCounts || {}
     };
 }
 
@@ -345,6 +363,7 @@ function completeJourneyAction(actionId, actionData) {
         gameState.endingId = actionId;
         gameState.endingTitle = actionData.ending.title;
         gameState.endingText = actionData.ending.text;
+        recordNarrativeEnding(actionId);
         gameState.currentObjectiveKey = 'ending_objective';
         gameState.currentObjectiveData = {};
         gameState.currentObjective = t('ending_objective');
@@ -510,6 +529,15 @@ function gameLoop() {
             processCascade(secondsPassed);
             const qps = getQiPerSecond();
             gameState.age += secondsPassed;
+
+            if (!gameState.isImmortal && gameState.age >= gameState.lifespan) {
+                inTribulation = false;
+                document.getElementById('tribulation-btn').innerText = t('start_tribulation');
+                handleDeath();
+                lastTick = now;
+                requestAnimationFrame(gameLoop);
+                return;
+            }
             
             // Dano contínuo
             gameState.qi -= dps * secondsPassed;

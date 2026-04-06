@@ -39,7 +39,10 @@ let gameState = {
     narrativeMemory: {
         samsaraCycles: 0,
         lifetimeActionCounts: {},
-        totalActionCounts: {}
+        totalActionCounts: {},
+        lastEndingId: '',
+        endingCounts: {},
+        endingHistory: []
     },
     activeAction: null,
     actionProgresses: {},
@@ -163,12 +166,18 @@ function loadGame() {
             gameState.narrativeMemory = {
                 samsaraCycles: 0,
                 lifetimeActionCounts: {},
-                totalActionCounts: {}
+                totalActionCounts: {},
+                lastEndingId: '',
+                endingCounts: {},
+                endingHistory: []
             };
         } else {
             if (gameState.narrativeMemory.samsaraCycles === undefined) gameState.narrativeMemory.samsaraCycles = 0;
             if (gameState.narrativeMemory.lifetimeActionCounts === undefined) gameState.narrativeMemory.lifetimeActionCounts = {};
             if (gameState.narrativeMemory.totalActionCounts === undefined) gameState.narrativeMemory.totalActionCounts = {};
+            if (gameState.narrativeMemory.lastEndingId === undefined) gameState.narrativeMemory.lastEndingId = '';
+            if (gameState.narrativeMemory.endingCounts === undefined) gameState.narrativeMemory.endingCounts = {};
+            if (gameState.narrativeMemory.endingHistory === undefined) gameState.narrativeMemory.endingHistory = [];
         }
         if (gameState.activeAction === undefined) gameState.activeAction = null;
         if (gameState.actionProgresses === undefined) {
@@ -246,12 +255,18 @@ function resetJourneyState() {
         gameState.narrativeMemory = {
             samsaraCycles: 0,
             lifetimeActionCounts: {},
-            totalActionCounts: {}
+            totalActionCounts: {},
+            lastEndingId: '',
+            endingCounts: {},
+            endingHistory: []
         };
     } else {
         gameState.narrativeMemory.lifetimeActionCounts = {};
         if (gameState.narrativeMemory.samsaraCycles === undefined) gameState.narrativeMemory.samsaraCycles = 0;
         if (gameState.narrativeMemory.totalActionCounts === undefined) gameState.narrativeMemory.totalActionCounts = {};
+        if (gameState.narrativeMemory.lastEndingId === undefined) gameState.narrativeMemory.lastEndingId = '';
+        if (gameState.narrativeMemory.endingCounts === undefined) gameState.narrativeMemory.endingCounts = {};
+        if (gameState.narrativeMemory.endingHistory === undefined) gameState.narrativeMemory.endingHistory = [];
     }
     gameState.activeAction = null;
     gameState.actionProgresses = {};
