@@ -383,6 +383,14 @@ function getActionEffectsSummary(actionData) {
 
 function applyAscensionReset(gain) {
     gameState.karma += gain;
+    if (!gameState.narrativeMemory) {
+        gameState.narrativeMemory = {
+            samsaraCycles: 0,
+            lifetimeActionCounts: {},
+            totalActionCounts: {}
+        };
+    }
+    gameState.narrativeMemory.samsaraCycles = (gameState.narrativeMemory.samsaraCycles || 0) + 1;
 
     let qiRetained = 0;
     const daoRetain = gameState.metaUpgrades.dao_retain || 0;

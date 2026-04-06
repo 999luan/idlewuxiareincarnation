@@ -219,6 +219,37 @@ function ensureJourneySafety() {
     });
 }
 
+function ensureNarrativeMemoryState() {
+    if (!gameState.narrativeMemory) {
+        gameState.narrativeMemory = {
+            samsaraCycles: 0,
+            lifetimeActionCounts: {},
+            totalActionCounts: {}
+        };
+    }
+    if (!gameState.narrativeMemory.lifetimeActionCounts) gameState.narrativeMemory.lifetimeActionCounts = {};
+    if (!gameState.narrativeMemory.totalActionCounts) gameState.narrativeMemory.totalActionCounts = {};
+    if (gameState.narrativeMemory.samsaraCycles === undefined) gameState.narrativeMemory.samsaraCycles = 0;
+}
+
+function recordNarrativeActionContext(actionId) {
+    ensureNarrativeMemoryState();
+
+    const lifeCount = (gameState.narrativeMemory.lifetimeActionCounts[actionId] || 0) + 1;
+    const totalCount = (gameState.narrativeMemory.totalActionCounts[actionId] || 0) + 1;
+
+    gameState.narrativeMemory.lifetimeActionCounts[actionId] = lifeCount;
+    gameState.narrativeMemory.totalActionCounts[actionId] = totalCount;
+    gameState.actionUseCounts[actionId] = lifeCount;
+
+    return {
+        age: Math.floor(gameState.age),
+        lifeCount,
+        totalCount,
+        samsaraCycles: gameState.narrativeMemory.samsaraCycles || 0
+    };
+}
+
 // ====================
 // MOTOR DA JORNADA
 // ====================
@@ -289,6 +320,7 @@ function processJourneyAction(secondsPassed) {
 }
 
 function completeJourneyAction(actionId, actionData) {
+    const narrativeContext = recordNarrativeActionContext(actionId);
     const statMultiplier = getJourneyStatRewardMultiplier();
     if (actionData.effects) {
         if (actionData.effects.qi) addQi(actionData.effects.qi * getJourneyQiRewardMultiplier());
@@ -320,7 +352,11 @@ function completeJourneyAction(actionId, actionData) {
             addJourneyLog(t('ending_log', { text: actionData.ending.text }));
     }
 
-    addJourneyLog(`[${Math.floor(gameState.age)} ${t('years')}] ${actionData.log}`);
+    if (typeof window.createJourneyDynamicActionLog === 'function') {
+        addJourneyLog(window.createJourneyDynamicActionLog(actionId, narrativeContext));
+    } else {
+        addJourneyLog(`[${Math.floor(gameState.age)} ${t('years')}] ${actionData.log}`);
+    }
 
     const newlyUnlocked = [];
     if (actionData.unlocks) {

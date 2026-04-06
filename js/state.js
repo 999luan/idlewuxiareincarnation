@@ -10,8 +10,11 @@ function getDefaultObjective() {
 }
 
 function getJourneyStartLog() {
+    const samsaraCycles = typeof gameState !== 'undefined' && gameState?.narrativeMemory
+        ? (gameState.narrativeMemory.samsaraCycles || 0)
+        : 0;
     if (typeof window.getLocalizedJourneyStartLog === 'function') {
-        return window.getLocalizedJourneyStartLog();
+        return window.getLocalizedJourneyStartLog(samsaraCycles);
     }
     return 'Aos 15 anos, você ainda é mortal, mas já escolheu ouvir o mundo com atenção perigosa.';
 }
@@ -33,6 +36,11 @@ let gameState = {
     blockedActions: [],
     actionCooldowns: {},
     actionUseCounts: {},
+    narrativeMemory: {
+        samsaraCycles: 0,
+        lifetimeActionCounts: {},
+        totalActionCounts: {}
+    },
     activeAction: null,
     actionProgresses: {},
     actionLogs: [getJourneyStartLog()],
@@ -151,6 +159,17 @@ function loadGame() {
         if (gameState.blockedActions === undefined) gameState.blockedActions = [];
         if (gameState.actionCooldowns === undefined) gameState.actionCooldowns = {};
         if (gameState.actionUseCounts === undefined) gameState.actionUseCounts = {};
+        if (gameState.narrativeMemory === undefined) {
+            gameState.narrativeMemory = {
+                samsaraCycles: 0,
+                lifetimeActionCounts: {},
+                totalActionCounts: {}
+            };
+        } else {
+            if (gameState.narrativeMemory.samsaraCycles === undefined) gameState.narrativeMemory.samsaraCycles = 0;
+            if (gameState.narrativeMemory.lifetimeActionCounts === undefined) gameState.narrativeMemory.lifetimeActionCounts = {};
+            if (gameState.narrativeMemory.totalActionCounts === undefined) gameState.narrativeMemory.totalActionCounts = {};
+        }
         if (gameState.activeAction === undefined) gameState.activeAction = null;
         if (gameState.actionProgresses === undefined) {
             gameState.actionProgresses = {};
@@ -223,6 +242,17 @@ function resetJourneyState() {
     gameState.blockedActions = [];
     gameState.actionCooldowns = {};
     gameState.actionUseCounts = {};
+    if (!gameState.narrativeMemory) {
+        gameState.narrativeMemory = {
+            samsaraCycles: 0,
+            lifetimeActionCounts: {},
+            totalActionCounts: {}
+        };
+    } else {
+        gameState.narrativeMemory.lifetimeActionCounts = {};
+        if (gameState.narrativeMemory.samsaraCycles === undefined) gameState.narrativeMemory.samsaraCycles = 0;
+        if (gameState.narrativeMemory.totalActionCounts === undefined) gameState.narrativeMemory.totalActionCounts = {};
+    }
     gameState.activeAction = null;
     gameState.actionProgresses = {};
     gameState.actionLogs = [getJourneyStartLog()];

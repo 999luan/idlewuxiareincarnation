@@ -863,6 +863,613 @@ const LEGACY_JOURNEY_LOG_ALIASES = {
     ]
 };
 
+const JOURNEY_DYNAMIC_LOG_PREFIX = '__ACTION_LOG__:';
+
+const JOURNEY_START_LOG_VARIANTS = {
+    'pt-BR': [
+        'Aos 15 anos, você ainda é mortal, mas já escolheu ouvir o mundo com atenção perigosa.',
+        'Aos 15 anos, você desperta com a estranha sensação de já ter fracassado antes, e isso o torna mais atento.',
+        'Aos 15 anos, o mundo parece familiar demais. Algo em você reconhece a estrada antes do primeiro passo.',
+        'Aos 15 anos, você retorna ao mundo como quem já discutiu com o céu outras vezes e decidiu insistir.'
+    ],
+    en: [
+        'At age 15, you are still mortal, but you already chose to listen to the world with dangerous attention.',
+        'At age 15, you wake with the unsettling sense that you have failed before, and that makes you listen harder.',
+        'At age 15, the world feels too familiar. Something in you recognizes the road before the first step.',
+        'At age 15, you return to the world like someone who has argued with heaven before and chose to insist.'
+    ],
+    'zh-CN': [
+        '十五岁时，你仍是凡人，但已经学会以危险的专注倾听这个世界。',
+        '十五岁时，你带着一种似曾败北的预感醒来，于是比过去更懂得倾听。',
+        '十五岁时，天地显得熟悉得过分，仿佛你在迈步前就认出了这条路。',
+        '十五岁时，你像一个曾与苍天争执过的人那样归来，而且决定再争一次。'
+    ]
+};
+
+const JOURNEY_LORE_GENERIC = {
+    'pt-BR': {
+        origin: {
+            corpo: [
+                'Seu corpo aprende esta lição como quem ainda não sabe se vai sobreviver a ela.',
+                'A fadiga entra primeiro, mas deixa para trás uma disciplina que o jovem você ainda não compreende.'
+            ],
+            cultivo: [
+                'Há um breve silêncio entre a respiração e o mundo, e você sente que dali pode nascer um caminho.',
+                'Você não entende o Dao, mas percebe que o vazio começa a responder quando você insiste.'
+            ],
+            social: [
+                'As vozes ao seu redor parecem banais, até que uma delas deixa escapar a direção da sua vida.',
+                'Você aprende cedo que pessoas comuns às vezes carregam portas escondidas na própria fala.'
+            ],
+            risco: [
+                'O medo chega antes do resultado, mas sair inteiro já basta para mudar algo dentro de você.',
+                'A violência do mundo o toca de perto, e seu coração aprende a bater sem pedir licença.'
+            ]
+        },
+        repeated: {
+            corpo: [
+                'Seu corpo já conhece este esforço; o que antes doía como castigo agora endurece como método.',
+                'A repetição rouba o espanto, mas devolve precisão. Cada gesto pesa menos e rende mais.'
+            ],
+            cultivo: [
+                'A prática se repete, mas não é a mesma. Você reconhece com mais rapidez o lugar onde o mundo cede.',
+                'O exercício volta, e com ele a sensação de que seu espírito recorda atalhos que ninguém lhe ensinou.'
+            ],
+            social: [
+                'Você já ouviu versões dessa conversa antes, e por isso desta vez sabe onde a verdade costuma se esconder.',
+                'As palavras se repetem, mas sua escuta mudou; você começa a separar ruído, intenção e destino.'
+            ],
+            risco: [
+                'O perigo ainda cobra seu preço, mas seus nervos já não desperdiçam força com o susto inicial.',
+                'Você entra no risco com menos hesitação. O mundo continua cruel, porém você já aprendeu seu ritmo.'
+            ]
+        },
+        reborn: {
+            corpo: [
+                'Nesta encarnação, seus músculos reconhecem o esforço cedo demais, como se herdassem disciplina de ossos que já viraram pó.',
+                'Seu corpo mortal é novo, mas a resistência chega com a familiaridade de um hábito atravessando o samsara.'
+            ],
+            cultivo: [
+                'Você repete o ritual nesta nova vida e sente que a alma encontra o compasso antes que a mente o compreenda.',
+                'Há memória nas suas meridianas. Nesta encarnação, o cultivo parece menos descoberta e mais reencontro.'
+            ],
+            social: [
+                'Nesta nova vida, você escuta as pessoas com a calma de quem já perdeu futuros inteiros por não notar certos sinais.',
+                'As vozes mudaram, mas você as lê como um velho sobrevivente do samsara: com paciência e desconfiança.'
+            ],
+            risco: [
+                'Mesmo nesta encarnação, o perigo o encontra menos cru; alguma parte da alma ainda lembra como não vacilar.',
+                'Você encara o risco com a estranha serenidade de quem já morreu por erros parecidos em outras vidas.'
+            ]
+        },
+        mastered: {
+            corpo: [
+                'Você já repetiu esse esforço tantas vezes que ele deixou de ser trabalho e passou a soar como um instinto reincidente.',
+                'A carne ainda é mortal, mas o gesto não: ele retorna em cada vida com a firmeza de uma técnica ancestral.'
+            ],
+            cultivo: [
+                'A prática já não abre só progresso; ela confirma que sua alma sabe voltar ao mesmo limiar até dobrá-lo.',
+                'O exercício virou liturgia de reencarnação. Cada repetição o aproxima menos de aprender e mais de lembrar.'
+            ],
+            social: [
+                'Você conversa como quem testa ecos antigos. As pessoas mudam; o padrão por trás delas, cada vez menos.',
+                'Esta cena volta em tantas vidas que você já fala com os outros como se negociasse diretamente com o destino.'
+            ],
+            risco: [
+                'Você repete o risco com a intimidade de quem já ofereceu muitos corpos ao mesmo tipo de abismo.',
+                'O perigo ainda morde, mas agora encontra alguém acostumado a voltar do samsara trazendo cicatrizes invisíveis.'
+            ]
+        }
+    },
+    en: {
+        origin: {
+            corpo: ['Your body learns this lesson like someone who still is not sure he will survive it.'],
+            cultivo: ['There is a brief silence between your breath and the world, and you feel a path could be born there.'],
+            social: ['The voices around you seem ordinary, until one of them quietly reveals the direction of your life.'],
+            risco: ['Fear arrives before the result, but coming back whole is already enough to change something inside you.']
+        },
+        repeated: {
+            corpo: ['Your body already knows this labor; what once hurt like punishment now hardens into method.'],
+            cultivo: ['The practice returns, and with it the feeling that your spirit remembers shortcuts nobody taught you.'],
+            social: ['The words repeat themselves, but your listening has changed; you begin to separate noise from fate.'],
+            risco: ['Danger still demands its price, but your nerves no longer waste strength on the first shock.']
+        },
+        reborn: {
+            corpo: ['In this incarnation, your muscles recognize the labor too early, as if discipline survived the grave.'],
+            cultivo: ['There is memory in your meridians. In this life, cultivation feels less like discovery and more like reunion.'],
+            social: ['In this life, you hear people with the patience of someone who has already lost futures by missing such signs.'],
+            risco: ['Even in this incarnation, danger finds you less raw; some part of the soul still remembers how not to flinch.']
+        },
+        mastered: {
+            corpo: ['You have repeated this labor so many times that it no longer feels like work, but like instinct crossing lives.'],
+            cultivo: ['The exercise has become a rite of reincarnation. Each repetition feels less like learning and more like remembering.'],
+            social: ['This scene returns across so many lives that you now speak to others as if bargaining directly with fate.'],
+            risco: ['Danger still bites, but it now meets someone used to returning from samsara with invisible scars.']
+        }
+    },
+    'zh-CN': {
+        origin: {
+            corpo: ['你的肉身像一个尚不确定自己能否活下来的凡人那样，艰难学会这一课。'],
+            cultivo: ['在呼吸与天地之间有一瞬寂静，你感觉一条道路也许就从那里生长。'],
+            social: ['周围人的声音原本平凡，直到其中一句悄悄泄露了你此生的方向。'],
+            risco: ['恐惧总比结果先到，但能完整回来，已经足够改变你体内的某样东西。']
+        },
+        repeated: {
+            corpo: ['你的肉身已经熟悉这种劳作；曾经像惩罚一样的痛，如今开始变成方法。'],
+            cultivo: ['修炼再次开始，而你的神魂像是在回忆某条从未有人教过的捷径。'],
+            social: ['这些话也许重复，但你的耳朵不同了；你开始把噪音、意图与命运分开。'],
+            risco: ['危险依旧索价，但你的神经已经不再把力量浪费在最初的惊惧上。']
+        },
+        reborn: {
+            corpo: ['这一世里，你的筋骨过早认出了这份劳作，仿佛纪律也能穿过坟土。'],
+            cultivo: ['你的经脉里藏着记忆。今生的修炼不再像发现，更像重逢。'],
+            social: ['这一世里，你听人说话时像个曾因忽略征兆而失去过许多未来的人。'],
+            risco: ['即便到了这一世，危险也没能让你显得生涩；灵魂里还有一部分记得如何不退。']
+        },
+        mastered: {
+            corpo: ['你已把这份劳作重复了太多世，它不再像工作，而像跨越轮回的本能。'],
+            cultivo: ['这项修炼已变成轮回中的仪式。每次重复都更像回忆，而非学习。'],
+            social: ['这场景在太多人生中回返，以至于你与人说话时像是在直接与命运讨价还价。'],
+            risco: ['危险仍会咬人，但如今它面对的是一个习惯带着无形伤痕走出轮回的人。']
+        }
+    }
+};
+
+const JOURNEY_LORE_OVERRIDES = {
+    'pt-BR': {
+        work_farm: {
+            origin: ['Você volta da plantação com as mãos rachadas e a impressão amarga de que sobreviver já exige uma técnica.'],
+            repeated: ['A enxada pesa menos do que antes. Nesta vida, seu corpo aprende cedo demais o valor brutal da rotina.'],
+            reborn: ['Nesta encarnação, suas mãos encontram o cabo da enxada com intimidade indevida, como se o campo o reconhecesse.'],
+            mastered: ['Você já lavrou a mesma terra em vidas demais. O campo não o impressiona mais, mas continua ensinando dureza.']
+        },
+        hear_legends: {
+            origin: ['As histórias da taverna soam exageradas, mas uma delas deixa em você uma fome que a vida comum já não apaga.'],
+            repeated: ['Você já sabe onde os bêbados mentem e onde, por descuido, deixam escapar migalhas de eternidade.'],
+            reborn: ['Nesta nova vida, você escuta as lendas como quem tenta reconhecer o próprio destino em bocas alheias.'],
+            mastered: ['As tavernas mudam, os contadores também, mas você já sabe: toda vida começa quando alguém menciona um impossível.']
+        },
+        rest_under_tree: {
+            origin: ['Sob a árvore antiga, o silêncio parece maior do que o seu nome, e isso o assusta mais do que deveria.'],
+            repeated: ['Você volta à árvore e o repouso já não é fuga; é um ponto fixo onde o coração aprende a se reorganizar.'],
+            reborn: ['Nesta encarnação, a sombra da árvore parece recebê-lo como um velho cúmplice do seu samsara.'],
+            mastered: ['Em muitas vidas, esta árvore foi pausa, abrigo e altar improvisado. Seu espírito sempre acaba voltando a ela.']
+        },
+        breathe: {
+            origin: ['Pela primeira vez, o ar não parece vazio. Algo entre a respiração e o medo finalmente responde.'],
+            repeated: ['Você repete o exercício e a passagem se abre mais rápido; o mundo já não resiste tanto à sua atenção.'],
+            reborn: ['Nesta nova vida, sentir o Qi parece menos um milagre e mais uma lembrança que demorou pouco para acordar.'],
+            mastered: ['Em cada reencarnação, este instante retorna: o breve segundo em que o mundo deixa de ser ar e começa a ser alimento.']
+        },
+        village_elder: {
+            origin: ['O velho fala pouco, mas cada pausa dele pesa como se escondesse uma montanha inteira atrás da língua.'],
+            repeated: ['Você já conhece a cadência do ancião. Nesta vida, percebe mais cedo quais conselhos são mapa e quais são teste.'],
+            reborn: ['Nesta encarnação, a voz do ancião soa como eco de um encontro antigo, quase como se ele também lembrasse de você.'],
+            mastered: ['Em vidas demais, um ancião diferente já lhe apontou a mesma direção. O rosto muda; o chamado, não.']
+        },
+        find_cave: {
+            origin: ['A caverna parece ferida aberta na montanha. Entrar nela é o primeiro gesto sério de alguém que decidiu deixar de ser pequeno.'],
+            repeated: ['Você volta à caverna com menos superstição e mais fome. O brilho já não intimida tanto quanto convida.'],
+            reborn: ['Nesta nova vida, a trilha até a caverna parece curta demais, como se seus pés recordassem a promessa guardada ali.'],
+            mastered: ['Você já encontrou muitas entradas para o mesmo tipo de destino: uma caverna, um brilho, a sensação de que a montanha escolheu responder.']
+        },
+        explore_forest: {
+            origin: ['A floresta aceita sua presença apenas para provar que aceitação e misericórdia nunca foram a mesma coisa.'],
+            repeated: ['Você entra na mata com menos medo e mais cálculo. O corpo já aprendeu quais sons pedem fuga e quais pedem avanço.'],
+            reborn: ['Nesta encarnação, a mata já não o trata como intruso completo; ela o mede como quem reconhece um velho teimoso.'],
+            mastered: ['Em muitas vidas, a floresta foi o primeiro adversário honesto: sem discurso, sem piedade, sem mentira.']
+        },
+        explore_ruins: {
+            origin: ['As ruínas não parecem abandonadas, só pacientes. Cada pedra rachada sugere que a desgraça ainda sabe o seu nome.'],
+            repeated: ['Você pisa nas ruínas com mais intimidade e menos prudência. Isso é avanço, mas também é o começo de um vício.'],
+            reborn: ['Nesta vida, as ruínas lhe parecem familiares demais, como se sua ambição já tivesse apodrecido ali antes.'],
+            mastered: ['Você já entrou em ruínas suficientes para aprender isto: o passado nunca dorme, só espera alguém curioso o bastante para acordá-lo.']
+        },
+        read_scroll: {
+            origin: ['Os pergaminhos o humilham antes de instruí-lo. Ainda assim, você aceita a humilhação porque percebe nela uma porta.'],
+            repeated: ['A escrita continua áspera, mas sua mente já sabe onde insistir até o significado ceder.'],
+            reborn: ['Nesta encarnação, os símbolos parecem difíceis só por formalidade; alguma parte sua já aprendeu a obedecê-los.'],
+            mastered: ['Em vida após vida, você volta aos pergaminhos e descobre que lembrar é só outra forma de leitura.']
+        },
+        gather_spirit_herbs: {
+            origin: ['Você se ajoelha diante de ervas que parecem frágeis demais para carregar tanto futuro dentro delas.'],
+            repeated: ['Sua mão colhe com mais cuidado do que antes; nesta vida, você já entende que poder bruto desperdiça ingredientes.'],
+            reborn: ['Nesta nova vida, os campos espirituais parecem responder ao seu toque como se já tivessem sido colhidos por você.'],
+            mastered: ['Você já reuniu ervas em vidas suficientes para saber: longevidade começa em gestos pacientes, quase humildes.']
+        },
+        watch_stars: {
+            origin: ['O céu parece excessivo demais para caber na cabeça de um mortal, mas você insiste até que uma estrela pareça retribuir.'],
+            repeated: ['Você volta a observar as estrelas e percebe padrões que antes precisavam de horas para surgir.'],
+            reborn: ['Nesta encarnação, o firmamento soa menos vasto do que íntimo, como se já houvesse trocado sinais com sua alma.'],
+            mastered: ['Em muitas vidas, você ergueu o rosto para o mesmo céu e saiu de lá com a suspeita de que era observado de volta.']
+        },
+        sect_recruiter: {
+            origin: ['O recrutador o mede com o olhar de quem calcula utilidade antes de respeito. Pela primeira vez, isso parece promessa em vez de ofensa.'],
+            repeated: ['Você já entende melhor esse jogo: na seita, ser notado é metade da ascensão e metade do perigo.'],
+            reborn: ['Nesta vida, você reconhece cedo demais o cheiro institucional da seita, como se já tivesse servido sob mantos parecidos.'],
+            mastered: ['Você já foi avaliado em tantas vidas que aprende a responder antes mesmo de a seita formular a pergunta.']
+        },
+        hunt_wild_boar: {
+            origin: ['O javali espiritual não é só caça; é o primeiro inimigo que o obriga a ganhar força sem poesia nenhuma.'],
+            repeated: ['A perseguição ainda é violenta, mas agora seu corpo já sabe transformar brutalidade em recurso.'],
+            reborn: ['Nesta nova vida, o cheiro de sangue e terra molhada desperta em você uma prontidão que parece herdada.'],
+            mastered: ['Você já caçou feras demais para confundir triunfo com beleza. A vitória aqui sempre cheira a lama, fôlego e carne.']
+        },
+        forbidden_whisper: {
+            origin: ['A voz proibida o toca como febre inteligente: íntima, útil e imediatamente cara demais.'],
+            repeated: ['Você já reconhece esse tipo de tentação. O problema é que reconhecê-la não a torna menos eficaz.'],
+            reborn: ['Nesta encarnação, o sussurro o encontra rápido demais, como se a mancha de vidas passadas ainda facilitasse o caminho.'],
+            mastered: ['Há tentações que passam a reconhecê-lo de vida em vida. Esta é uma delas.']
+        },
+        outer_disciple_trial: {
+            origin: ['Você cruza o portão sabendo que talento não basta; ali dentro, até a esperança precisa aprender etiqueta.'],
+            repeated: ['A prova continua humilhante, mas você já entende a liturgia da submissão melhor do que na primeira vez.'],
+            reborn: ['Nesta nova vida, a estrutura da seita lhe parece familiar demais. Você já sabe onde abaixar a cabeça e onde escondê-la.'],
+            mastered: ['Você já entrou em instituições assim em vidas demais: sempre mudam os nomes, nunca a fome de obedecer e subir.']
+        },
+        study_alchemy: {
+            origin: ['A alquimia o ensina uma crueldade elegante: errar custa caro, mas acertar faz o mundo inteiro parecer combustível.'],
+            repeated: ['Você repete a fórmula com menos hesitação. O caos continua perigoso, porém sua mente agora sabe onde segurá-lo.'],
+            reborn: ['Nesta encarnação, o caldeirão lhe parece um velho adversário prestes a virar cúmplice.'],
+            mastered: ['Em vida após vida, você volta ao forno e conclui a mesma verdade: transformar matéria é também decidir quem você será depois.']
+        },
+        fight_beast: {
+            origin: ['A fera não lhe concede dignidade alguma. Ela o obriga a descobrir, na marra, quanta violência seu corpo aguenta devolver.'],
+            repeated: ['Você já não entra nessa luta como presa em pânico; entra como alguém que aprendeu a usar dor como instrução.'],
+            reborn: ['Nesta nova vida, o confronto desperta um instinto antigo: matar rápido, respirar fundo, aprender depois.'],
+            mastered: ['Você já derrubou monstros suficientes para saber que bravura é, muitas vezes, só familiaridade com o horror.']
+        },
+        silent_retreat: {
+            origin: ['O silêncio primeiro parece vazio, depois ameaça, e só muito depois começa a soar como doutrina.'],
+            repeated: ['Você volta ao retiro sem o mesmo desespero. Desta vez, o vazio encontra alguém mais capaz de suportá-lo.'],
+            reborn: ['Nesta encarnação, o silêncio não o recebe como estranho, mas como devedor antigo.'],
+            mastered: ['Em muitas vidas, você escolheu o afastamento e descobriu que o mundo faz mais barulho justamente quando perde o direito de falar com você.']
+        },
+        refine_awakening_pill: {
+            origin: ['Quando a pílula começa a tomar forma, você entende que está cozinhando não só remédio, mas uma versão mais perigosa de si mesmo.'],
+            repeated: ['O forno torna-se menos caprichoso à medida que sua vontade aprende a impor forma ao risco.'],
+            reborn: ['Nesta vida, a chama alquímica parece obedecer cedo demais, como se já conhecesse o desenho da sua ambição.'],
+            mastered: ['Você já refinou destino em chamas suficientes para saber: toda grande pílula também julga quem a criou.']
+        },
+        choose_orthodox_sect: {
+            origin: ['Ao vestir o manto da seita, você entende que poder institucional sempre cobra o preço em parcelas invisíveis.'],
+            repeated: ['A hierarquia ainda pesa, mas agora você já enxerga melhor quais degraus servem para subir e quais servem apenas para ajoelhar.'],
+            reborn: ['Nesta encarnação, jurar à seita soa menos como escolha e mais como retorno a uma engrenagem que seu espírito reconhece.'],
+            mastered: ['Você já pertenceu a ordens suficientes para aprender que disciplina e servidão sempre caminham mais perto do que os mestres admitem.']
+        },
+        blood_bath: {
+            origin: ['O sangue espiritual corrói e fortalece ao mesmo tempo. Você sai menos humano, mas muito mais convicto.'],
+            repeated: ['Seu corpo já entra nessa dor com menos espanto; agora a carne sabe que renascer costuma começar como mutilação.'],
+            reborn: ['Nesta nova vida, o sangue da fera o reconhece cedo, como se suas cicatrizes de outras eras ainda soubessem beber.'],
+            mastered: ['Você já tomou banhos de sangue demais para tratá-los como ritual. Agora são só uma língua brutal que seu corpo aprendeu a falar.']
+        },
+        demonic_art: {
+            origin: ['A arte demoníaca lhe entrega resultado com obscena facilidade, e por isso mesmo você a teme tarde demais.'],
+            repeated: ['Você volta a esse poder já sabendo o cheiro moral dele, mas a eficiência continua difícil de recusar.'],
+            reborn: ['Nesta encarnação, a arte proibida parece encaixar rápido demais, como roupa talhada por erros antigos.'],
+            mastered: ['Em várias vidas, você já vendeu partes aceitáveis de si para avançar mais rápido. O preço nunca baixa; só fica mais familiar.']
+        },
+        feel_heavens: {
+            origin: ['Ao provocar os céus, você descobre que a arrogância também pode ser uma forma de oração.'],
+            repeated: ['Você já reconhece os sinais da ira celeste antes do primeiro trovão. Desta vez, o medo chega mais instruído.'],
+            reborn: ['Nesta vida, o céu o percebe cedo demais, como se a memória de suas afrontas ainda estivesse registrada acima das nuvens.'],
+            mastered: ['Você já chamou a atenção dos céus em vidas suficientes para saber que o firmamento nunca esquece um insolente.']
+        },
+        sect_duties: {
+            origin: ['A rotina da seita parece servil à primeira vista, até você perceber quantas passagens secretas o trabalho burocrático oferece.'],
+            repeated: ['Você cumpre as ordens com obediência suficiente para subir e ambição suficiente para tirar lucro de cada tarefa.'],
+            reborn: ['Nesta encarnação, a máquina da seita parece mais legível; você já conhece o ritmo dessa espécie de obediência lucrativa.'],
+            mastered: ['Em vidas demais, você já aprendeu que impérios espirituais também se movem por recados, favores e cansaço mal pago.']
+        },
+        hall_of_scripts: {
+            origin: ['No salão dos pergaminhos, o excesso de saber primeiro o comprime, depois o organiza.'],
+            repeated: ['Você volta às estantes com menos reverência e mais fome; agora sabe que biblioteca também é campo de batalha.'],
+            reborn: ['Nesta nova vida, o cheiro de papel antigo o acalma como se sua mente já tivesse envelhecido ali antes.'],
+            mastered: ['Você já enlouqueceu um pouco em bibliotecas suficientes para entender que conhecimento raramente vem sem desgaste.']
+        },
+        bone_tempering: {
+            origin: ['O Qi atravessa seus ossos como martelo. O corpo protesta, mas algo mais profundo agradece pela violência.'],
+            repeated: ['Nesta vida, seus ossos já sabem receber o golpe. Ainda dói, mas a dor encontra um esqueleto mais organizado.'],
+            reborn: ['Nesta encarnação, sua medula parece lembrar a disciplina antes que a carne aceite o processo.'],
+            mastered: ['Você já temperou os próprios ossos em vidas demais. Em algum ponto, a dor deixou de ser obstáculo e virou assinatura.']
+        },
+        open_medicine_hall: {
+            origin: ['Ao abrir o pavilhão, você descobre o valor monetário da esperança dos outros.'],
+            repeated: ['Você já negocia com mais frieza: cura, prestígio e influência começam a caber no mesmo balcão.'],
+            reborn: ['Nesta vida, pacientes e mercadores o procuram com rapidez estranha, como se o nome ainda ecoasse de outras eras.'],
+            mastered: ['Em vidas demais, você aprendeu que salvar pessoas e construir poder às vezes usam exatamente as mesmas mãos.']
+        },
+        soul_bargain: {
+            origin: ['O pacto acontece sem cerimônia visível, mas sua alma nota imediatamente que algo passou a observá-la de perto.'],
+            repeated: ['Você já conhece o gosto desse acordo e, mesmo assim, volta a assiná-lo. Talvez isso diga mais sobre você do que sobre o abismo.'],
+            reborn: ['Nesta encarnação, o contrato encontra terreno fácil demais, como se antigas concessões jamais tivessem sido totalmente encerradas.'],
+            mastered: ['Você já negociou com trevas suficientes para entender que alguns credores espirituais trabalham no longo prazo do samsara.']
+        },
+        void_insight: {
+            origin: ['Ao contemplar o vazio, você percebe que solidão e liberdade às vezes dividem a mesma fronteira.'],
+            repeated: ['Você retorna à vastidão com menos vertigem; nesta vida, seu pensamento suporta melhor a ausência de centro.'],
+            reborn: ['Nesta nova vida, o nada lhe parece íntimo. Isso é avanço, mas também é um pouco assustador.'],
+            mastered: ['Em vidas demais, você encarou o vazio até aprender que certas respostas só aparecem depois que o eu começa a rarear.']
+        },
+        formation_lessons: {
+            origin: ['Pela primeira vez, você deixa de disputar apenas com pessoas e começa a negociar diretamente com a geometria do mundo.'],
+            repeated: ['Você retorna às formações com mais domínio; o chão já não é cenário, mas ferramenta.'],
+            reborn: ['Nesta encarnação, linhas, nós e fluxos parecem se organizar cedo demais diante dos seus olhos.'],
+            mastered: ['Você já desenhou o mundo em vidas suficientes para saber que toda grande formação é também um argumento contra o caos.']
+        },
+        consume_enemy_core: {
+            origin: ['Ao devorar o núcleo inimigo, você sente o poder entrar rápido demais para continuar fingindo inocência.'],
+            repeated: ['Seu corpo já processa esse roubo com menos hesitação; a consciência é que se torna mais difícil de convocar depois.'],
+            reborn: ['Nesta nova vida, o núcleo cedido pelo inimigo parece reconhecer em você um velho predador.'],
+            mastered: ['Você já cresceu tantas vezes à custa do que matou que a fronteira entre vitória e profanação se tornou funcionalmente inútil.']
+        },
+        stabilize_foundation: {
+            origin: ['Sua base finalmente para de parecer improviso; pela primeira vez, ambição e estrutura assinam a mesma trégua.'],
+            repeated: ['Você repete o processo com mais precisão e menos desperdício. Nesta vida, estabilidade já não parece acidente raro.'],
+            reborn: ['Nesta encarnação, firmar a base soa quase natural, como se sua alma tivesse cansado de desabar.'],
+            mastered: ['Você já reconstruiu a própria fundação em vidas suficientes para saber que permanência é uma arte paciente e cara.']
+        },
+        mountain_trial: {
+            origin: ['A montanha o esmaga com a impessoalidade de uma lei natural, e sobreviver a isso já o transforma.'],
+            repeated: ['Você volta à provação mais pesado por dentro. A montanha ainda resiste, mas não da mesma forma.'],
+            reborn: ['Nesta nova vida, seus passos encontram a pedra com a familiaridade de alguém que já foi testado por ela antes.'],
+            mastered: ['Em muitas vidas, você já negociou com montanhas. Elas sempre oferecem a mesma resposta: peso, silêncio e julgamento.']
+        },
+        elder_promotion: {
+            origin: ['Sentar-se entre anciões é descobrir que autoridade raramente parece gloriosa por dentro.'],
+            repeated: ['Você já entende melhor o teatro do poder: nesta vida, até a formalidade da seita começa a lhe servir.'],
+            reborn: ['Nesta encarnação, a política espiritual lhe parece antiga demais para assustar. Você reconhece a fome por trás da etiqueta.'],
+            mastered: ['Você já subiu mesas de conselho suficientes para saber que a velhice do poder quase nunca o torna sábio, só paciente.']
+        },
+        golden_cauldron_ritual: {
+            origin: ['O ritual do caldeirão dourado faz sua vontade parecer maior que o corpo que a sustenta.'],
+            repeated: ['A chama se inclina com menos resistência; nesta vida, sua ambição já aprendeu a respirar junto ao forno.'],
+            reborn: ['Nesta nova vida, o ouro da fornalha reflete um rosto jovem demais para conter tamanha familiaridade.'],
+            mastered: ['Você já levantou sóis domésticos em vidas suficientes para entender que toda grande alquimia exige um ego capaz de encarar fogo sem piscar.']
+        },
+        nameless_breakthrough: {
+            origin: ['Romper sem nome é renunciar ao conforto de ser explicado. Você avança, e a solidão avança junto.'],
+            repeated: ['Você retorna a esse limiar com menos necessidade de testemunha. Nesta vida, o anonimato já lhe serve melhor.'],
+            reborn: ['Nesta encarnação, quebrar fronteiras sem doutrina parece natural demais, como se o samsara tivesse perdido a paciência com escolas.'],
+            mastered: ['Você já ultrapassou limites sem pedir licença em vidas suficientes para saber que certos caminhos só permanecem puros enquanto ninguém consegue nomeá-los.']
+        },
+        black_meridian_breakthrough: {
+            origin: ['Seus meridianos escurecem como se aceitassem um voto que a parte limpa da sua alma jamais aprovaria.'],
+            repeated: ['Você força a ruptura com mais método e menos remorso. Isso o fortalece de formas que não convém celebrar demais.'],
+            reborn: ['Nesta nova vida, a escuridão entra cedo nos canais, como se a estrada proibida tivesse preservado seu endereço.'],
+            mastered: ['Você já tomou para si escuridão suficiente para saber que certos avanços não o corrompem de uma vez; eles o acostumam.']
+        },
+        iron_body_breakthrough: {
+            origin: ['O corpo de ferro nasce quando a carne finalmente entende que dor não é argumento suficiente para recuar.'],
+            repeated: ['Seu corpo volta a esse limiar com menos espanto; nesta vida, suportar já se tornou reflexo.'],
+            reborn: ['Nesta encarnação, a ruptura chega como reencontro entre sua alma obstinada e uma carne que ainda finge ser nova.'],
+            mastered: ['Você já fez a própria carne atravessar esse portão em vidas suficientes para saber: resistência extrema sempre beira monstruosidade.']
+        },
+        karma_storm: {
+            origin: ['Quando a tempestade responde ao seu nome, você percebe que o céu já o tratava como problema havia mais tempo do que imaginava.'],
+            repeated: ['Você convoca a tempestade com mais precisão e menos dúvida. Nesta vida, até o ódio celeste lhe parece recurso.'],
+            reborn: ['Nesta nova vida, os trovões negros o encontram depressa, como se lembrassem exatamente quem devem punir primeiro.'],
+            mastered: ['Você já chamou calamidades suficientes para entender que, depois de certo ponto, ser odiado pelo céu vira apenas outra forma de intimidade.']
+        }
+    },
+    en: {
+        work_farm: {
+            origin: ['You return from the field with split hands and the bitter realization that survival already demands technique.'],
+            repeated: ['The hoe weighs less than it used to. In this life, your body learns the brutality of routine too quickly.'],
+            reborn: ['In this incarnation, your hands find the hoe with suspicious ease, as if the field remembers you.']
+            ,
+            mastered: ['You have tilled the same kind of earth in too many lives. The field no longer impresses you, but it still teaches hardness.']
+        },
+        hear_legends: {
+            origin: ['The tavern tales sound exaggerated, yet one of them leaves behind a hunger that ordinary life can no longer quiet.'],
+            repeated: ['You already know where drunkards lie and where, by accident, they let eternity slip through the cracks.'],
+            reborn: ['In this life, you hear the tavern legends like someone trying to recognize his own fate in another mouth.']
+            ,
+            mastered: ['The taverns change, the storytellers too, but you already know this: every life truly begins when someone mentions the impossible.']
+        },
+        rest_under_tree: {
+            origin: ['Beneath the ancient tree, the silence feels larger than your name, and that frightens you more than it should.'],
+            repeated: ['You return to the tree and rest no longer feels like escape; it becomes a fixed point where the heart learns to reorder itself.'],
+            reborn: ['In this incarnation, the tree\'s shade receives you like an old accomplice from samsara.']
+            ,
+            mastered: ['Across many lives, this tree has been pause, shelter and makeshift altar. Your spirit always finds its way back to it.']
+        },
+        breathe: {
+            origin: ['For the first time, the air does not feel empty. Something between breath and fear finally answers you.'],
+            repeated: ['You repeat the exercise and the passage opens more quickly; the world resists your attention a little less each time.'],
+            reborn: ['In this life, sensing Qi feels less like a miracle and more like a memory waking quickly.']
+            ,
+            mastered: ['In every reincarnation, this instant returns: the brief second when the world stops being air and starts becoming nourishment.']
+        },
+        village_elder: {
+            origin: ['The old man says little, but each pause weighs as if a whole mountain were hidden behind his tongue.'],
+            repeated: ['You already know the elder\'s cadence. In this life, you notice sooner which words are guidance and which are tests.'],
+            reborn: ['In this incarnation, the elder\'s voice sounds like the echo of an older meeting, almost as if he remembered you too.'],
+            mastered: ['Across too many lives, a different elder has pointed you toward the same horizon. The face changes; the summons does not.']
+        },
+        find_cave: {
+            origin: ['The cave looks like an open wound in the mountain. Entering it is the first serious gesture of someone who decided to stop being small.'],
+            repeated: ['You return to the cave with less superstition and more hunger. Its glow intimidates you less than it invites you.'],
+            reborn: ['In this life, the path to the cave feels too short, as if your feet remembered the promise waiting there.'],
+            mastered: ['You have found too many entrances to the same kind of destiny: a cave, a glow, and the feeling that the mountain chose to answer.']
+        },
+        explore_forest: {
+            origin: ['The forest accepts your presence only to prove that acceptance and mercy were never the same thing.'],
+            repeated: ['You step into the woods with less fear and more calculation. Your body already knows which sounds demand retreat and which demand advance.'],
+            reborn: ['In this incarnation, the forest no longer treats you as a complete intruder; it measures you like a stubborn old rival.'],
+            mastered: ['Across many lives, the forest has been your first honest enemy: no speeches, no pity, no lies.']
+        },
+        explore_ruins: {
+            origin: ['The ruins do not feel abandoned, only patient. Every cracked stone suggests that disaster still knows your name.'],
+            repeated: ['You tread the ruins with more familiarity and less caution. That is progress, but it is also the beginning of a habit.'],
+            reborn: ['In this life, the ruins feel far too familiar, as if your ambition had already decayed here once before.'],
+            mastered: ['You have entered enough ruins to learn this: the past never sleeps, it only waits for someone curious enough to wake it.']
+        },
+        sect_recruiter: {
+            origin: ['The recruiter measures you with the gaze of someone who calculates usefulness before respect. For the first time, that feels like promise rather than insult.'],
+            repeated: ['You understand the game better now: in the sect, being noticed is half ascent and half danger.'],
+            reborn: ['In this life, you recognize the institutional scent of the sect too early, as if you had already served beneath similar robes.'],
+            mastered: ['You have been evaluated in so many lives that you learn to answer before the sect fully asks the question.']
+        },
+        study_alchemy: {
+            origin: ['Alchemy teaches you an elegant cruelty: failure is expensive, but success makes the whole world look combustible.'],
+            repeated: ['You repeat the formula with less hesitation. Chaos remains dangerous, but your mind now knows where to hold it.'],
+            reborn: ['In this incarnation, the cauldron feels less like a new tool and more like an old adversary about to become an ally.'],
+            mastered: ['Life after life, you return to the furnace and relearn the same truth: to transform matter is also to decide what you will become afterward.']
+        },
+        silent_retreat: {
+            origin: ['Silence first feels empty, then threatening, and only much later begins to resemble doctrine.'],
+            repeated: ['You return to the retreat without the same desperation. This time, the void meets someone more capable of enduring it.'],
+            reborn: ['In this incarnation, silence does not receive you like a stranger, but like an old debtor.'],
+            mastered: ['Across many lives, you chose withdrawal and discovered that the world grows loudest exactly when it loses the right to speak to you.']
+        },
+        refine_awakening_pill: {
+            origin: ['As the pill begins to take shape, you understand that you are cooking not merely medicine, but a more dangerous version of yourself.'],
+            repeated: ['The furnace grows less capricious as your will learns to impose form upon danger.'],
+            reborn: ['In this life, the alchemical flame obeys too quickly, as if it already knew the shape of your ambition.'],
+            mastered: ['You have refined destiny in fire often enough to know that every great pill also judges its maker.']
+        },
+        choose_orthodox_sect: {
+            origin: ['When you put on the sect robe, you understand that institutional power always collects its price in invisible installments.'],
+            repeated: ['Hierarchy still weighs on you, but now you see more clearly which steps are meant for climbing and which only for kneeling.'],
+            reborn: ['In this incarnation, swearing to the sect feels less like a choice and more like returning to machinery your spirit recognizes.'],
+            mastered: ['You have belonged to enough orders to learn that discipline and servitude always walk closer together than masters admit.']
+        },
+        blood_bath: {
+            origin: ['Spiritual blood erodes and strengthens at the same time. You leave it less human, but far more convinced.'],
+            repeated: ['Your body enters this pain with less shock now; the flesh already knows that rebirth often begins as mutilation.'],
+            reborn: ['In this life, beast blood recognizes you early, as if scars from older eras still knew how to drink.'],
+            mastered: ['You have taken too many blood baths to mistake them for ritual. They are simply a brutal language your body learned to speak.']
+        },
+        demonic_art: {
+            origin: ['The demonic art offers results with obscene ease, and for that very reason you fear it too late.'],
+            repeated: ['You return to this power already knowing its moral smell, but efficiency remains difficult to refuse.'],
+            reborn: ['In this incarnation, the forbidden art fits too quickly, like clothing tailored from old mistakes.'],
+            mastered: ['Across several lives, you have already sold acceptable parts of yourself for speed. The price never falls; it only becomes familiar.']
+        },
+        soul_bargain: {
+            origin: ['The pact happens without visible ceremony, yet your soul notices at once that something has begun to watch it closely.'],
+            repeated: ['You already know the taste of this agreement and still sign again. That may say more about you than about the abyss.'],
+            reborn: ['In this life, the contract finds easy ground, as if older concessions had never been fully canceled.'],
+            mastered: ['You have bargained with enough darkness to understand that some spiritual creditors operate on the long timescale of samsara.']
+        },
+        karma_storm: {
+            origin: ['When the storm answers your name, you realize heaven had treated you as a problem for longer than you suspected.'],
+            repeated: ['You summon the storm with more precision and less doubt. In this life, even heaven\'s hatred starts to resemble a resource.'],
+            reborn: ['In this incarnation, the black thunder finds you too quickly, as if it remembers exactly whom it should punish first.'],
+            mastered: ['You have called enough calamities to understand that, after a certain point, being hated by heaven becomes another form of intimacy.']
+        }
+    },
+    'zh-CN': {
+        work_farm: {
+            origin: ['你从田里回来时双手开裂，也第一次苦涩地明白：想活下去，本身就需要一种技艺。'],
+            repeated: ['锄柄已经没有从前那么沉了。这一世里，你的身体过早学会了日复一日的残酷价值。'],
+            reborn: ['这一世里，你握住锄柄的动作熟得过分，仿佛田地本身记得你。']
+            ,
+            mastered: ['你在太多人生里耕过同一种土地。田地已不再让你惊异，却依旧教会你坚硬。']
+        },
+        hear_legends: {
+            origin: ['酒馆里的传说听来夸张，可其中一句仍在你心里留下了凡俗生活再也压不住的饥渴。'],
+            repeated: ['你已经知道醉汉会在哪里撒谎，又会在哪里不小心漏出一点长生的碎屑。'],
+            reborn: ['这一世里，你听那些传说时，像是在别人嘴里辨认自己的命数。']
+            ,
+            mastered: ['酒馆会变，说书人也会变，但你已经知道：每一生真正开始，往往都在有人提起“不可能”的那一刻。']
+        },
+        rest_under_tree: {
+            origin: ['古树下的寂静比你的名字还大，这让你感到一种不该出现的畏惧。'],
+            repeated: ['你再次回到树下，休息已不再只是逃避，而成了心神重新归位的固定坐标。'],
+            reborn: ['这一世里，古树的阴影像旧日同谋般接纳了你。']
+            ,
+            mastered: ['在许多世里，这棵树都曾是停顿、庇护与临时祭坛。你的神魂总会回到它这里。']
+        },
+        breathe: {
+            origin: ['第一次，空气不再显得空无。某种藏在呼吸与恐惧之间的东西终于回应了你。'],
+            repeated: ['你重复这个练习时，通路开启得更快了；这一次，天地对你的注视少了些抵抗。'],
+            reborn: ['这一世里，感知真气不再像奇迹，更像一段很快醒来的旧记忆。']
+            ,
+            mastered: ['每一次转生，这一刻都会回来：世界不再只是空气，而开始成为养分。']
+        },
+        village_elder: {
+            origin: ['老人说得不多，但每一次停顿都像舌后藏着整座山。'],
+            repeated: ['你已熟悉长者说话的节奏。这一世里，你更早分辨出哪些话是指路，哪些话是在试你。'],
+            reborn: ['这一世里，长者的声音像旧日会面的回声，几乎像是他也记得你。'],
+            mastered: ['太多人生里，总有不同的老人把你指向同一片远方。面容会变，召唤却不会。']
+        },
+        find_cave: {
+            origin: ['那洞窟像山体上一道张开的伤口。走进去，是你第一次认真决定不再渺小。'],
+            repeated: ['你再次回到洞窟时，迷信少了，饥渴多了；那道光不再只是威吓，也开始像邀请。'],
+            reborn: ['这一世里，通向洞窟的路短得过分，像是你的双脚记得那里藏着怎样的承诺。'],
+            mastered: ['你已经在许多人生中见过同一种命运入口：一座洞窟，一道微光，以及山终于开口回应的感觉。']
+        },
+        explore_forest: {
+            origin: ['森林允许你进入，只是为了证明允许与慈悲从来不是一回事。'],
+            repeated: ['你带着更少恐惧、更多计算走进林中。身体已知道哪些声响意味着退，哪些意味着进。'],
+            reborn: ['这一世里，森林不再把你完全当作闯入者；它更像在衡量一个顽固的旧对手。'],
+            mastered: ['许多世里，森林都是你遇见的第一个诚实敌人：无言、无怜悯、也不撒谎。']
+        },
+        explore_ruins: {
+            origin: ['遗迹并不像被遗弃，更像在耐心等待。每一块裂石都暗示着灾祸仍记得你的名字。'],
+            repeated: ['你更熟稔、也更少谨慎地踏入遗迹。这是进步，但也是一种上瘾的开端。'],
+            reborn: ['这一世里，遗迹熟悉得过分，仿佛你的野心曾在这里腐烂过一次。'],
+            mastered: ['你已进入过足够多的遗迹，因此明白：过去从不沉睡，它只等着被人重新唤醒。']
+        },
+        sect_recruiter: {
+            origin: ['招募者用先评估价值、后谈尊重的目光打量你。第一次，这样的目光听起来像承诺而非冒犯。'],
+            repeated: ['你更懂这套游戏了：在宗门里，被看见一半是上升，一半是危险。'],
+            reborn: ['这一世里，你过早认出了宗门那种制度化的气味，仿佛你曾在类似的袍袖之下服侍过。'],
+            mastered: ['你在太多人生中被审视过，以至于宗门的问题还没问完，你就已经会作答。']
+        },
+        study_alchemy: {
+            origin: ['炼丹教给你一种优雅的残酷：失败代价高昂，而成功会让整个世界看起来都像燃料。'],
+            repeated: ['你以更少迟疑重复配方。混沌仍然危险，但你的心神已知道该在哪里按住它。'],
+            reborn: ['这一世里，丹炉不再像新器具，更像一位快要转为同盟的旧对手。'],
+            mastered: ['生生世世，你总会回到炉火前，并重新学会同一句真理：改造物质，也是在决定自己会变成什么。']
+        },
+        silent_retreat: {
+            origin: ['寂静最初像空无，然后像威胁，最后才慢慢开始有了道理的形状。'],
+            repeated: ['你再次进入闭关时，已不再怀着同样的绝望；这一次，虚无遇到的是一个更能承受它的人。'],
+            reborn: ['这一世里，寂静接纳你时不像对待陌生人，反倒像在等一个旧债主。'],
+            mastered: ['在许多人生里，你都选择了远离世界，并发现：当世界失去与你说话的资格时，它反而最吵。']
+        },
+        refine_awakening_pill: {
+            origin: ['当丹药开始成形时，你意识到自己炼制的不只是药，更是一个更危险的自己。'],
+            repeated: ['随着意志学会给危险定形，丹炉也显得不再那么任性。'],
+            reborn: ['这一世里，丹火服从得太快，仿佛它早已知道你野心的轮廓。'],
+            mastered: ['你已在火中炼过足够多次命运，因此知道：每一枚真正伟大的丹药，也都在审判炼它的人。']
+        },
+        choose_orthodox_sect: {
+            origin: ['当你披上宗门法袍时，便明白制度性的力量总会以看不见的分期来索取代价。'],
+            repeated: ['等级秩序依旧沉重，但你终于更清楚地看见哪些台阶通向高处，哪些台阶只为让人跪下。'],
+            reborn: ['这一世里，向宗门立誓不再像选择，更像回到一座神魂本就认得的巨大机括。'],
+            mastered: ['你已属于过足够多的秩序，因此明白：纪律与服从之间的距离，总比掌门承认的更近。']
+        },
+        blood_bath: {
+            origin: ['灵血一边侵蚀你，一边强化你。你从中走出时少了几分人味，却多了许多笃定。'],
+            repeated: ['你的身体如今带着更少惊惧步入这场痛苦；它已经知道，重生往往先以残酷开始。'],
+            reborn: ['这一世里，兽血过早认出了你，仿佛旧时代的伤痕仍记得如何饮下它。'],
+            mastered: ['你已经历太多血浴，不会再把它误认为仪式；它只是你的身体学会的一种残暴语言。']
+        },
+        demonic_art: {
+            origin: ['魔功以近乎猥亵的轻松交付结果，也正因如此，你对它的恐惧来得太迟。'],
+            repeated: ['你再次回到这份力量前，已知道它在道德上的气味，可效率依旧难以拒绝。'],
+            reborn: ['这一世里，禁术贴合得太快，像一件由旧错裁成的衣。'],
+            mastered: ['好几世里，你都拿还能接受的部分自己去换速度。代价从不降低，只会变得熟悉。']
+        },
+        soul_bargain: {
+            origin: ['契约表面上没有仪式，但你的魂魄立刻知道，有什么东西开始近距离看着你了。'],
+            repeated: ['你已经认识这种交易的味道，却仍再次签下。也许这更说明你，而不是深渊。'],
+            reborn: ['这一世里，契约找到你时太过顺利，像是旧日让步从未真正被撤销。'],
+            mastered: ['你已经与足够多的黑暗做过买卖，因此明白：某些灵性的债主，本就按轮回的长线来工作。']
+        },
+        karma_storm: {
+            origin: ['当风暴回应你的名字时，你才明白，苍天早把你当成麻烦，而且时间比你想的更久。'],
+            repeated: ['你以更少迟疑、更高精度召来风暴。到了这一世，连天意的憎恨都开始像资源。'],
+            reborn: ['这一世里，黑雷来得太快，仿佛它们清楚记得该先惩罚谁。'],
+            mastered: ['你已呼唤过足够多的灾厄，因此知道：到某个地步，被苍天厌恶本身也会成为一种亲密。']
+        }
+    }
+};
+
 let BASE_GAME_TEXT = null;
 
 function getCurrentLocale() {
@@ -883,6 +1490,51 @@ function getTranslationVariants(key) {
     return Object.values(UI_TRANSLATIONS)
         .map(dict => dict?.[key])
         .filter(Boolean);
+}
+
+function getJourneyStartLogVariants() {
+    return Object.values(JOURNEY_START_LOG_VARIANTS).flat();
+}
+
+function getJourneyLoreStage(payload) {
+    if ((payload.samsaraCycles || 0) > 0 && (payload.lifeCount || 0) <= 1) return 'reborn';
+    if ((payload.lifeCount || 0) >= 4 || (payload.totalCount || 0) >= 8) return 'mastered';
+    if ((payload.lifeCount || 0) >= 2 || (payload.totalCount || 0) >= 3) return 'repeated';
+    return 'origin';
+}
+
+function pickJourneyLoreVariant(pool, seed) {
+    if (!pool?.length) return '';
+    return pool[Math.abs(seed) % pool.length];
+}
+
+function buildJourneyActionLoreText(actionId, payload) {
+    const action = GAME_DATA.journeyActions[actionId];
+    if (!action) return '';
+
+    const locale = getCurrentLocale();
+    const stage = getJourneyLoreStage(payload);
+    const localeOverrides = JOURNEY_LORE_OVERRIDES[locale]?.[actionId]?.[stage];
+    const localePool = localeOverrides || [];
+    const genericPool = JOURNEY_LORE_GENERIC[locale]?.[stage]?.[action.type]
+        || JOURNEY_LORE_GENERIC['pt-BR']?.[stage]?.[action.type]
+        || JOURNEY_LORE_GENERIC['pt-BR']?.[stage]?.cultivo
+        || [];
+
+    const overrideText = pickJourneyLoreVariant(localePool, (payload.totalCount || 1) - 1);
+    const genericText = pickJourneyLoreVariant(genericPool, (payload.lifeCount || 1) - 1);
+
+    return [overrideText, genericText].filter(Boolean).join(' ');
+}
+
+function renderJourneyDynamicActionLog(payload) {
+    const age = payload.age ?? Math.floor(gameState.age);
+    const lore = buildJourneyActionLoreText(payload.actionId, payload);
+    return `[${age} ${t('years')}] ${lore}`;
+}
+
+function encodeJourneyDynamicActionLog(actionId, payload) {
+    return `${JOURNEY_DYNAMIC_LOG_PREFIX}${JSON.stringify({ actionId, ...payload })}`;
 }
 
 function getJourneyActionIdByMatcher(value, field) {
@@ -951,14 +1603,25 @@ function localizeJourneyLogEntry(entry) {
 
     captureBaseGameText();
 
+    if (entry.startsWith(JOURNEY_DYNAMIC_LOG_PREFIX)) {
+        try {
+            const payload = JSON.parse(entry.slice(JOURNEY_DYNAMIC_LOG_PREFIX.length));
+            return renderJourneyDynamicActionLog(payload);
+        } catch (error) {
+            return entry;
+        }
+    }
+
     if (getCurrentLocale() === 'pt-BR') {
         return entry;
     }
 
     const trimmed = entry.trim();
 
-    if (trimmed === BASE_GAME_TEXT?.journeyStartLog || getTranslationVariants('journey_start_log').includes(trimmed)) {
-        return t('journey_start_log');
+    if (trimmed === BASE_GAME_TEXT?.journeyStartLog || getTranslationVariants('journey_start_log').includes(trimmed) || getJourneyStartLogVariants().includes(trimmed)) {
+        const matchedLocale = Object.keys(JOURNEY_START_LOG_VARIANTS).find(localeKey => JOURNEY_START_LOG_VARIANTS[localeKey]?.includes(trimmed));
+        const matchedCycles = matchedLocale ? JOURNEY_START_LOG_VARIANTS[matchedLocale].indexOf(trimmed) : 0;
+        return window.getLocalizedJourneyStartLog ? window.getLocalizedJourneyStartLog(Math.max(0, matchedCycles)) : t('journey_start_log');
     }
     if (getTranslationVariants('peak_reached_log').includes(trimmed)) return t('peak_reached_log');
     if (getTranslationVariants('unlock_mechanic_log').includes(trimmed)) return t('unlock_mechanic_log');
@@ -1225,7 +1888,12 @@ window.getLocalizedDefaultObjective = function() {
 };
 
 window.getLocalizedJourneyStartLog = function() {
-    return t('journey_start_log');
+    const samsaraCycles = arguments[0] || 0;
+    const locale = getCurrentLocale();
+    const variants = JOURNEY_START_LOG_VARIANTS[locale] || JOURNEY_START_LOG_VARIANTS['pt-BR'];
+    if (samsaraCycles <= 0) return variants[0];
+    return variants[Math.min(variants.length - 1, samsaraCycles)];
 };
 
 window.localizeJourneyLogEntry = localizeJourneyLogEntry;
+window.createJourneyDynamicActionLog = encodeJourneyDynamicActionLog;
