@@ -51,7 +51,11 @@ function resolveRealmPromotion() {
     gameState.currentObjective = t('objective_master_realm', { realm: newRealmData.name });
 
     pushGameToast(t('realm_up_toast', { realm: newRealmData.name }), 'success');
-    addJourneyLog(`[Tribulação] ${newRealmData.desc} ${lifeMsg} Você retém ${formatNumber(gameState.qi)} Qi como base do novo reino.`);
+    addJourneyLog(t('realm_transition_log', {
+        realmDesc: newRealmData.desc,
+        lifeMsg,
+        qi: formatNumber(gameState.qi)
+    }));
     checkSectUnlock();
 }
 
@@ -313,10 +317,10 @@ function completeJourneyAction(actionId, actionData) {
         gameState.currentObjectiveData = {};
         gameState.currentObjective = t('ending_objective');
         pushGameToast(actionData.ending.title, 'success');
-        addJourneyLog(`[Destino] ${actionData.ending.text}`);
+            addJourneyLog(t('ending_log', { text: actionData.ending.text }));
     }
 
-    addJourneyLog(`[${Math.floor(gameState.age)} Anos] ${actionData.log}`);
+    addJourneyLog(`[${Math.floor(gameState.age)} ${t('years')}] ${actionData.log}`);
 
     const newlyUnlocked = [];
     if (actionData.unlocks) {
@@ -446,7 +450,7 @@ function handleTribulation() {
         document.getElementById('tribulation-btn').innerText = t('survive_years', { years: Math.ceil(tribulationTimer) });
         document.getElementById('tribulation-btn').disabled = true;
         pushGameToast(t('tribulation_start_toast', { years: formatNumber(tribulationTimer) }), 'warning');
-        addJourneyLog(`[Tribulação] Os céus exigem ${formatNumber(tribulationTimer)} anos de resistência para permitir o avanço.`);
+        addJourneyLog(t('tribulation_demand_log', { years: formatNumber(tribulationTimer) }));
     } else if (gameState.realm >= getMaxRealm()) {
         pushGameToast(t('max_realm_toast'), 'warning');
     } else if (!isRealmPeak()) {

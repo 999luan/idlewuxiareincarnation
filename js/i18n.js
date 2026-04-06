@@ -190,6 +190,9 @@ const UI_TRANSLATIONS = {
         cooldown_toast: '{action} recarrega em {years} anos.',
         switched_focus_log: '[{age} Anos] Mudou o foco para: {action}',
         abandon_action_log: '[{age} Anos] Você abandonou a ação pela metade. O progresso foi salvo.',
+        tribulation_demand_log: '[Tribulação] Os céus exigem {years} anos de resistência para permitir o avanço.',
+        realm_transition_log: '[Tribulação] {realmDesc} {lifeMsg} Você retém {qi} Qi como base do novo reino.',
+        ending_log: '[Destino] {text}',
         ascension_confirm: 'Deseja ascender? Você perderá todo seu Qi, Técnicas e voltará ao Reino 1, mas ganhará Karma para melhorias permanentes.',
         ascension_success: 'Você ascendeu com sucesso e compreendeu mais sobre o Dao!',
         ascension_fail: 'Você ainda não acumulou compreensão suficiente nesta vida para ascender.',
@@ -389,6 +392,9 @@ const UI_TRANSLATIONS = {
         cooldown_toast: '{action} recharges in {years} years.',
         switched_focus_log: '[{age} Years] Focus shifted to: {action}',
         abandon_action_log: '[{age} Years] You abandoned the action halfway. Progress was saved.',
+        tribulation_demand_log: '[Tribulation] The heavens demand {years} years of endurance before they allow your ascent.',
+        realm_transition_log: '[Tribulation] {realmDesc} {lifeMsg} You retain {qi} Qi as the foundation of the new realm.',
+        ending_log: '[Fate] {text}',
         ascension_confirm: 'Do you wish to ascend? You will lose all Qi, Techniques and return to Realm 1, but gain Karma for permanent upgrades.',
         ascension_success: 'You ascended successfully and deepened your understanding of the Dao!',
         ascension_fail: 'You have not yet gathered enough understanding in this life to ascend.',
@@ -588,6 +594,9 @@ const UI_TRANSLATIONS = {
         cooldown_toast: '{action} 进入 {years} 年冷却。',
         switched_focus_log: '[{age} 岁] 你的重心转向了：{action}',
         abandon_action_log: '[{age} 岁] 你中途放弃了这项行动。进度已保存。',
+        tribulation_demand_log: '[天劫] 苍天要求你再承受 {years} 年，才肯放你通行。',
+        realm_transition_log: '[天劫] {realmDesc} {lifeMsg} 你保留了 {qi} 真气，作为新境界的根基。',
+        ending_log: '[命途] {text}',
         ascension_confirm: '确定要飞升吗？你会失去所有真气、功法并回到第一境，但会获得可永久强化的业力。',
         ascension_success: '你成功飞升，对大道的理解更深了一层！',
         ascension_fail: '你此生积累的感悟还不足以飞升。',
@@ -793,6 +802,67 @@ const CONTENT_TRANSLATIONS = {
     }
 };
 
+const JOURNEY_LOG_TRANSLATIONS = {
+    en: {
+        work_farm: 'You return from the fields with cracked hands, heavier shoulders and a harder will.',
+        hear_legends: 'The tales leave embers in your mind; fatigue gives way to a hunger you cannot name.',
+        village_elder: 'The elder speaks of caves, sects and the sort of madness that makes a life worth remembering.',
+        rest_under_tree: 'Nothing grand happened, but the world felt quieter and your heart learned a little stillness.',
+        breathe: 'A warm current crosses your meridians. Meditation stops being superstition and becomes a path.',
+        find_cave: 'You find spiritual herbs and a crude shelter, enough to begin dreaming of greatness.',
+        explore_forest: 'You return scratched and breathless, but no longer certain you are easy prey.',
+        explore_ruins: 'Something ancient inside the ruins notices that you are curious, ambitious and foolish enough to continue.',
+        read_scroll: 'Each line strips away a little more of your ignorance.',
+        gather_spirit_herbs: 'Your satchel fills with herbs, and your mind with alchemical possibilities.',
+        watch_stars: 'You learn to call destiny what once looked like empty sky.',
+        sect_recruiter: 'You receive an appraising stare. It is not respect yet, but it is better than nothing.',
+        hunt_wild_boar: 'The hunt leaves your muscles harder and your meridians slightly richer.',
+        forbidden_whisper: 'Your heart learns a syllable that should not exist.',
+        outer_disciple_trial: 'You pass through the sect gates. Luxury can wait; servitude arrives at once.',
+        study_alchemy: 'For the first time, your mind forces chaos into a formula.',
+        fight_beast: 'The beast falls. Your body learns from brutality before your mind can protest.',
+        silent_retreat: 'You choose the void. Everything else starts sounding too loud.',
+        refine_awakening_pill: 'Your spirit stretches like metal in a furnace. The path of the cauldron is chosen.',
+        choose_orthodox_sect: 'You put on the sect robe. Your talent now belongs to a larger machine.',
+        blood_bath: 'Your bones crack and are born anew. You chose the road that answers with scars.',
+        demonic_art: 'The power is intoxicating. The smell of your soul, less so.',
+        feel_heavens: 'The clouds darken. You understand heaven\'s wrath better before the final challenge.',
+        sect_duties: 'Your name climbs one more invisible step among the sect\'s promising servants.',
+        hall_of_scripts: 'You learn to think with enough rigor to survive a cultivator\'s library.',
+        bone_tempering: 'Your bones now creak with authority.',
+        open_medicine_hall: 'Your name starts circulating among merchants, patients and the unscrupulous.',
+        soul_bargain: 'You sign without ink. Your fate now knows exactly where you live.',
+        void_insight: 'Your thoughts stop asking the world for permission.',
+        formation_lessons: 'For the first time, the sect\'s ground itself works in your favor.',
+        consume_enemy_core: 'Your power rises as quickly as your terrible reputation.',
+        stabilize_foundation: 'Your spiritual foundation becomes steady enough to support expensive ambitions.',
+        mountain_trial: 'Stone, weight and pain bend a little more beneath your steps.',
+        elder_promotion: 'You gain a seat, authority and enough disciples to lose peaceful sleep forever.',
+        golden_cauldron_ritual: 'Your cauldron finally stops being a tool and becomes an extension of your will.',
+        nameless_breakthrough: 'Your advance fits no doctrine. That makes you more dangerous and much lonelier.',
+        black_meridian_breakthrough: 'Your spiritual channels darken like a vow made for war.',
+        iron_body_breakthrough: 'Your body crosses a threshold most only describe with reverence or fear.',
+        karma_storm: 'Black thunder answers your name. The rest of the world prefers not to comment.',
+        pill_saint_ascension: 'The golden cauldron seals itself. When it opens, a legend walks out breathing.',
+        found_own_peak: 'A new peak rises beneath your will. Disciples begin reciting your name like law.',
+        walk_beyond_mortals: 'You take a step so quiet that even the world notices it too late.',
+        beast_king_gate: 'The mountain trembles, not from fear of heaven, but from respect for what now dwells upon it.',
+        ten_thousand_ghosts_rite: 'Ten thousand echoes obey. The living kneel because the alternative is louder.'
+    }
+};
+
+const LEGACY_JOURNEY_LOG_ALIASES = {
+    hear_legends: [
+        'As histórias plantam ambição onde antes só havia cansaço.'
+    ],
+    rest_under_tree: [
+        'O silêncio da árvore antiga faz o mundo parecer menos apressado.'
+    ],
+    village_elder: [
+        'O ancião da vila fala como quem entrega um mapa sem admitir que está fazendo isso.'
+    ]
+};
+
 let BASE_GAME_TEXT = null;
 
 function getCurrentLocale() {
@@ -809,6 +879,155 @@ function t(key, params = {}) {
     return text;
 }
 
+function getTranslationVariants(key) {
+    return Object.values(UI_TRANSLATIONS)
+        .map(dict => dict?.[key])
+        .filter(Boolean);
+}
+
+function getJourneyActionIdByMatcher(value, field) {
+    if (!value) return null;
+    const trimmedValue = `${value}`.trim();
+    if (!trimmedValue || !BASE_GAME_TEXT?.journeyActions) return null;
+
+    return Object.keys(BASE_GAME_TEXT.journeyActions).find(actionId => {
+        const candidates = new Set();
+        const baseAction = BASE_GAME_TEXT.journeyActions[actionId];
+        const currentAction = GAME_DATA.journeyActions[actionId];
+        const translatedAction = CONTENT_TRANSLATIONS[getCurrentLocale()]?.journeyActions?.[actionId];
+        const englishAction = CONTENT_TRANSLATIONS.en?.journeyActions?.[actionId];
+
+        if (field === 'log') {
+            candidates.add(baseAction?.log);
+            candidates.add(currentAction?.log);
+            candidates.add(translatedAction?.log);
+            candidates.add(englishAction?.log);
+            candidates.add(JOURNEY_LOG_TRANSLATIONS.en?.[actionId]);
+            (LEGACY_JOURNEY_LOG_ALIASES[actionId] || []).forEach(alias => candidates.add(alias));
+        } else {
+            candidates.add(baseAction?.[field]);
+            candidates.add(currentAction?.[field]);
+            candidates.add(translatedAction?.[field]);
+            candidates.add(englishAction?.[field]);
+        }
+
+        return Array.from(candidates).filter(Boolean).some(candidate => `${candidate}`.trim() === trimmedValue);
+    }) || null;
+}
+
+function getJourneySubRealmIdByName(name) {
+    if (!name || !BASE_GAME_TEXT?.subRealms) return null;
+    const trimmedName = `${name}`.trim();
+    return Object.keys(BASE_GAME_TEXT.subRealms).find(id => {
+        const candidates = new Set([
+            BASE_GAME_TEXT.subRealms[id]?.name,
+            GAME_DATA.subRealms[id]?.name,
+            CONTENT_TRANSLATIONS[getCurrentLocale()]?.subRealms?.[id]?.name,
+            CONTENT_TRANSLATIONS.en?.subRealms?.[id]?.name
+        ]);
+        return Array.from(candidates).filter(Boolean).some(candidate => `${candidate}`.trim() === trimmedName);
+    }) || null;
+}
+
+function getLocalizedEndingText(text) {
+    if (!text || !BASE_GAME_TEXT?.journeyActions) return text;
+    const trimmedText = `${text}`.trim();
+
+    const actionId = Object.keys(BASE_GAME_TEXT.journeyActions).find(id => {
+        const candidates = new Set([
+            BASE_GAME_TEXT.journeyActions[id]?.ending?.text,
+            GAME_DATA.journeyActions[id]?.ending?.text,
+            CONTENT_TRANSLATIONS[getCurrentLocale()]?.journeyActions?.[id]?.ending?.text,
+            CONTENT_TRANSLATIONS.en?.journeyActions?.[id]?.ending?.text
+        ]);
+        return Array.from(candidates).filter(Boolean).some(candidate => `${candidate}`.trim() === trimmedText);
+    });
+
+    return actionId ? (GAME_DATA.journeyActions[actionId]?.ending?.text || text) : text;
+}
+
+function localizeJourneyLogEntry(entry) {
+    if (typeof entry !== 'string' || !entry) return entry;
+
+    captureBaseGameText();
+
+    if (getCurrentLocale() === 'pt-BR') {
+        return entry;
+    }
+
+    const trimmed = entry.trim();
+
+    if (trimmed === BASE_GAME_TEXT?.journeyStartLog || getTranslationVariants('journey_start_log').includes(trimmed)) {
+        return t('journey_start_log');
+    }
+    if (getTranslationVariants('peak_reached_log').includes(trimmed)) return t('peak_reached_log');
+    if (getTranslationVariants('unlock_mechanic_log').includes(trimmed)) return t('unlock_mechanic_log');
+    if (getTranslationVariants('ascension_log').includes(trimmed)) return t('ascension_log');
+
+    let match = trimmed.match(/^(?:Nova escolha de jornada|New journey choice|新的旅途选择)[:：]\s*(.+)$/);
+    if (match) {
+        const actionId = getJourneyActionIdByMatcher(match[1], 'name');
+        const actionName = actionId ? GAME_DATA.journeyActions[actionId]?.name : match[1];
+        return t('new_choice_log', { action: actionName });
+    }
+
+    match = trimmed.match(/^\[(\d+)\s+(?:Anos|Years|岁|年)\]\s+Mudou o foco para:\s+(.+)$/);
+    if (!match) match = trimmed.match(/^\[(\d+)\s+(?:Anos|Years|岁|年)\]\s+Focus shifted to:\s+(.+)$/);
+    if (!match) match = trimmed.match(/^\[(\d+)\s+(?:Anos|Years|岁|年)\]\s+你的重心转向了：(.+)$/);
+    if (match) {
+        const actionId = getJourneyActionIdByMatcher(match[2], 'name');
+        const actionName = actionId ? GAME_DATA.journeyActions[actionId]?.name : match[2];
+        return t('switched_focus_log', { age: match[1], action: actionName });
+    }
+
+    match = trimmed.match(/^\[(\d+)\s+(?:Anos|Years|岁|年)\]\s+Você abandonou a ação pela metade\. O progresso foi salvo\.$/);
+    if (!match) match = trimmed.match(/^\[(\d+)\s+(?:Anos|Years|岁|年)\]\s+You abandoned the action halfway\. Progress was saved\.$/);
+    if (!match) match = trimmed.match(/^\[(\d+)\s+(?:Anos|Years|岁|年)\]\s+你中途放弃了这项行动。进度已保存。$/);
+    if (match) {
+        return t('abandon_action_log', { age: match[1] });
+    }
+
+    match = trimmed.match(/^\[Recarga\]\s+(.+)\s+estará pronta novamente em\s+(.+)\s+anos\.$/);
+    if (!match) match = trimmed.match(/^\[Cooldown\]\s+(.+)\s+will be ready again in\s+(.+)\s+years\.$/);
+    if (!match) match = trimmed.match(/^\[冷却\]\s+(.+)\s+将在\s+(.+)\s+年后再次可用。$/);
+    if (match) {
+        const actionId = getJourneyActionIdByMatcher(match[1], 'name');
+        const actionName = actionId ? GAME_DATA.journeyActions[actionId]?.name : match[1];
+        return t('cooldown_log', { action: actionName, years: match[2] });
+    }
+
+    match = trimmed.match(/^\[Dao\]\s+Seu cultivo avançou para o estágio\s+(.+)\.$/);
+    if (!match) match = trimmed.match(/^\[Dao\]\s+Your cultivation advanced to the stage\s+(.+)\.$/);
+    if (!match) match = trimmed.match(/^\[大道\]\s+你的修为提升到了阶段\s+(.+)。$/);
+    if (match) {
+        const subRealmId = getJourneySubRealmIdByName(match[1]);
+        const stageName = subRealmId ? GAME_DATA.subRealms[subRealmId]?.name : match[1];
+        return t('subrealm_up_log', { stage: stageName });
+    }
+
+    match = trimmed.match(/^\[Tribulação\]\s+Os céus exigem\s+(.+)\s+anos de resistência para permitir o avanço\.$/);
+    if (!match) match = trimmed.match(/^\[Tribulation\]\s+The heavens demand\s+(.+)\s+years of endurance before they allow your ascent\.$/);
+    if (!match) match = trimmed.match(/^\[天劫\]\s+苍天要求你再承受\s+(.+)\s+年，才肯放你通行。$/);
+    if (match) {
+        return t('tribulation_demand_log', { years: match[1] });
+    }
+
+    match = trimmed.match(/^\[(?:Destino|Fate|命途)\]\s+(.+)$/);
+    if (match) {
+        return t('ending_log', { text: getLocalizedEndingText(match[1]) });
+    }
+
+    match = trimmed.match(/^\[(\d+)\s+(?:Anos|Years|岁|年)\]\s+(.+)$/);
+    if (match) {
+        const actionId = getJourneyActionIdByMatcher(match[2], 'log');
+        if (actionId && GAME_DATA.journeyActions[actionId]?.log) {
+            return `[${match[1]} ${t('years')}] ${GAME_DATA.journeyActions[actionId].log}`;
+        }
+    }
+
+    return entry;
+}
+
 function getLocalizedRouteLabel(routeId) {
     const locale = getCurrentLocale();
     const translated = CONTENT_TRANSLATIONS[locale]?.routes?.[routeId];
@@ -820,6 +1039,7 @@ function getLocalizedRouteLabel(routeId) {
 function captureBaseGameText() {
     if (BASE_GAME_TEXT) return;
     BASE_GAME_TEXT = {
+        journeyStartLog: UI_TRANSLATIONS['pt-BR'].journey_start_log,
         subRealms: JSON.parse(JSON.stringify(GAME_DATA.subRealms)),
         realms: JSON.parse(JSON.stringify(GAME_DATA.realms)),
         buildings: JSON.parse(JSON.stringify(GAME_DATA.buildings)),
@@ -841,6 +1061,9 @@ function localizeGameData() {
             const translatedEntry = translations[group]?.[id];
             if (translatedEntry) {
                 Object.assign(GAME_DATA[group][id], translatedEntry);
+            }
+            if (group === 'journeyActions' && JOURNEY_LOG_TRANSLATIONS[locale]?.[id]) {
+                GAME_DATA[group][id].log = JOURNEY_LOG_TRANSLATIONS[locale][id];
             }
         });
     });
@@ -1004,3 +1227,5 @@ window.getLocalizedDefaultObjective = function() {
 window.getLocalizedJourneyStartLog = function() {
     return t('journey_start_log');
 };
+
+window.localizeJourneyLogEntry = localizeJourneyLogEntry;

@@ -100,18 +100,27 @@ function syncFullscreenHudLayout(force = false) {
     if (!gameState.journeyView) return;
 
     const isMobile = window.innerWidth <= 768;
-    const targetOffsetX = isMobile ? 70 : 220;
-    const targetOffsetY = isMobile ? 180 : 120;
+    const container = document.getElementById('journey-graph-container');
+    const rect = container?.getBoundingClientRect();
+    const targetZoom = isMobile ? 0.44 : 0.54;
 
     if (
         force ||
         (gameState.journeyView.offsetX === 0 && gameState.journeyView.offsetY === 0)
     ) {
-        gameState.journeyView.offsetX = targetOffsetX;
-        gameState.journeyView.offsetY = targetOffsetY;
-        if (!gameState.journeyView.zoom || gameState.journeyView.zoom < 0.45) {
-            gameState.journeyView.zoom = isMobile ? 0.6 : 0.8;
+        if (force || !gameState.journeyView.zoom || gameState.journeyView.zoom < 0.45) {
+            gameState.journeyView.zoom = targetZoom;
         }
+
+        const zoom = gameState.journeyView.zoom || targetZoom;
+        const startFocus = getJourneyStartFocusBounds();
+        const desiredScreenX = rect ? rect.width * (isMobile ? 0.52 : 0.46) : (isMobile ? 240 : 480);
+        const desiredScreenY = rect ? rect.height * (isMobile ? 0.82 : 0.8) : (isMobile ? 560 : 760);
+        const focusCenterX = (startFocus.minX + startFocus.maxX) / 2;
+        const focusBottomY = startFocus.maxY;
+
+        gameState.journeyView.offsetX = desiredScreenX - (focusCenterX * zoom);
+        gameState.journeyView.offsetY = desiredScreenY - (focusBottomY * zoom);
     }
 
     if (gameState.hudView?.activeDrawer) {
@@ -249,9 +258,13 @@ function setupAudioHud() {
     tryAutoplayBackgroundMusic();
 }
 
-const JOURNEY_GRAPH_NODE_WIDTH = 180;
-const JOURNEY_GRAPH_NODE_HEIGHT = 72;
+const JOURNEY_GRAPH_NODE_WIDTH = 220;
+const JOURNEY_GRAPH_NODE_HEIGHT = 112;
 const HUD_DRAWER_IDS = ['drawer-idle', 'drawer-sect', 'drawer-transcendence'];
+const JOURNEY_GRAPH_PADDING_X = 120;
+const JOURNEY_GRAPH_PADDING_Y = 120;
+const JOURNEY_GRAPH_COLUMN_GAP = 74;
+const JOURNEY_GRAPH_ROW_GAP = 90;
 const journeyGraphRuntime = {
     canvas: null,
     ctx: null,
@@ -270,6 +283,91 @@ function getJourneyNodeTypeColor(type) {
     if (type === 'social') return '#8cb8ff';
     if (type === 'risco') return '#8a2424';
     return '#57A773';
+}
+
+function getJourneyNodePalette(type) {
+    if (type === 'corpo') {
+        return {
+            start: '#dc2626',
+            end: '#ea580c',
+            icon: '💪'
+        };
+    }
+    if (type === 'social') {
+        return {
+            start: '#16a34a',
+            end: '#10b981',
+            icon: '👥'
+        };
+    }
+    if (type === 'risco') {
+        return {
+            start: '#7f1d1d',
+            end: '#450a0a',
+            icon: '⚠'
+        };
+    }
+    return {
+        start: '#9333ea',
+        end: '#2563eb',
+        icon: '🧘'
+    };
+}
+
+function getJourneyNodeBadge(node) {
+    if (node.active) return { text: `▶ ${t('in_progress_action')}`, background: 'rgba(250, 204, 21, 0.85)', color: '#111827' };
+    if (node.blocked) return { text: `🔒 ${t('route_lost')}`, background: 'rgba(239, 68, 68, 0.82)', color: '#fff7f7' };
+    if (!node.unlocked) return { text: `🔒 ${t('locked_word')}`, background: 'rgba(107, 114, 128, 0.78)', color: '#f3f4f6' };
+    if (node.isInteractable) return { text: t('available_now'), background: 'rgba(96, 165, 250, 0.82)', color: '#eff6ff' };
+    if (node.adjacent) return { text: t('next_action'), background: 'rgba(107, 114, 128, 0.78)', color: '#f3f4f6' };
+    return { text: t('memory_status'), background: 'rgba(75, 85, 99, 0.74)', color: '#f3f4f6' };
+}
+
+function truncateCanvasText(ctx, text, maxWidth) {
+    const raw = `${text ?? ''}`;
+    if (ctx.measureText(raw).width <= maxWidth) return raw;
+    let truncated = raw;
+    while (truncated.length > 1 && ctx.measureText(`${truncated}…`).width > maxWidth) {
+        truncated = truncated.slice(0, -1);
+    }
+    return `${truncated}…`;
+}
+
+function drawWrappedCanvasText(ctx, text, x, y, maxWidth, maxLines, lineHeight) {
+    const words = `${text ?? ''}`.split(/\s+/).filter(Boolean);
+    if (words.length === 0) return y;
+
+    const lines = [];
+    let currentLine = '';
+
+    words.forEach(word => {
+        const candidate = currentLine ? `${currentLine} ${word}` : word;
+        if (ctx.measureText(candidate).width <= maxWidth) {
+            currentLine = candidate;
+            return;
+        }
+
+        if (currentLine) {
+            lines.push(currentLine);
+            currentLine = word;
+        } else {
+            lines.push(truncateCanvasText(ctx, word, maxWidth));
+            currentLine = '';
+        }
+    });
+
+    if (currentLine) lines.push(currentLine);
+
+    const limitedLines = lines.slice(0, maxLines);
+    if (lines.length > maxLines) {
+        limitedLines[maxLines - 1] = truncateCanvasText(ctx, limitedLines[maxLines - 1], maxWidth);
+    }
+
+    limitedLines.forEach((line, index) => {
+        ctx.fillText(line, x, y + (index * lineHeight));
+    });
+
+    return y + limitedLines.length * lineHeight;
 }
 
 function getJourneyNodeAtWorld(worldX, worldY) {
@@ -349,6 +447,70 @@ function getVisibleJourneyNodes() {
     return Array.from(visible).filter(actionId => GAME_DATA.journeyActions[actionId]);
 }
 
+function getJourneyGraphAxisMaps() {
+    const rawXs = new Set();
+    const rawYs = new Set();
+
+    Object.values(GAME_DATA.journeyActions).forEach(action => {
+        if (!action.graph) return;
+        rawXs.add(action.graph.x);
+        rawYs.add(action.graph.y);
+    });
+
+    const xLevels = Array.from(rawXs).sort((a, b) => a - b);
+    const yLevels = Array.from(rawYs).sort((a, b) => a - b);
+
+    return {
+        xOrder: new Map(xLevels.map((value, index) => [value, index])),
+        yOrder: new Map(yLevels.map((value, index) => [value, index])),
+        xCount: xLevels.length,
+        yCount: yLevels.length
+    };
+}
+
+function transformJourneyGraphPoint(rawX, rawY, axisMaps) {
+    // Rotate the journey so the beginning sits at the bottom and the path climbs upward.
+    const xIndex = axisMaps.yOrder.get(rawY) || 0;
+    const yIndex = axisMaps.xOrder.get(rawX) || 0;
+
+    return {
+        x: JOURNEY_GRAPH_PADDING_X + xIndex * (JOURNEY_GRAPH_NODE_WIDTH + JOURNEY_GRAPH_COLUMN_GAP),
+        y: JOURNEY_GRAPH_PADDING_Y + ((axisMaps.xCount - 1 - yIndex) * (JOURNEY_GRAPH_NODE_HEIGHT + JOURNEY_GRAPH_ROW_GAP))
+    };
+}
+
+function getJourneyStartFocusBounds() {
+    const axisMaps = getJourneyGraphAxisMaps();
+    const startingIds = getStartingJourneyActions();
+    const fallback = {
+        minX: JOURNEY_GRAPH_PADDING_X,
+        maxX: JOURNEY_GRAPH_PADDING_X + JOURNEY_GRAPH_NODE_WIDTH,
+        minY: JOURNEY_GRAPH_PADDING_Y,
+        maxY: JOURNEY_GRAPH_PADDING_Y + JOURNEY_GRAPH_NODE_HEIGHT
+    };
+
+    if (!startingIds.length) return fallback;
+
+    const coords = startingIds
+        .map(actionId => GAME_DATA.journeyActions[actionId]?.graph)
+        .filter(Boolean)
+        .map(graph => transformJourneyGraphPoint(graph.x, graph.y, axisMaps));
+
+    if (!coords.length) return fallback;
+
+    return coords.reduce((acc, point) => ({
+        minX: Math.min(acc.minX, point.x),
+        maxX: Math.max(acc.maxX, point.x + JOURNEY_GRAPH_NODE_WIDTH),
+        minY: Math.min(acc.minY, point.y),
+        maxY: Math.max(acc.maxY, point.y + JOURNEY_GRAPH_NODE_HEIGHT)
+    }), {
+        minX: Infinity,
+        maxX: -Infinity,
+        minY: Infinity,
+        maxY: -Infinity
+    });
+}
+
 function buildJourneyGraphViewModel() {
     const visibleIds = getVisibleJourneyNodes();
     const baseSet = new Set([
@@ -357,10 +519,12 @@ function buildJourneyGraphViewModel() {
         ...gameState.unlockedActions,
         ...gameState.blockedActions
     ]);
+    const axisMaps = getJourneyGraphAxisMaps();
 
     const nodes = visibleIds.map(actionId => {
         const action = GAME_DATA.journeyActions[actionId];
         const graph = action.graph || { x: 0, y: 0, lane: 'geral' };
+        const point = transformJourneyGraphPoint(graph.x, graph.y, axisMaps);
         const discovered = gameState.discoveredActions.includes(actionId);
         const blocked = gameState.blockedActions.includes(actionId);
         const cooldownRemaining = getActionCooldownRemainingYears(actionId);
@@ -376,8 +540,8 @@ function buildJourneyGraphViewModel() {
         return {
             id: actionId,
             action,
-            x: graph.x,
-            y: graph.y,
+            x: point.x,
+            y: point.y,
             width: JOURNEY_GRAPH_NODE_WIDTH,
             height: JOURNEY_GRAPH_NODE_HEIGHT,
             lane: graph.lane,
@@ -396,7 +560,7 @@ function buildJourneyGraphViewModel() {
             onCooldown,
             cooldownRemaining
         };
-    }).sort((a, b) => a.x - b.x || a.y - b.y);
+    }).sort((a, b) => b.y - a.y || a.x - b.x);
 
     const visibleSet = new Set(nodes.map(node => node.id));
     const edges = [];
@@ -440,19 +604,19 @@ function drawJourneyEdges(ctx, nodes, edges) {
         const to = nodeMap.get(edge.to);
         if (!from || !to) return;
 
-        const startX = from.x + from.width;
-        const startY = from.y + from.height / 2;
-        const endX = to.x;
-        const endY = to.y + to.height / 2;
-        const controlOffset = Math.max(70, (endX - startX) * 0.5);
+        const startX = from.x + from.width / 2;
+        const startY = from.y;
+        const endX = to.x + to.width / 2;
+        const endY = to.y + to.height;
+        const controlOffset = Math.max(90, Math.abs(endY - startY) * 0.4);
 
         ctx.beginPath();
         ctx.moveTo(startX, startY);
         ctx.bezierCurveTo(
-            startX + controlOffset,
-            startY,
-            endX - controlOffset,
-            endY,
+            startX,
+            startY - controlOffset,
+            endX,
+            endY + controlOffset,
             endX,
             endY
         );
@@ -480,78 +644,131 @@ function drawJourneyEdges(ctx, nodes, edges) {
 
 function drawJourneyNodes(ctx, nodes) {
     nodes.forEach(node => {
-        const baseColor = getJourneyNodeTypeColor(node.action.type);
-        let fill = 'rgba(20, 22, 24, 0.92)';
-        let stroke = baseColor;
-        let shadow = 'transparent';
+        const palette = getJourneyNodePalette(node.action.type);
+        const cardGradient = ctx.createLinearGradient(node.x, node.y, node.x + node.width, node.y + node.height);
+        cardGradient.addColorStop(0, palette.start);
+        cardGradient.addColorStop(1, palette.end);
 
-        if (node.blocked) {
-            fill = 'rgba(30, 18, 18, 0.8)';
-            stroke = '#8a2424';
-            shadow = 'rgba(138, 36, 36, 0.22)';
-        } else if (node.active) {
-            fill = 'rgba(87, 167, 115, 0.26)';
-            stroke = '#57A773';
-            shadow = 'rgba(87, 167, 115, 0.45)';
-        } else if (node.unlocked) {
-            fill = 'rgba(11, 13, 15, 0.98)';
-            stroke = baseColor;
-            shadow = 'rgba(212, 175, 55, 0.25)';
-        } else if (node.adjacent) {
-            fill = 'rgba(8, 8, 9, 0.96)';
-            stroke = '#443b20';
-            shadow = 'rgba(0, 0, 0, 0.1)';
-        } else if (node.discovered) {
-            fill = 'rgba(10, 10, 11, 0.9)';
-            stroke = '#34383d';
+        let stroke = '#6b7280';
+        let shadow = 'rgba(0, 0, 0, 0.28)';
+        let opacity = 1;
+
+        if (node.active) {
+            stroke = '#facc15';
+            shadow = 'rgba(250, 204, 21, 0.45)';
+        } else if (node.blocked) {
+            stroke = '#ef4444';
+            shadow = 'rgba(239, 68, 68, 0.34)';
+            opacity = 0.4;
+        } else if (!node.unlocked) {
+            stroke = '#4b5563';
+            opacity = 0.42;
+        } else if (node.isInteractable) {
+            stroke = '#60a5fa';
+            shadow = 'rgba(96, 165, 250, 0.28)';
+        } else {
+            stroke = '#6b7280';
         }
 
         if (node.isEnding) {
-            stroke = '#f0d78a';
-            shadow = 'rgba(240, 215, 138, 0.28)';
+            stroke = '#facc15';
+            shadow = 'rgba(250, 204, 21, 0.3)';
         }
 
         ctx.save();
         ctx.shadowColor = shadow;
-        ctx.globalAlpha = node.adjacent && !node.isInteractable ? 0.34 : (node.discovered && !node.unlocked ? 0.5 : 1);
-        ctx.shadowBlur = node.hovered || node.selected ? 20 : (node.isInteractable || node.active ? 14 : 4);
+        ctx.globalAlpha = opacity;
+        ctx.shadowBlur = node.hovered || node.selected ? 24 : (node.isInteractable || node.active ? 18 : 8);
 
-        drawRoundedRect(ctx, node.x, node.y, node.width, node.height, 14);
-        ctx.fillStyle = fill;
+        drawRoundedRect(ctx, node.x, node.y, node.width, node.height, 9);
+        ctx.fillStyle = cardGradient;
         ctx.fill();
-        ctx.lineWidth = node.hovered || node.selected ? 3 : 2;
+        ctx.lineWidth = node.hovered || node.selected ? 3.5 : 2.5;
         ctx.strokeStyle = stroke;
         ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        const innerX = node.x + 2;
+        const innerY = node.y + 2;
+        const innerW = node.width - 4;
+        const innerH = node.height - 4;
+        const innerGradient = ctx.createLinearGradient(innerX, innerY, innerX, innerY + innerH);
+        innerGradient.addColorStop(0, 'rgba(0, 0, 0, 0.52)');
+        innerGradient.addColorStop(1, 'rgba(0, 0, 0, 0.82)');
+        drawRoundedRect(ctx, innerX, innerY, innerW, innerH, 7);
+        ctx.fillStyle = innerGradient;
+        ctx.fill();
+
+        const iconSize = 34;
+        const iconX = node.x + node.width - 26;
+        const iconY = node.y - 10;
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.88)';
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(iconX, iconY + 10, iconSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.font = '18px Inter';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(palette.icon, iconX, iconY + 10);
         ctx.restore();
     });
 }
 
 function drawJourneyNodeLabels(ctx, nodes) {
     nodes.forEach(node => {
+        const badge = getJourneyNodeBadge(node);
+        const contentX = node.x + 12;
+        let currentY = node.y + 12;
+        const textWidth = node.width - 24;
+
         ctx.save();
-        ctx.fillStyle = node.blocked ? '#c69a9a' : (node.adjacent && !node.isInteractable ? '#7d7560' : '#F6F0DE');
-        ctx.font = '600 13px Inter';
         ctx.textBaseline = 'top';
 
-        const title = node.action.name.length > 26 ? `${node.action.name.slice(0, 26)}…` : node.action.name;
-        ctx.fillText(title, node.x + 12, node.y + 12);
+        const badgeWidth = Math.min(node.width - 58, Math.max(72, ctx.measureText(badge.text).width + 14));
+        drawRoundedRect(ctx, contentX, currentY, badgeWidth, 20, 4);
+        ctx.fillStyle = badge.background;
+        ctx.fill();
+        ctx.fillStyle = badge.color;
+        ctx.font = '600 10px Inter';
+        ctx.fillText(truncateCanvasText(ctx, badge.text, badgeWidth - 10), contentX + 6, currentY + 5);
+        currentY += 28;
 
-        ctx.fillStyle = node.blocked ? '#886868' : (node.adjacent && !node.isInteractable ? '#5f5846' : '#B4B4B4');
-        ctx.font = '12px Inter';
-        const statusText = node.active
-            ? t('in_progress_action')
-            : node.blocked
-                ? t('route_lost')
-                : node.unlocked
-                    ? t('available_now')
-                    : node.adjacent
-                        ? t('next_action')
-                        : t('memory_status');
-        ctx.fillText(statusText, node.x + 12, node.y + 34);
+        if (node.action.set_route) {
+            const routeBadgeText = '★ Rota';
+            const routeBadgeWidth = 52;
+            drawRoundedRect(ctx, contentX + badgeWidth + 6, node.y + 12, routeBadgeWidth, 20, 4);
+            ctx.fillStyle = 'rgba(168, 85, 247, 0.84)';
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '600 10px Inter';
+            ctx.fillText(routeBadgeText, contentX + badgeWidth + 13, node.y + 17);
+        }
 
-        ctx.fillStyle = node.isEnding ? '#f0d78a' : '#D4AF37';
-        const costText = node.isEnding ? `${t('final_word')} • ${node.action.time_cost} ${t('years')}` : `${node.action.time_cost} ${t('years')}`;
-        ctx.fillText(costText, node.x + 12, node.y + 52);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '700 13px Inter';
+        ctx.textBaseline = 'top';
+        const title = truncateCanvasText(ctx, node.action.name, textWidth - 4);
+        ctx.fillText(title, contentX, currentY);
+        currentY += 18;
+
+        ctx.fillStyle = 'rgba(243, 244, 246, 0.86)';
+        ctx.font = '11px Inter';
+        currentY = drawWrappedCanvasText(ctx, node.action.desc, contentX, currentY, textWidth, 2, 14) + 4;
+
+        ctx.fillStyle = 'rgba(226, 232, 240, 0.88)';
+        ctx.font = '600 11px Inter';
+        const timeText = `⏱ ${node.action.time_cost} ${t('years')}`;
+        ctx.fillText(timeText, contentX, node.y + node.height - 22);
+
+        if (node.action.repeatable) {
+            ctx.textAlign = 'right';
+            ctx.fillText('♻', node.x + node.width - 12, node.y + node.height - 22);
+            ctx.textAlign = 'left';
+        }
         ctx.restore();
     });
 }
@@ -1120,7 +1337,7 @@ function renderTechniques() {
 
 function renderJourney() {
     renderJourneyLog();
-    syncFullscreenHudLayout();
+    syncFullscreenHudLayout(!journeyGraphRuntime.bound);
     bindJourneyCanvasEvents();
     drawJourneyGraph();
     updateJourneyGraphInfo(gameState.journeyView?.selectedNode || journeyGraphRuntime.hoveredNodeId || gameState.activeAction || getStartingJourneyActions()[0]);
@@ -1134,7 +1351,9 @@ function renderJourneyLog() {
     gameState.actionLogs.forEach(log => {
         const entry = document.createElement('div');
         entry.className = 'log-entry';
-        entry.innerText = log;
+        entry.innerText = typeof window.localizeJourneyLogEntry === 'function'
+            ? window.localizeJourneyLogEntry(log)
+            : log;
         logContainer.appendChild(entry);
     });
     // Scroll para o fim
