@@ -104,9 +104,12 @@ let gameState = {
     lastSave: Date.now()
 };
 
+window.__wuxiaGameStateReady = true;
+
 // ...rest of state.js...
 
 function saveGame() {
+    if (!window.__wuxiaGameStateReady) return;
     gameState.lastSave = Date.now();
     localStorage.setItem('wuxiaIdleSave', JSON.stringify(gameState));
 }
